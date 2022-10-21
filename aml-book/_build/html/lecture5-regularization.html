@@ -1,0 +1,2002 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 5: Regularization &#8212; Applied Machine Learning</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lecture 6: Generative Models and Naive Bayes" href="lecture6-naive-bayes.html" />
+    <link rel="prev" title="Lecture 4: Classification and Logistic Regression" href="lecture4-classification.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Applied Machine Learning</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture2-supervised-learning.html">
+   Lecture 2: Supervised Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture3-linear-regression.html">
+   Lecture 3: Linear Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture4-classification.html">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture6-naive-bayes.html">
+   Lecture 6: Generative Models and Naive Bayes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+   Lecture 8: Unsupervised Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture9-density-estimation.html">
+   Lecture 9: Density Estimation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture10-clustering.html">
+   Lecture 10: Clustering
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture5-regularization.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture5-regularization.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/lecture5-regularization.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#two-failure-cases-of-supervised-learning">
+   5.1. Two Failure Cases of Supervised Learning
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-of-polynomial-regression">
+     5.1.1. Review of Polynomial Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#polynomials-fit-the-data-well">
+       5.1.1.1. Polynomials Fit the Data Well
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#towards-higher-degree-polynomial-features">
+       5.1.1.2. Towards Higher-Degree Polynomial Features?
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overfitting-and-underfitting">
+     5.1.2. Overfitting and Underfitting
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#definitions">
+       5.1.2.1. Definitions
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#overfitting">
+         Overfitting
+        </a>
+       </li>
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#underfitting">
+         Underfitting
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#overfitting-vs-underfitting-evaluation">
+       5.1.2.2. Overfitting vs. Underfitting: Evaluation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#how-to-fix-overfitting-and-underfitting">
+       5.1.2.3. How to Fix Overfitting and Underfitting
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#evaluating-supervised-learning-models">
+   5.2. Evaluating Supervised Learning Models
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-a-good-supervised-learning-model">
+     5.2.1. What Is A Good Supervised Learning Model?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#when-do-we-get-good-performance-on-new-data">
+       5.2.1.1. When Do We Get Good Performance on New Data?
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-distribution">
+     5.2.2 Data Distribution
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#iid-sampling">
+       5.2.2.1. IID Sampling
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#motivation">
+       5.2.2.2. Motivation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#an-example">
+       5.2.2.3. An Example
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performance-on-a-holdout-set">
+     5.2.3. Performance on a Holdout Set
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-framework-for-applying-supervised-learning">
+   5.3. A Framework for Applying Supervised Learning
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#datasets-for-model-development">
+     5.3.1. Datasets for Model Development
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model-development-workflow">
+     5.3.2. Model Development Workflow
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#choosing-validation-and-test-sets">
+       5.3.2.1 Choosing Validation and Test Sets
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#l2-regularization">
+   5.4. L2 Regularization
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-overfitting">
+     Review: Overfitting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#regularization">
+     5.4.1. Regularization
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#definition">
+       5.4.1.1. Definition
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     5.4.2. L2 Regularization
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id2">
+       5.4.2.1. Definition
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#l2-regularization-for-polynomial-regression">
+       5.4.2.2. L2 Regularization for Polynomial Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#how-to-choose-lambda-hyperparameter-search">
+       5.4.2.3. How to Choose
+       <span class="math notranslate nohighlight">
+        \(\lambda\)
+       </span>
+       ? Hyperparameter Search
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#normal-equations-for-l2-regularized-linear-models">
+     5.4.3. Normal Equations for L2-Regularized Linear Models
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-ridge-regression">
+     5.4.3. Algorithm: Ridge Regression
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#l1-regularization-and-sparsity">
+   5.5. L1 Regularization and Sparsity
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#l1-regularizion">
+     5.5.1. L1 Regularizion
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id3">
+       5.5.1.1. Definition
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#algorithm-lasso">
+       5.5.1.2. Algorithm: Lasso
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sparsity">
+     5.5.2. Sparsity
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id4">
+       5.5.2.1. Definition
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualizing-weights-in-ridge-and-lasso">
+       5.5.2.2. Visualizing Weights in Ridge and Lasso
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#why-does-l1-regularization-produce-sparsity">
+     5.5.3. Why Does L1 Regularization Produce Sparsity?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#regularizing-via-constraints">
+       5.5.3.1. Regularizing via Constraints
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id5">
+         An Example
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sparsity-in-l1-vs-l2-regularization">
+       5.5.3.2. Sparsity in L1 vs. L2 Regularization
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-does-supervised-learning-work">
+   5.6. Why Does Supervised Learning Work?
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#some-assumptions-and-definitions">
+     5.6.1. Some Assumptions and Definitions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id6">
+       5.6.1.1. Data Distribution
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#holdout-dataset">
+       5.6.1.2. Holdout Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#evaluating-performance-on-a-holdout-set">
+       5.6.1.2. Evaluating Performance on a Holdout Set
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performance-on-out-of-distribution-data">
+     5.6.2. Performance on Out-of-Distribution Data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#machine-learning-provably-works">
+     5.6.3. Machine Learning Provably Works
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#short-proof-of-why-machine-learning-works">
+       5.6.3.1. Short Proof of Why Machine Learning Works
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Lecture 5: Regularization</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#two-failure-cases-of-supervised-learning">
+   5.1. Two Failure Cases of Supervised Learning
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-of-polynomial-regression">
+     5.1.1. Review of Polynomial Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#polynomials-fit-the-data-well">
+       5.1.1.1. Polynomials Fit the Data Well
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#towards-higher-degree-polynomial-features">
+       5.1.1.2. Towards Higher-Degree Polynomial Features?
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overfitting-and-underfitting">
+     5.1.2. Overfitting and Underfitting
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#definitions">
+       5.1.2.1. Definitions
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#overfitting">
+         Overfitting
+        </a>
+       </li>
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#underfitting">
+         Underfitting
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#overfitting-vs-underfitting-evaluation">
+       5.1.2.2. Overfitting vs. Underfitting: Evaluation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#how-to-fix-overfitting-and-underfitting">
+       5.1.2.3. How to Fix Overfitting and Underfitting
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#evaluating-supervised-learning-models">
+   5.2. Evaluating Supervised Learning Models
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-a-good-supervised-learning-model">
+     5.2.1. What Is A Good Supervised Learning Model?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#when-do-we-get-good-performance-on-new-data">
+       5.2.1.1. When Do We Get Good Performance on New Data?
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-distribution">
+     5.2.2 Data Distribution
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#iid-sampling">
+       5.2.2.1. IID Sampling
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#motivation">
+       5.2.2.2. Motivation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#an-example">
+       5.2.2.3. An Example
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performance-on-a-holdout-set">
+     5.2.3. Performance on a Holdout Set
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-framework-for-applying-supervised-learning">
+   5.3. A Framework for Applying Supervised Learning
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#datasets-for-model-development">
+     5.3.1. Datasets for Model Development
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model-development-workflow">
+     5.3.2. Model Development Workflow
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#choosing-validation-and-test-sets">
+       5.3.2.1 Choosing Validation and Test Sets
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#l2-regularization">
+   5.4. L2 Regularization
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-overfitting">
+     Review: Overfitting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#regularization">
+     5.4.1. Regularization
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#definition">
+       5.4.1.1. Definition
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     5.4.2. L2 Regularization
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id2">
+       5.4.2.1. Definition
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#l2-regularization-for-polynomial-regression">
+       5.4.2.2. L2 Regularization for Polynomial Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#how-to-choose-lambda-hyperparameter-search">
+       5.4.2.3. How to Choose
+       <span class="math notranslate nohighlight">
+        \(\lambda\)
+       </span>
+       ? Hyperparameter Search
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#normal-equations-for-l2-regularized-linear-models">
+     5.4.3. Normal Equations for L2-Regularized Linear Models
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-ridge-regression">
+     5.4.3. Algorithm: Ridge Regression
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#l1-regularization-and-sparsity">
+   5.5. L1 Regularization and Sparsity
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#l1-regularizion">
+     5.5.1. L1 Regularizion
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id3">
+       5.5.1.1. Definition
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#algorithm-lasso">
+       5.5.1.2. Algorithm: Lasso
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sparsity">
+     5.5.2. Sparsity
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id4">
+       5.5.2.1. Definition
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualizing-weights-in-ridge-and-lasso">
+       5.5.2.2. Visualizing Weights in Ridge and Lasso
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#why-does-l1-regularization-produce-sparsity">
+     5.5.3. Why Does L1 Regularization Produce Sparsity?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#regularizing-via-constraints">
+       5.5.3.1. Regularizing via Constraints
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id5">
+         An Example
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sparsity-in-l1-vs-l2-regularization">
+       5.5.3.2. Sparsity in L1 vs. L2 Regularization
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-does-supervised-learning-work">
+   5.6. Why Does Supervised Learning Work?
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#some-assumptions-and-definitions">
+     5.6.1. Some Assumptions and Definitions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id6">
+       5.6.1.1. Data Distribution
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#holdout-dataset">
+       5.6.1.2. Holdout Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#evaluating-performance-on-a-holdout-set">
+       5.6.1.2. Evaluating Performance on a Holdout Set
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performance-on-out-of-distribution-data">
+     5.6.2. Performance on Out-of-Distribution Data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#machine-learning-provably-works">
+     5.6.3. Machine Learning Provably Works
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#short-proof-of-why-machine-learning-works">
+       5.6.3.1. Short Proof of Why Machine Learning Works
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <p><left><img width=25% src="img/cornell_tech2.svg"></left></p>
+<section class="tex2jax_ignore mathjax_ignore" id="lecture-5-regularization">
+<h1>Lecture 5: Regularization<a class="headerlink" href="#lecture-5-regularization" title="Permalink to this headline">#</a></h1>
+<p>Up to now, we have been looking at various types of supervised learning algorithms.</p>
+<p>Next, let’s try to understand how to evaluate and understand these algorithms. In the process of doing that, we will identify two common failure modes of supervised learning, and develop new algorithms that address these failure modes. These algorithms will rely on a general technique called <em>regularization</em>.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="two-failure-cases-of-supervised-learning">
+<h1>5.1. Two Failure Cases of Supervised Learning<a class="headerlink" href="#two-failure-cases-of-supervised-learning" title="Permalink to this headline">#</a></h1>
+<p>Let’s start this process by examining more closely an algorithm we have introduced in earlier lectures—polynomial regression. We will see some setting where supervised learning works well, and two settings where it does not.</p>
+<section id="review-of-polynomial-regression">
+<h2>5.1.1. Review of Polynomial Regression<a class="headerlink" href="#review-of-polynomial-regression" title="Permalink to this headline">#</a></h2>
+<p>Recall that in 1D polynomial regression, we fit a model
+$<span class="math notranslate nohighlight">\( f_\theta(x) := \theta^\top \phi(x) = \sum_{j=0}^p \theta_j x^j \)</span><span class="math notranslate nohighlight">\(
+that is linear in \)</span>\theta<span class="math notranslate nohighlight">\( but non-linear in \)</span>x<span class="math notranslate nohighlight">\( because the features 
+\)</span><span class="math notranslate nohighlight">\(\phi(x) = [1\; x\; \ldots\; x^p]\)</span><span class="math notranslate nohighlight">\( 
+are non-linear. Using these features, we can fit any polynomial of degree \)</span>p<span class="math notranslate nohighlight">\(. Becaause the model is linear in the weights \)</span>\theta<span class="math notranslate nohighlight">\(, we can use the normal equations to find the \)</span>\theta<span class="math notranslate nohighlight">\( that minimizes the mean squared error and has the best model fit. However, the resulting model can still be highly non-linear in \)</span>x$.</p>
+<section id="polynomials-fit-the-data-well">
+<h3>5.1.1.1. Polynomials Fit the Data Well<a class="headerlink" href="#polynomials-fit-the-data-well" title="Permalink to this headline">#</a></h3>
+<p>When we switch from linear models to polynomials, we can better fit the data and increase the accuracy of our models. This is not suprising—a polynomial is more flexible than a linear function.</p>
+<p>Let’s illustrate polynomial regression by implementing it on a toy dataset, in which we are trying to fit a cosine function.</p>
+<p>First, we need to generate the dataset. We will do that by first defining our cosine function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s visualize it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x120e92668&gt;
+</pre></div>
+</div>
+<img alt="_images/lecture5-regularization_8_1.png" src="_images/lecture5-regularization_8_1.png" />
+</div>
+</div>
+<p>Let’s now generate datapoints around that function. We will generate random <span class="math notranslate nohighlight">\(x\)</span>, and then generate random <span class="math notranslate nohighlight">\(y\)</span> using
+$<span class="math notranslate nohighlight">\( y = f(x) + \epsilon \)</span><span class="math notranslate nohighlight">\(
+where \)</span>f<span class="math notranslate nohighlight">\( is our true cosine function and \)</span>\epsilon$ is a random noise variable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize the samples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12111c860&gt;
+</pre></div>
+</div>
+<img alt="_images/lecture5-regularization_12_1.png" src="_images/lecture5-regularization_12_1.png" />
+</div>
+</div>
+<p>These samples give us our dataset. We can now try to fit it using a number of different models, including linear functions and polynomials of various degrees.</p>
+<p>Although fitting a linear model does not work well, qudratic or cubic polynomials improve the fit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Polynomial of Degree </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/lecture5-regularization_15_0.png" src="_images/lecture5-regularization_15_0.png" />
+</div>
+</div>
+</section>
+<section id="towards-higher-degree-polynomial-features">
+<h3>5.1.1.2. Towards Higher-Degree Polynomial Features?<a class="headerlink" href="#towards-higher-degree-polynomial-features" title="Permalink to this headline">#</a></h3>
+<p>As we increase the complexity of our model class <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> to include even higher degree polynomials, we are able to fit the data even better.</p>
+<p>What happens if we further increase the degree of the polynomial?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Polynomial of Degree </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/lecture5-regularization_18_0.png" src="_images/lecture5-regularization_18_0.png" />
+</div>
+</div>
+<p>As the degree of the polynomial increases to the size of the dataset, we are increasingly able to fit every point in the dataset.</p>
+<p>However, this results in a highly irregular curve: its behavior outside the training set is wildly inaccurate!</p>
+</section>
+</section>
+<section id="overfitting-and-underfitting">
+<h2>5.1.2. Overfitting and Underfitting<a class="headerlink" href="#overfitting-and-underfitting" title="Permalink to this headline">#</a></h2>
+<p>We have seen above a clear failure of polynomial regression. In fact, this failure represents an example of a more general phenomenon that we call <em>overfitting</em>. Overfitting—and its opposite, underfitting—represent the most important practical failure mode of all types of supervised learning algorithms.</p>
+<section id="definitions">
+<h3>5.1.2.1. Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">#</a></h3>
+<section id="overfitting">
+<h4>Overfitting<a class="headerlink" href="#overfitting" title="Permalink to this headline">#</a></h4>
+<p>Overfitting is one of the most common failure modes of machine learning.</p>
+<ul class="simple">
+<li><p>A very expressive model (e.g., a high degree polynomial) fits the training dataset perfectly.</p></li>
+<li><p>But the model makes highly incorrect predictions outside this dataset, and doesn’t generalize.</p></li>
+</ul>
+<p>In other words, if the model is too expressive (like a high degree polynomial), we are going to fit the training dataset perfectly; however, the model will make wildly incorrect prediction at points right outside this dataset, and will also not generalize well to unseen data.</p>
+</section>
+<section id="underfitting">
+<h4>Underfitting<a class="headerlink" href="#underfitting" title="Permalink to this headline">#</a></h4>
+<p>A related failure mode is underfitting.</p>
+<ul class="simple">
+<li><p>A small model (e.g. a straight line), will not fit the training data well.</p></li>
+<li><p>Therefore, it will also not be accurate on new data.</p></li>
+</ul>
+<p>If the model is too small (like the linear model in the above example), it will not generalize well to unseen data because it is not sufficiently complex to fit the true structure of the dataset.</p>
+<p>Finding the tradeoff between overfitting and underfitting is one of the main challenges in applying machine learning.</p>
+</section>
+</section>
+<section id="overfitting-vs-underfitting-evaluation">
+<h3>5.1.2.2. Overfitting vs. Underfitting: Evaluation<a class="headerlink" href="#overfitting-vs-underfitting-evaluation" title="Permalink to this headline">#</a></h3>
+<p>We can diagnose overfitting and underfitting by measuring performance on a separate held out dataset (not used for training).</p>
+<ul class="simple">
+<li><p>If training perforance is high but holdout performance is low, we are overfitting.</p></li>
+<li><p>If training perforance is low but holdout performance is low, we are underfitting.</p></li>
+</ul>
+<p>Let’s look at this via an example. Below, we are generating a separate held-out dataset from the same data generating process (represented via red dots on the figures). We fit three different models (the orange curves) to our training set (the blue dots), and observe their performance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Underfitting&#39;</span><span class="p">,</span> <span class="s1">&#39;Overfitting&#39;</span><span class="p">,</span> <span class="s1">&#39;A Good Fit&#39;</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_holdout</span><span class="p">[::</span><span class="mi">3</span><span class="p">],</span> <span class="n">y_holdout</span><span class="p">[::</span><span class="mi">3</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (Degree </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span><span class="o">-</span><span class="mf">1.7</span><span class="p">,</span> <span class="s1">&#39;Holdout MSE: </span><span class="si">%.4f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="n">y_holdout</span><span class="o">-</span><span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_holdout</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/lecture5-regularization_24_0.png" src="_images/lecture5-regularization_24_0.png" />
+</div>
+</div>
+<p>In the above example, the linear model is clearly too simple to fit the cosine function. It has an MSE of 0.2060 on the red held-out set. The middle model is clearly overfitting and gets a massive MSE on the red dots. The right-most figure is clearly the best fit, and it gets the lowest MSE by far.</p>
+<p>Thus, we can detect overfitting and underfitting quantiatively by measuring performance on held out data. We will come back to this later.</p>
+</section>
+<section id="how-to-fix-overfitting-and-underfitting">
+<h3>5.1.2.3. How to Fix Overfitting and Underfitting<a class="headerlink" href="#how-to-fix-overfitting-and-underfitting" title="Permalink to this headline">#</a></h3>
+<p>What if our model doesn’t fit the training set well? You may try the following:</p>
+<ul class="simple">
+<li><p>Create richer features that will make the dataset easier to fit.</p></li>
+<li><p>Use a more expressive model family (neural nets vs. linear models). A more expressive model is more likely to fit the data well.</p></li>
+<li><p>Try a better optimization procedure. Sometimes the fit is bad simply because we haven’t trained our model sufficiently well.</p></li>
+</ul>
+<p>We will also see many ways of dealing with overftting, but here are some ideas:</p>
+<ul class="simple">
+<li><p>Use a simpler model family (linear models vs. neural nets)</p></li>
+<li><p>Keep the same model, but collect more training data. Given a model family, it will be difficult to find a highly fitting model if the dataset is very large.</p></li>
+<li><p>Modify the training process to penalize overly complex models. We will come back to this last point in a lot more detail.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="evaluating-supervised-learning-models">
+<h1>5.2. Evaluating Supervised Learning Models<a class="headerlink" href="#evaluating-supervised-learning-models" title="Permalink to this headline">#</a></h1>
+<p>We have just seen that supervised learning algorithms can fail in practice. In particular they have two clear failure modes—overfitting and underfitting. In order to avoid these failures, the first step is to understand how to evaluate supervised models in a principled way.</p>
+<p>To set context, recall our intuitive definition of supervised learning.</p>
+<center><img width=70% src="img/tesla_data.png"/></center>
+<ol class="simple">
+<li><p>First, we collect a dataset of labeled training examples.</p></li>
+<li><p>We train a model to output accurate predictions on this dataset.</p></li>
+</ol>
+<section id="what-is-a-good-supervised-learning-model">
+<h2>5.2.1. What Is A Good Supervised Learning Model?<a class="headerlink" href="#what-is-a-good-supervised-learning-model" title="Permalink to this headline">#</a></h2>
+<p>Our previous example inolving polynomial regression should strongly suggests the following principle for determining whether a supervised model is good or not.
+A good supervised model is one that makes <strong>accurate predictions</strong> on <strong>new data</strong> that it has not seen at training time.</p>
+<p>What does it mean to make accurate predictions? Here are a few examples:</p>
+<ul class="simple">
+<li><p>Accurate predictions of diabetes risk on patients</p></li>
+<li><p>Accurate object detection in new scenes</p></li>
+<li><p>Correct translation of new sentences</p></li>
+</ul>
+<p>Note, however, that other types of definitions of good performance exist from the ones above. For example, we may be interested in whether the model discovers useful structure in the data. This is different from simply asking for good predictive accuracy. We will come back to other performance criteria later in the course.</p>
+<section id="when-do-we-get-good-performance-on-new-data">
+<h3>5.2.1.1. When Do We Get Good Performance on New Data?<a class="headerlink" href="#when-do-we-get-good-performance-on-new-data" title="Permalink to this headline">#</a></h3>
+<p>We need to make formal the notion of being accurate on new data. For this we will introduce notation for a holdout dataset, which is a second supervised learning dataset consisting of <span class="math notranslate nohighlight">\(m\)</span> training instances.</p>
+<div class="math notranslate nohighlight">
+\[\dot{\mathcal{D}} = \{(\dot{x}^{(i)}, \dot{y}^{(i)}) \mid i = 1,2,...,m\}\]</div>
+<p>Crucially, this dataset is distinct from the training dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.</p>
+<p>Let’s say we have trained a model on <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>; when will it be accurate on <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span>? Or, more concretely, suppose you have a classification model trained on images of cats and dogs. On which dataset will it perform better?</p>
+<ul class="simple">
+<li><p>A dataset of German shepherds and siamese cats?</p></li>
+<li><p>A dataset of birds and reptiles?</p></li>
+</ul>
+<p>Clearly it will be more accurate on the former. Intuitively, ML are accurate on new data, if it is similar to the training data.</p>
+</section>
+</section>
+<section id="data-distribution">
+<h2>5.2.2 Data Distribution<a class="headerlink" href="#data-distribution" title="Permalink to this headline">#</a></h2>
+<p>We are now going to make the above intuition more precise, by introducing a mathematical tool widely used in machine learning—the data distribution.</p>
+<p>It is standard in machine learning to assume that data is sampled from some probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we call the <em>data distribution</em>. We will denote this as
+$<span class="math notranslate nohighlight">\(x, y \sim \mathbb{P}.\)</span>$</p>
+<p>The training set <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}\)</span> consists of <em>independent and identicaly distributed</em> (IID) samples from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
+<section id="iid-sampling">
+<h3>5.2.2.1. IID Sampling<a class="headerlink" href="#iid-sampling" title="Permalink to this headline">#</a></h3>
+<p>The key assumption is that the training examples are <em>independent and identicaly distributed</em> (IID).</p>
+<ul class="simple">
+<li><p>Each training example is from the same distribution.</p></li>
+<li><p>This distribution doesn’t depend on previous training examples.</p></li>
+</ul>
+<p><strong>Example</strong>: Flipping a coin. Each flip has same probability of heads &amp; tails and doesn’t depend on previous flips.</p>
+<p><strong>Counter-Example</strong>: Yearly census data. The population in each year will be close to that of the previous year.</p>
+</section>
+<section id="motivation">
+<h3>5.2.2.2. Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">#</a></h3>
+<p>Why assume that the dataset is sampled from a distribution?</p>
+<ul class="simple">
+<li><p>The process we model may be effectively random. If <span class="math notranslate nohighlight">\(y\)</span> is a stock price, there is randomness in the market that cannot be captured by a deterministic model.</p></li>
+</ul>
+<ul class="simple">
+<li><p>There may be noise and randomness in the data collection process itself (e.g., collecting readings from an imperfect thermometer).</p></li>
+</ul>
+<ul class="simple">
+<li><p>We can use probability and statistics to analyze supervised learning algorithms and prove that they work. The key idea is that if we train a model on data sampled from a data distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, it will also be accurate on new (previously unseen) data that is also sampled from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p></li>
+</ul>
+</section>
+<section id="an-example">
+<h3>5.2.2.3. An Example<a class="headerlink" href="#an-example" title="Permalink to this headline">#</a></h3>
+<p>Let’s implement an example of a data distribution in numpy. Below, we are defining the same cosine function that we have previously seen.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s visualize it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x120e92668&gt;
+</pre></div>
+</div>
+<img alt="_images/lecture5-regularization_46_1.png" src="_images/lecture5-regularization_46_1.png" />
+</div>
+</div>
+<p>Let’s now draw samples from the distribution. We will generate random <span class="math notranslate nohighlight">\(x\)</span>, and then generate random <span class="math notranslate nohighlight">\(y\)</span> using
+$<span class="math notranslate nohighlight">\( y = f(x) + \epsilon \)</span><span class="math notranslate nohighlight">\(
+for a random noise variable \)</span>\epsilon$.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize the samples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12111c860&gt;
+</pre></div>
+</div>
+<img alt="_images/lecture5-regularization_50_1.png" src="_images/lecture5-regularization_50_1.png" />
+</div>
+</div>
+<p>Let’s also genenerate a holdout dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_holdout_samples</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+<span class="n">X_holdout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_holdout_samples</span><span class="p">))</span>
+<span class="n">y_holdout</span> <span class="o">=</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_holdout</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_holdout_samples</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_holdout</span><span class="p">,</span> <span class="n">y_holdout</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Holdout Samples&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x121440f28&gt;
+</pre></div>
+</div>
+<img alt="_images/lecture5-regularization_52_1.png" src="_images/lecture5-regularization_52_1.png" />
+</div>
+</div>
+<p>We now have defined two supervised learning datasets: a training set <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> (in blue), and a separate hold out set <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span> (in red). If we train a supervised model on <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> (in a way that avoids overfitting and underfitting), this model will be accurate on <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span> (and in fact, on any hold out dataset sampled from the same data distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span> that generated <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.</p>
+</section>
+</section>
+<section id="performance-on-a-holdout-set">
+<h2>5.2.3. Performance on a Holdout Set<a class="headerlink" href="#performance-on-a-holdout-set" title="Permalink to this headline">#</a></h2>
+<p>You should now be convinced that the correct way to evaluaet supervised learning performance is on a separate holdout set. But how do we specifically use the holdout dataset for evaluation?</p>
+<p>Formally, we consider a supervised model <span class="math notranslate nohighlight">\(f_\theta\)</span> to be a “good” model (i.e., an accurate model) if it performs well on a holdout set <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span> according to some measure</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{m} \sum_{i=1}^m L\left(\dot y^{(i)}, f_\theta(\dot x^{(i)}) \right).
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(L : \mathcal{X}\times\mathcal{Y} \to \mathbb{R}\)</span> is a performance metric or a loss function that we get to choose.</p>
+<p>The choice of the performance metric <span class="math notranslate nohighlight">\(L\)</span> depends on the specific problem and our goals:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(L\)</span> can be the training objective: mean squared error, cross-entropy</p></li>
+<li><p>In classification, <span class="math notranslate nohighlight">\(L\)</span> is often just accuracy: is <span class="math notranslate nohighlight">\(\dot y^{(i)} = f_\theta(\dot x^{(i)})\)</span>?</p></li>
+<li><p><span class="math notranslate nohighlight">\(L\)</span> can also implement a task-specific metric: <span class="math notranslate nohighlight">\(R^2\)</span> metric (see Homework 1) for regression, F1 score for document retrieval, etc.</p></li>
+</ul>
+<p>For example, in a classification setting, we may be interested in the accuracy of the model. Thus, we want the % of misclassified inputs
+$<span class="math notranslate nohighlight">\(
+\frac{1}{m} \sum_{i=1}^m \mathbb{I}\left(\dot y^{(i)} \neq f_\theta(\dot x^{(i)}) \right)
+\)</span>$
+to be small.</p>
+<p>Here <span class="math notranslate nohighlight">\(\mathbb{I}\left( A \right)\)</span> is an <em>indicator</em> function that equals one if <span class="math notranslate nohighlight">\(A\)</span> is true and zero otherwise.</p>
+<p>The key thing to note is that for large enough holdout sets <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span>, our estimate of performance on  <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span> we will be an accurate estimate of performance on new datapoints sampled from the data distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="a-framework-for-applying-supervised-learning">
+<h1>5.3. A Framework for Applying Supervised Learning<a class="headerlink" href="#a-framework-for-applying-supervised-learning" title="Permalink to this headline">#</a></h1>
+<p>We have just introduced the concepts of data distribution and holdout set, and we have expalined how to use a holdout set to evaluate a supervised learning model.</p>
+<p>In practice, we use not one but multiple holdout sets when developing machine learning models. These multiple datasets are part of an interative framework for developing ML algorithms that we will describe next.</p>
+<section id="datasets-for-model-development">
+<h2>5.3.1. Datasets for Model Development<a class="headerlink" href="#datasets-for-model-development" title="Permalink to this headline">#</a></h2>
+<p>When developing machine learning models, it is customary to work with three datasets:</p>
+<ul class="simple">
+<li><p><strong>Training set</strong>: Data on which we train our algorithms.</p></li>
+<li><p><strong>Development set</strong> (validation or holdout set): Data used for tuning algorithms.</p></li>
+<li><p><strong>Test set</strong>: Data used to evaluate the final performance of the model.</p></li>
+</ul>
+<p>The test set is best thought of as a small amount of data that is put aside and never used during model development—we only use it to evaluate our final model. This is in order to not bias the development of the model towards something that would look overly favorable on the training set.</p>
+<p>The development set on the other hand is constantly used for tasks such as hyperparameter selection (more on that later).</p>
+<p>When beginning a new project (e.g., a Kaggle competition), it is common to split all the available data into the above three datasets. The most standard splitting ratio is approximately 70%, 15%, 15%. However, we will see later some improved splitting strategies as well.</p>
+</section>
+<section id="model-development-workflow">
+<h2>5.3.2. Model Development Workflow<a class="headerlink" href="#model-development-workflow" title="Permalink to this headline">#</a></h2>
+<p>The typical way in which these datasets are used is:</p>
+<ol class="simple">
+<li><p><strong>Training:</strong> Try a new model and fit it on the training set.</p></li>
+</ol>
+<ol class="simple">
+<li><p><strong>Model Selection</strong>: Estimate performance on the development set using metrics. Based on results, try a new model idea in step #1.</p></li>
+</ol>
+<ol class="simple">
+<li><p><strong>Evaluation</strong>: Finally, estimate real-world performance on test set.</p></li>
+</ol>
+<p>When we start developing a new supervised learning model we often only have a rough guess as to what a good solution looks like. We start with this guess—this includes a choice of model family, features, etc.—and train it on the training set.</p>
+<p>We then take our trained model and evaluate it on the development set. Typically, our initial guess will be bad—it may overfit, underfit, or have other types of problems. However, by observing its failure modes on the development set, we can determine which changes we need to make. For example, if we see that our model is overfitting, we know we need to make it simpler.</p>
+<p>Thus, we take our next best guess about the model (e.g., new features or a new model family) and retrain it. After a while, we will eventually fix the problems observed on the development set.</p>
+<p>Once we are satistfied with development set performance, we evaluate the model on the test set. This represents our final unbiased estimate of performance before we release the model into the world.</p>
+<section id="choosing-validation-and-test-sets">
+<h3>5.3.2.1 Choosing Validation and Test Sets<a class="headerlink" href="#choosing-validation-and-test-sets" title="Permalink to this headline">#</a></h3>
+<p>These holdout sets are used to esimate real-world performance. How should one choose the development and test set? We highlight two important considerations.</p>
+<p><strong>Distributional Consistency</strong>: The development and test sets should be from the data distribution we will see at deployment time. That is because we want to estimate our performance in deployment as accurately as possible.</p>
+<p><strong>Dataset Size</strong>: The development and test sets should be large enough to estimate future performance. On small datasets, about 30% of the data can be used for development and testing. On larger datasets, it usually not useful to reserve more than a few thousand instances for non-training purposes.</p>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="l2-regularization">
+<h1>5.4. L2 Regularization<a class="headerlink" href="#l2-regularization" title="Permalink to this headline">#</a></h1>
+<p>Thus far, we have identified two common failure modes of supervsied learning algorithms (overfitting and underfitting), and we have explained how to evaluate models to detect these failure modes.</p>
+<p>Let’s now look at a technique that helps avoid overfitting altogether.</p>
+<section id="review-overfitting">
+<h2>Review: Overfitting<a class="headerlink" href="#review-overfitting" title="Permalink to this headline">#</a></h2>
+<p>Recall that overfitting is one of the most common failure modes of machine learning.</p>
+<ul class="simple">
+<li><p>A very expressive model (a high degree polynomial) fits the training dataset perfectly.</p></li>
+<li><p>The model also makes wildly incorrect prediction outside this dataset, and doesn’t generalize.</p></li>
+</ul>
+<p>We can visualize overfitting by trying to fit a small dataset with a high degree polynomial.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Polynomial of Degree </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/lecture5-regularization_72_0.png" src="_images/lecture5-regularization_72_0.png" />
+</div>
+</div>
+<p>In this example, the polynomial passes through every training set points, but its fit is very bad outside the small training set.</p>
+</section>
+<section id="regularization">
+<h2>5.4.1. Regularization<a class="headerlink" href="#regularization" title="Permalink to this headline">#</a></h2>
+<p>Recall that we talked about a few ways of mitigating overfitting—making the model smaller, giving it more data, and modifying the training process to avoid the selection of models that overfit. Regularization is a technique that takes the latter strategy.</p>
+<p>Intuitively, the idea of regularization is to penalize complex models that may overfit the data. In the previous example, a less complex would rely less on polynomial terms of high degree.</p>
+<section id="definition">
+<h3>5.4.1.1. Definition<a class="headerlink" href="#definition" title="Permalink to this headline">#</a></h3>
+<p>More formally, the idea of regularization is to train models with an augmented objective <span class="math notranslate nohighlight">\(J : \mathcal{M} \to \mathbb{R}\)</span> defined over a training dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> of size <span class="math notranslate nohighlight">\(n\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[J(f) = \underbrace{\frac{1}{n} \sum_{i=1}^n L(y^{(i)}, f(x^{(i)}))}_\text{Learning Objective} + \underbrace{\lambda \cdot R(f)}_\text{New Regularization Term}\]</div>
+<p>Let’s dissect this objective. It features three important components:</p>
+<ul class="simple">
+<li><p>A loss function <span class="math notranslate nohighlight">\(L(y, f(x))\)</span> such as the mean squared error. This can be thought of as a standard supervised learning loss.</p></li>
+</ul>
+<ul class="simple">
+<li><p>A regularizer <span class="math notranslate nohighlight">\(R : \mathcal{M} \to \mathbb{R}\)</span> that penalizes models that are overly complex. Specifically, this term takes in a function and outputs a large score for models that it considers being overly complex.</p></li>
+</ul>
+<ul class="simple">
+<li><p>A regularization parameter <span class="math notranslate nohighlight">\(\lambda &gt; 0\)</span>, which controls the strength of the regularizer.</p></li>
+</ul>
+<p>When the model <span class="math notranslate nohighlight">\(f_\theta\)</span> is parametrized by parameters <span class="math notranslate nohighlight">\(\theta\)</span>, we also use the following notation:</p>
+<div class="math notranslate nohighlight">
+\[J(\theta) = \frac{1}{n} \sum_{i=1}^n L(y^{(i)}, f_\theta(x^{(i)})) + \lambda \cdot R(\theta).\]</div>
+<p>Next, let’s see some examples of what a regularizer could look like.</p>
+</section>
+</section>
+<section id="id1">
+<h2>5.4.2. L2 Regularization<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<p>How can we define a regularizer <span class="math notranslate nohighlight">\(R: \mathcal{M} \to \mathbb{R}\)</span> to control the complexity of a model <span class="math notranslate nohighlight">\(f \in \mathcal{M}\)</span>? In the context of linear models <span class="math notranslate nohighlight">\(f_\theta(x) = \theta^\top x\)</span>, a widely used approach is called <em>L2 regularization</em>.</p>
+<section id="id2">
+<h3>5.4.2.1. Definition<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+<p>L2 regularization defines the following objective:
+$<span class="math notranslate nohighlight">\(J(\theta) = \frac{1}{n} \sum_{i=1}^n L(y^{(i)}, \theta^\top x^{(i)}) + \frac{\lambda}{2} \cdot ||\theta||_2^2.\)</span>$</p>
+<p>Let’s dissect the components of this objective.</p>
+<p>Note that ehe regularizer <span class="math notranslate nohighlight">\(R : \Theta \to \mathbb{R}\)</span> is the function
+<span class="math notranslate nohighlight">\(R(\theta) = ||\theta||_2^2 = \sum_{j=1}^d \theta_j^2.\)</span>
+This is also known as the L2 norm of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>The regularizer penalizes large parameters. This prevents us from relying on any single feature and penalizes very irregular solutions. It is an empirical fact that models that tend to overfit (like the polynomials in our examples) tend to have weights with a very large L2 norm. By penalizing this norm, we are penalizing complex models.</p>
+<p>Finally, note that although we just defined L2 regularization in the context of linear regression, any model that has parameters can be regularized by adding to the objective the L2 norm of these paramters. Thus, the technique can be used with logistic regression, neural networks, and many other models.</p>
+</section>
+<section id="l2-regularization-for-polynomial-regression">
+<h3>5.4.2.2. L2 Regularization for Polynomial Regression<a class="headerlink" href="#l2-regularization-for-polynomial-regression" title="Permalink to this headline">#</a></h3>
+<p>Let’s consider an application to the polynomial model we have seen so far. Given polynomial features <span class="math notranslate nohighlight">\(\phi(x)\)</span>, we optimize the following objective:</p>
+<div class="math notranslate nohighlight">
+\[ J(\theta) = \frac{1}{2n} \sum_{i=1}^n \left( y^{(i)} - \theta^\top \phi(x^{(i)}) \right)^2 + \frac{\lambda}{2} \cdot ||\theta||_2^2. \]</div>
+<p>We implement regularized and polynomial regression of degree 15 on three random training sets sampled from the same distribution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Ridge</span>
+
+<span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">))):</span>
+    <span class="c1"># sample a dataset</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+
+    <span class="c1"># fit a least squares model</span>
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+    
+    <span class="c1"># fit a Ridge model</span>
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span> <span class="c1"># sklearn uses alpha instead of lambda</span>
+    <span class="n">pipeline2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>    
+
+    <span class="c1"># visualize results</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># ax.plot(X_test, true_fn(X_test), label=&quot;True function&quot;)    </span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;No Regularization&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">pipeline2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;L2 Regularization&quot;</span><span class="p">)</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Dataset sample #</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/lecture5-regularization_89_0.png" src="_images/lecture5-regularization_89_0.png" />
+</div>
+</div>
+<p>It’s an empirical fact that in order to define a very irregular function, we need very large polynomial weights.</p>
+<p>Forcing the model to use small weights prevents it from learning irregular functions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Non-regularized weights of the polynomial model need to be large to fit every point:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;By regularizing the weights to be small, we force the curve to be more regular:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pipeline2</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Non-regularized weights of the polynomial model need to be large to fit every point:
+[-3.02370887e+03  1.16528860e+05 -2.44724185e+06  3.20288837e+07]
+
+By regularizing the weights to be small, we force the curve to be more regular:
+[-2.70114811 -1.20575056 -0.09210716  0.44301292]
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the above example, the weights of the best-fit degree 15 polynomial are huge: they are on the order of <span class="math notranslate nohighlight">\(10^3\)</span> to <span class="math notranslate nohighlight">\(10^7\)</span>. By regularizing the model, we are forcing the weights to be small—less than <span class="math notranslate nohighlight">\(10^0\)</span> in this example, As expected, a polynomial with small weights cannot reproduce the highly “wiggly” shape of the overfitting polynomial, and thus does not suffer from the same failure mode.</p>
+</section>
+<section id="how-to-choose-lambda-hyperparameter-search">
+<h3>5.4.2.3. How to Choose <span class="math notranslate nohighlight">\(\lambda\)</span>? Hyperparameter Search<a class="headerlink" href="#how-to-choose-lambda-hyperparameter-search" title="Permalink to this headline">#</a></h3>
+<p>Note that regularization has introduced a new parameter into our model—the regularization strength <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+<p>We refer to <span class="math notranslate nohighlight">\(\lambda\)</span> as a <strong>hyperparameter</strong>, because it’s a high-level parameter that controls other parameters. Higher values of <span class="math notranslate nohighlight">\(\lambda\)</span> induce a small norm for <span class="math notranslate nohighlight">\(\theta\)</span>.
+Note that we cannot learn <span class="math notranslate nohighlight">\(\lambda\)</span> from data—if we did, the optimizer would just set it to zero to get the best possible training fit. This is also what makes it very distinct from regular parameters.</p>
+<p>How do we choose <span class="math notranslate nohighlight">\(\lambda\)</span> then? We select the <span class="math notranslate nohighlight">\(\lambda\)</span> that yields the best model performance on the development set. Thus, we are in a sense choosing <span class="math notranslate nohighlight">\(\lambda\)</span> by minimizing the training loss on the development set. Over time this can lead us to overfit the development set; however, there is usually only a very small number of hyparameters, and the problem is not as pronounced as regular overfitting.</p>
+</section>
+</section>
+<section id="normal-equations-for-l2-regularized-linear-models">
+<h2>5.4.3. Normal Equations for L2-Regularized Linear Models<a class="headerlink" href="#normal-equations-for-l2-regularized-linear-models" title="Permalink to this headline">#</a></h2>
+<p>How, do we fit regularized models? As in the linear case, we can do this easily by deriving generalized normal equations!</p>
+<p>Let <span class="math notranslate nohighlight">\(L(\theta) = \frac{1}{2} (X \theta - y)^\top  (X \theta - y)\)</span> be our least squares objective. We can write the L2-regularized objective as:
+$<span class="math notranslate nohighlight">\( J(\theta) = \frac{1}{2} (X \theta - y)^\top  (X \theta - y) + \frac{1}{2} \lambda ||\theta||_2^2 \)</span>$</p>
+<p>This allows us to derive the gradient as follows:
+\begin{align*}
+\nabla_\theta J(\theta)
+&amp; = \nabla_\theta \left( \frac{1}{2} (X \theta - y)^\top  (X \theta - y) + \frac{1}{2} \lambda ||\theta||<em>2^2 \right) \
+&amp; = \nabla</em>\theta \left( L(\theta) + \frac{1}{2} \lambda \theta^\top \theta \right) \
+&amp; = \nabla_\theta L(\theta) + \lambda \theta \
+&amp; = (X^\top X) \theta - X^\top y + \lambda \theta \
+&amp; = (X^\top X + \lambda I) \theta - X^\top y
+\end{align*}</p>
+<p>We used the derivation of the normal equations for least squares to obtain <span class="math notranslate nohighlight">\(\nabla_\theta L(\theta)\)</span> as well as the fact that: <span class="math notranslate nohighlight">\(\nabla_x x^\top x = 2 x\)</span>.</p>
+<p>We can set the gradient to zero to obtain normal equations for the Ridge model:
+$<span class="math notranslate nohighlight">\( (X^\top X + \lambda I) \theta = X^\top y. \)</span>$</p>
+<p>Hence, the value <span class="math notranslate nohighlight">\(\theta^*\)</span> that minimizes this objective is given by:
+$<span class="math notranslate nohighlight">\( \theta^* = (X^\top X + \lambda I)^{-1} X^\top y.\)</span>$</p>
+<p>Note that the matrix <span class="math notranslate nohighlight">\((X^\top X + \lambda I)\)</span> is always invertible, which addresses a problem with least squares that we saw earlier.</p>
+</section>
+<section id="algorithm-ridge-regression">
+<h2>5.4.3. Algorithm: Ridge Regression<a class="headerlink" href="#algorithm-ridge-regression" title="Permalink to this headline">#</a></h2>
+<p>These derivations yield a new algorithm, which is known as L2-regularized ordinary least squares or simply <em>Ridge regression</em>.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (regression)</p></li>
+<li><p><strong>Model family</strong>: Linear models</p></li>
+<li><p><strong>Objective function</strong>: L2-regularized mean squared error</p></li>
+<li><p><strong>Optimizer</strong>: Normal equations</p></li>
+</ul>
+<p>Ridge regression can be used to fit models with highly non-linear features (like high-dimensional polynomial regression), while keeping overfitting under control.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="l1-regularization-and-sparsity">
+<h1>5.5. L1 Regularization and Sparsity<a class="headerlink" href="#l1-regularization-and-sparsity" title="Permalink to this headline">#</a></h1>
+<p>The L2 norm is not the only type of regularizer that can be used to mitigate overfiting. We will now look at another approach called L1 regularization, which will have an important new property called sparsity.</p>
+<section id="l1-regularizion">
+<h2>5.5.1. L1 Regularizion<a class="headerlink" href="#l1-regularizion" title="Permalink to this headline">#</a></h2>
+<section id="id3">
+<h3>5.5.1.1. Definition<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<p>Another closely related approach to L2 regularization is to penalize the size of the weights using the L1 norm.</p>
+<p>In the context of linear models <span class="math notranslate nohighlight">\(f(x) = \theta^\top x\)</span>, L1 regularization yields the following objective:
+$<span class="math notranslate nohighlight">\( J(\theta) = \frac{1}{n} \sum_{i=1}^n L(y^{(i)}, \theta^\top x^{(i)}) + \lambda \cdot ||\theta||_1. \)</span>$</p>
+<p>Let’s dissect the components of this objective.</p>
+<ul class="simple">
+<li><p>As before, the objective contains a supervised loss <span class="math notranslate nohighlight">\(L\)</span> and a hyper-parameter <span class="math notranslate nohighlight">\(\lambda\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The regularizer <span class="math notranslate nohighlight">\(R : \mathcal{M} \to \mathbb{R}\)</span> is now
+<span class="math notranslate nohighlight">\(R(\theta) = ||\theta||_1 = \sum_{j=1}^d |\theta_j|.\)</span>
+This is known as the L1 norm of <span class="math notranslate nohighlight">\(\theta\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>This regularizer also penalizes large weights. However, it additionally forces most weights to decay to zero, as opposed to just being small.</p></li>
+</ul>
+</section>
+<section id="algorithm-lasso">
+<h3>5.5.1.2. Algorithm: Lasso<a class="headerlink" href="#algorithm-lasso" title="Permalink to this headline">#</a></h3>
+<p>L1-regularized linear regression is also known as the Lasso (least absolute shrinkage and selection operator).</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (regression)</p></li>
+<li><p><strong>Model family</strong>: Linear models</p></li>
+<li><p><strong>Objective function</strong>: L1-regularized mean squared error</p></li>
+</ul>
+<ul class="simple">
+<li><p><strong>Optimizer</strong>: gradient descent, coordinate descent, least angle regression (LARS) and others</p></li>
+</ul>
+<p>Unlike Ridge regression, the Lasso does not have an analytical formula for the best-fit parameters. In practice, we resort to iterative numerical algorithms, including variations of gradient descent and more specialized procedures.</p>
+</section>
+</section>
+<section id="sparsity">
+<h2>5.5.2. Sparsity<a class="headerlink" href="#sparsity" title="Permalink to this headline">#</a></h2>
+<p>Like L2 regularization, the L1 approach makes model weights small. However, it doesn’t just make the weights small—it sets some of them exactly zero. This property of the weights is calles <em>sparsity</em>, and can be very useful in practice.</p>
+<section id="id4">
+<h3>5.5.2.1. Definition<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+<p>More formally, a vector is said to be sparse if a large fraction of its entires is zero. Thus, L1-regularized linear regression produces <em>sparse parameters</em> <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>Why is sparsity useful?</p>
+<ul class="simple">
+<li><p>It makes the model more interpretable. If we have a large number of features, the Lasso will set most of their parameters zero, thus effectively excluding them. This allows us to focus our attention on a small number of relevant features.</p></li>
+<li><p>Sparsity can also make models computationally more tractable. Once the model has set certain weights to zero—we can ignore their corresponding features entirely. This avoids us from spending and computation or memory on these features.</p></li>
+</ul>
+</section>
+<section id="visualizing-weights-in-ridge-and-lasso">
+<h3>5.5.2.2. Visualizing Weights in Ridge and Lasso<a class="headerlink" href="#visualizing-weights-in-ridge-and-lasso" title="Permalink to this headline">#</a></h3>
+<p>To better understand sparsity, we fit Ridge and Lasso on the UCI diabetes dataset and observe the magnitude of each weight (colored lines) as a function of the regularization parameter.</p>
+<p>Below is Ridge—each colored line represents the magnitude of each of the ten different model parameters as a function of regularization strength. Clearly, the weights become smaller as we regularize more.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># based on https://scikit-learn.org/stable/auto_examples/linear_model/plot_ridge_path.html</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Ridge</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># create ridge coefficients</span>
+<span class="n">alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>  <span class="p">)</span>
+<span class="n">ridge_coefs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">alphas</span><span class="p">:</span>
+    <span class="n">ridge</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">fit_intercept</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ridge</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">ridge_coefs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ridge</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+
+<span class="c1"># plot ridge coefficients</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="n">ridge_coefs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Regularization parameter (lambda)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Magnitude of model parameters&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ridge coefficients as a function of the regularization&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4.466835921509635e-06,
+ 223.872113856834,
+ -868.4051623855127,
+ 828.0533448059361)
+</pre></div>
+</div>
+<img alt="_images/lecture5-regularization_111_1.png" src="_images/lecture5-regularization_111_1.png" />
+</div>
+</div>
+<p>However, the Ridge model does not produce sparse weights—the weights are never exactly zero. Let’s now compare it to a Lasso model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Based on: https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lars.html</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">lars_path</span>
+
+<span class="c1"># create lasso coefficients    </span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">lasso_coefs</span> <span class="o">=</span> <span class="n">lars_path</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lasso&#39;</span><span class="p">)</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lasso_coefs</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># plot ridge coefficients</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="s1">&#39;121&#39;</span><span class="p">)</span>    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="n">ridge_coefs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Regularization Strength (lambda)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Magnitude of model parameters&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ridge coefficients as a function of regularization strength $\lambda$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+<span class="c1"># plot lasso coefficients</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="s1">&#39;122&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">3500</span><span class="o">-</span><span class="n">xx</span><span class="p">,</span> <span class="n">lasso_coefs</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Magnitude of model parameters&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Regularization Strength (lambda)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;LASSO coefficients as a function of regularization strength $\lambda$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-133.00520290292727, 3673.000247757282, -869.357335763701, 828.4524952229654)
+</pre></div>
+</div>
+<img alt="_images/lecture5-regularization_113_1.png" src="_images/lecture5-regularization_113_1.png" />
+</div>
+</div>
+<p>Observe how the Lasso parameters become progressively smaller, until they reach exactly zero, and then they stay at zero.</p>
+</section>
+</section>
+<section id="why-does-l1-regularization-produce-sparsity">
+<h2>5.5.3. Why Does L1 Regularization Produce Sparsity?<a class="headerlink" href="#why-does-l1-regularization-produce-sparsity" title="Permalink to this headline">#</a></h2>
+<p>We conclude with some intuition for why L1 regularization induces sparsity. This is a more advanced topic that is not essential for understanding the most important ideas in this section.</p>
+<section id="regularizing-via-constraints">
+<h3>5.5.3.1. Regularizing via Constraints<a class="headerlink" href="#regularizing-via-constraints" title="Permalink to this headline">#</a></h3>
+<p>Consider a regularized problem with a penalty term:
+$<span class="math notranslate nohighlight">\( \min_{\theta \in \Theta} L(\theta) + \lambda \cdot R(\theta). \)</span>$</p>
+<p>Alternatively, we may enforce an explicit constraint on the complexity of the model:
+\begin{align*}
+\min_{\theta \in \Theta} ; &amp; L(\theta) \
+\text{such that } ; &amp; R(\theta) \leq \lambda’
+\end{align*}</p>
+<p>We will not prove this, but solving this problem is equivalent to solving the penalized problem for some <span class="math notranslate nohighlight">\(\lambda &gt; 0\)</span> that’s different from <span class="math notranslate nohighlight">\(\lambda'\)</span>. In other words,</p>
+<ul class="simple">
+<li><p>We can regularize by explicitly enforcing <span class="math notranslate nohighlight">\(R(\theta)\)</span> to be less than a value instead of penalizing it.</p></li>
+<li><p>For each value of <span class="math notranslate nohighlight">\(\lambda\)</span>, we are implicitly setting a constraint of <span class="math notranslate nohighlight">\(R(\theta)\)</span>.</p></li>
+</ul>
+<section id="id5">
+<h4>An Example<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h4>
+<p>This is what constraint-based regularization looks like for the linear models we have seen thus far:
+\begin{align*}
+\min_{\theta \in \Theta} ; &amp; \frac{1}{2n} \sum_{i=1}^n \left( y^{(i)} - \theta^\top x^{(i)} \right)^2 \
+\text{such that } ; &amp; ||\theta|| \leq \lambda’
+\end{align*}</p>
+<p>where <span class="math notranslate nohighlight">\(||\cdot||\)</span> can either be the L1 or L2 norm.</p>
+</section>
+</section>
+<section id="sparsity-in-l1-vs-l2-regularization">
+<h3>5.5.3.2. Sparsity in L1 vs. L2 Regularization<a class="headerlink" href="#sparsity-in-l1-vs-l2-regularization" title="Permalink to this headline">#</a></h3>
+<p>The following image by <a href="https://medium.com/uwaterloo-voice/a-deep-dive-into-regularization-eec8ab648bce">Divakar Kapil</a> and Hastie et al. explains the difference between the two norms.</p>
+<p><left><img width=75% src="img/l1-vs-l2-annotated.png"></left></p>
+<p>The ellipses represent the level curves of the mean squared error (MSE) loss function used by both Ridge and Lasso. The unregularized minimizer is indicated by a black dot (<span class="math notranslate nohighlight">\(\hat\beta\)</span>).</p>
+<p>However, the loss is regularized, and the parameters are constrained to live in the light blue regions. These are the L1 ball around zero (on the left) and the L2 ball around zero (on the right). Therefore, the parameters chosen by both models are point with the smallest MSE loss that are within the light blue feasible region.</p>
+<p>In order to find these points, we have to find the level curve that is tangent to the feasible region (this is show in the figure). On the right hand side, the shape of the L2 feasible region is round and it’s unlikely that the tanget point will be one that is sparse.</p>
+<p>However, in the L1 case, the level curve will most likely be tangent to the L1 feasible region at a “vertex” of the diamond. These “vertices” are aligned with the axes—therefore at these points some of the coefficients are exactly zero. This is the intuition for why L1 produces sparse parameter vectors.</p>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="why-does-supervised-learning-work">
+<h1>5.6. Why Does Supervised Learning Work?<a class="headerlink" href="#why-does-supervised-learning-work" title="Permalink to this headline">#</a></h1>
+<p>We have started this lecture with an example of when supervised learning doesn’t work. Let’s conclude it with a more detailed argument explaining when and why supervised learning <em>does</em> work.</p>
+<p>This is more advanced materials that is not essential to understand the rest of the lecture.</p>
+<p>First, let’s begin by recalling again our intuitive definition of supervised learning.</p>
+<ol class="simple">
+<li><p>First, we collect a dataset of labeled training examples.</p></li>
+<li><p>We train a model to output accurate predictions on this dataset.</p></li>
+</ol>
+<p>We have seen that a good predictive model is one that makes <strong>accurate predictions</strong> on <strong>new data</strong> that it has not seen at training time. We will now prove that under some conditions and given enough data is guaranteed to be accurate on enw data coming from the same data distribution.</p>
+<section id="some-assumptions-and-definitions">
+<h2>5.6.1. Some Assumptions and Definitions<a class="headerlink" href="#some-assumptions-and-definitions" title="Permalink to this headline">#</a></h2>
+<section id="id6">
+<h3>5.6.1.1. Data Distribution<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<p>We will assume that data is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as
+$<span class="math notranslate nohighlight">\(x, y \sim \mathbb{P}.\)</span>$</p>
+<p>The training set <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}\)</span> consists of <em>independent and identicaly distributed</em> (IID) samples from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
+</section>
+<section id="holdout-dataset">
+<h3>5.6.1.2. Holdout Dataset<a class="headerlink" href="#holdout-dataset" title="Permalink to this headline">#</a></h3>
+<p>A holdout dataset</p>
+<div class="math notranslate nohighlight">
+\[\dot{\mathcal{D}} = \{(\dot{x}^{(i)}, \dot{y}^{(i)}) \mid i = 1,2,...,m\}\]</div>
+<p>is sampled IID from the same distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, and is distinct from the training dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.</p>
+</section>
+<section id="evaluating-performance-on-a-holdout-set">
+<h3>5.6.1.2. Evaluating Performance on a Holdout Set<a class="headerlink" href="#evaluating-performance-on-a-holdout-set" title="Permalink to this headline">#</a></h3>
+<p>Intuitively, a supervised model <span class="math notranslate nohighlight">\(f_\theta\)</span> is successful if it performs well on a holdout set <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span> according to some measure</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{m} \sum_{i=1}^m L\left(\dot y^{(i)}, f_\theta(\dot x^{(i)}) \right).
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(L : \mathcal{X}\times\mathcal{Y} \to \mathbb{R}\)</span> is a performance metric or a loss function that we get to choose.</p>
+<p>The choice of the performance metric <span class="math notranslate nohighlight">\(L\)</span> depends on the specific problem and our goals.
+For example, in a classification setting, we may be interested in the accuracy of the model. Thus, we want the % of misclassified inputs
+$<span class="math notranslate nohighlight">\(
+\frac{1}{m} \sum_{i=1}^m \mathbb{I}\left(\dot y^{(i)} \neq f_\theta(\dot x^{(i)}) \right)
+\)</span><span class="math notranslate nohighlight">\(
+to be small. 
+Here \)</span>\mathbb{I}\left( A \right)<span class="math notranslate nohighlight">\( is an *indicator* function that equals one if \)</span>A$ is true and zero otherwise.</p>
+</section>
+</section>
+<section id="performance-on-out-of-distribution-data">
+<h2>5.6.2. Performance on Out-of-Distribution Data<a class="headerlink" href="#performance-on-out-of-distribution-data" title="Permalink to this headline">#</a></h2>
+<p>Intuitively, a supervised model <span class="math notranslate nohighlight">\(f_\theta\)</span> is successful if it performs well in expectation on new data <span class="math notranslate nohighlight">\(\dot x, \dot y\)</span> sampled from the data distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}_{(\dot x, \dot y)\sim \mathbb{P}} \left[ L\left(\dot y, f_\theta(\dot x \right)) \right] \text{ is &quot;good&quot;}.
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(L : \mathcal{X}\times\mathcal{Y} \to \mathbb{R}\)</span> is a performance metric and we take its expectation or average over all the possible samples <span class="math notranslate nohighlight">\(\dot x, \dot y\)</span> from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
+<p>Recall that formally, an expectation <span class="math notranslate nohighlight">\(\mathbb{E}_{x)\sim {P}} f(x)\)</span> is <span class="math notranslate nohighlight">\(\sum_{x \in \mathcal{X}} f(x) P(x)\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is discrete and <span class="math notranslate nohighlight">\(\int_{x \in \mathcal{X}} f(x) P(x) dx\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is continuous. Intuitively,
+$<span class="math notranslate nohighlight">\(\mathbb{E}_{(\dot x, \dot y)\sim \mathbb{P}} \left[ L\left(\dot y, f_\theta(\dot x) \right) \right]
+= \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} L\left(y, f_\theta(x) \right) \mathbb{P}(x, y)
+\)</span>$
+is the performance on an <em>infinite-sized</em> holdout set, where we have sampled every possible point.</p>
+<p>In practice, we cannot measure
+$<span class="math notranslate nohighlight">\(\mathbb{E}_{(\dot x, \dot y)\sim \mathbb{P}} \left[ L\left(\dot y, f_\theta(\dot x) \right) \right]\)</span><span class="math notranslate nohighlight">\(
+on infinite data. 
+We approximate its performance with a sample \)</span>\dot{\mathcal{D}}<span class="math notranslate nohighlight">\( from \)</span>\mathbb{P}<span class="math notranslate nohighlight">\( and we measure
+\)</span><span class="math notranslate nohighlight">\(
+\frac{1}{m} \sum_{i=1}^m L\left(\dot y^{(i)}, f_\theta(\dot x^{(i)}) \right).
+\)</span><span class="math notranslate nohighlight">\(
+If the number of IID samples \)</span>m$ is large, this approximation holds (we call this a Monte Carlo approximation).</p>
+<p>For example, in a classification setting, we may be interested in the accuracy of the model.
+We want a small probability of making an error on a new <span class="math notranslate nohighlight">\(\dot x, \dot y \sim \mathbb{P}\)</span>:
+$<span class="math notranslate nohighlight">\(
+\mathbb{P}\left(\dot y \neq f_\theta(\dot x) \right) \text{ is small.}
+\)</span>$</p>
+<p>We approximate this via the % of misclassifications on <span class="math notranslate nohighlight">\(\dot{\mathcal{D}}\)</span> sampled from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>:
+$<span class="math notranslate nohighlight">\(
+\frac{1}{m} \sum_{i=1}^m \mathbb{I}\left(\dot y^{(i)} \neq f_\theta(\dot x^{(i)}) \right) \text{ is small.}
+\)</span>$</p>
+<p>Here, <span class="math notranslate nohighlight">\(\mathbb{I}\left( A \right)\)</span> is an <em>indicator</em> function that equals one if <span class="math notranslate nohighlight">\(A\)</span> is true and zero otherwise.</p>
+<p>To summarize, a supervised model <span class="math notranslate nohighlight">\(f_\theta\)</span> performs well when</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}_{(\dot x, \dot y)\sim \mathbb{P}} \left[ L\left(\dot y, f_\theta(\dot x \right)) \right] \text{ is &quot;good&quot;}.
+\]</div>
+<p>Under which conditions is supervised learning guaranteed to give us a good model?</p>
+</section>
+<section id="machine-learning-provably-works">
+<h2>5.6.3. Machine Learning Provably Works<a class="headerlink" href="#machine-learning-provably-works" title="Permalink to this headline">#</a></h2>
+<p>Suppose that we choose <span class="math notranslate nohighlight">\(f \in \mathcal{M}\)</span> on a dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> of size <span class="math notranslate nohighlight">\(n\)</span> sampled IID from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span> by minimizing
+$<span class="math notranslate nohighlight">\(
+\frac{1}{n} \sum_{i=1}^n L\left(y^{(i)}, f(x^{(i)}) \right)
+\)</span>$</p>
+<p>Let <span class="math notranslate nohighlight">\(f^*\)</span>, the best model in <span class="math notranslate nohighlight">\(\mathcal{M}\)</span>:
+$<span class="math notranslate nohighlight">\(
+f^* = \arg\min_f \mathbb{E}_{(\dot x, \dot y)\sim \mathbb{P}} \left[ L\left(\dot y, f(\dot x \right)) \right]
+\)</span>$</p>
+<p>Then, as <span class="math notranslate nohighlight">\(n \to \infty\)</span>, the performance of <span class="math notranslate nohighlight">\(f\)</span> approaches that of <span class="math notranslate nohighlight">\(f^*\)</span>.</p>
+<section id="short-proof-of-why-machine-learning-works">
+<h3>5.6.3.1. Short Proof of Why Machine Learning Works<a class="headerlink" href="#short-proof-of-why-machine-learning-works" title="Permalink to this headline">#</a></h3>
+<p>We say that a classification model <span class="math notranslate nohighlight">\(f\)</span> is accurate if its probability of making an error on a new random datapoint is small:</p>
+<div class="math notranslate nohighlight">
+\[ 1 - \mathbb{P} \left[ \dot y= f(\dot x) \right] \leq \epsilon \]</div>
+<p>for <span class="math notranslate nohighlight">\(\dot{x}, \dot{y} \sim \mathbb{P}\)</span>, for some small <span class="math notranslate nohighlight">\(\epsilon &gt; 0\)</span> and some definition of accuracy.</p>
+<p>We can also say that the model <span class="math notranslate nohighlight">\(f\)</span> is inaccurate if it’s probability of making an error on a random holdout sample is large:</p>
+<div class="math notranslate nohighlight">
+\[ 1 - \mathbb{P} \left[ \dot y= f(\dot x) \right] \geq \epsilon \]</div>
+<p>or equivalently</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{P} \left[ \dot y= f(\dot x) \right] \leq  1-\epsilon.\]</div>
+<p>In order to prove that supervised learning works, we will make two simplifying assumptions:</p>
+<ol class="simple">
+<li><p>We define a model class <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> containing <span class="math notranslate nohighlight">\(H\)</span> different models
+$<span class="math notranslate nohighlight">\(\mathcal{M} = \{f_1, f_2,...,f_H\}\)</span>$</p></li>
+<li><p>One of these models fits the training data perfectly (is accurate on every point) and we choose that model.</p></li>
+</ol>
+<p>(Both of these assumptions can be relaxed.)</p>
+<p><strong>Claim</strong>: The probability that supervised learning will return an inaccurate model decreases exponentially with training set size <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<ol class="simple">
+<li><p>A model <span class="math notranslate nohighlight">\(f\)</span> is inaccurate if <span class="math notranslate nohighlight">\(\mathbb{P} \left[ \dot y= f(\dot x) \right] \leq  1-\epsilon\)</span>.  The probability that an inaccurate model <span class="math notranslate nohighlight">\(f\)</span> perfectly fits the training set is at most <span class="math notranslate nohighlight">\(\prod_{i=1}^n  \mathbb{P} \left[ \dot y= f(\dot x) \right] \leq (1-\epsilon)^n\)</span>.</p></li>
+</ol>
+<ol class="simple">
+<li><p>We have <span class="math notranslate nohighlight">\(H\)</span> models in <span class="math notranslate nohighlight">\(\mathcal{M}\)</span>, and any of them could be in accurate. The probability that at least one of at most <span class="math notranslate nohighlight">\(H\)</span> inaccurate models willl fit the training set perfectly is <span class="math notranslate nohighlight">\(\leq H (1-\epsilon)^n\)</span>.</p></li>
+</ol>
+<!-- 3. If $\delta$ is the probability that a bad classifier is found by supervised learning, then $\delta \leq H (1-\epsilon)^n$ and if
+$$ n \geq \frac{\log(\delta/H)}{\log(1-\epsilon)} $$
+then supervised learning will work with probability at least $1-\delta$. --><p>Therefore, the claim holds.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "aml"
+        },
+        kernelOptions: {
+            kernelName: "aml",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'aml'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="lecture4-classification.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Lecture 4: Classification and Logistic Regression</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="lecture6-naive-bayes.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 6: Generative Models and Naive Bayes</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Cornell University<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -4,6 +4,14 @@
 format: jb-book
 root: intro
 chapters:
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+# - file: markdown
+# - file: notebooks
+# - file: markdown-notebooks
+- file: lecture2-supervised-learning
+- file: lecture3-linear-regression
+- file: lecture4-classification
+- file: lecture5-regularization
+- file: lecture6-naive-bayes
+- file: lecture8-unsupervised-learning
+- file: lecture9-density-estimation
+- file: lecture10-clustering
