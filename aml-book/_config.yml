@@ -10,11 +10,6 @@ logo: logo.png
 execute:
   execute_notebooks: 'off'
 
-# Define the name of the latex output file for PDF builds
-latex:
-  latex_documents:
-    targetname: book.tex
-
 # Add a bibtex file so that we can create citations
 bibtex_bibfiles:
   - references.bib
@@ -30,3 +25,12 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+
+# LaTeX-specific settings
+latex:
+  latex_engine              : xelatex  # one of 'pdflatex', 'xelatex' (recommended for unicode), 'luatex', 'platex', 'uplatex'
+  use_jupyterbook_latex     : true # use sphinx-jupyterbook-latex for pdf builds as default
+
+sphinx:
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
