@@ -366,11 +366,13 @@ plt.ylabel('Diabetes Risk')
 # ## 3.2. Linear Model Family
 # 
 # Recall that a linear model has the form
+# 
 # $$
 # \begin{align*}
 # y & = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d
 # \end{align*}
 # $$
+# 
 # where $x \in \mathbb{R}^d$ is a vector of features and $y$ is the target. The $\theta_j$ are the *parameters* of the model.
 # 
 # By using the notation $x_0 = 1$, we can represent the model in a vectorized form
