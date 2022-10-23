@@ -26,9 +26,11 @@
 # 
 # It outputs a model $f \in \mathcal{M}$ with the smallest value of the objective $J$.
 # 
+# $$
 # \begin{align*}
 # \min_{f \in \mathcal{M}} J(f)
 # \end{align*}
+# $$
 # 
 # Intuitively, this is the function that bests "fits" the data on the training dataset $\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}$.
 # 
@@ -74,7 +76,13 @@ plt.title('Simple quadratic function')
 # 
 # ### 3.1.3.1. Derivatives
 # 
-# Recall that the derivative $$\frac{d f(\theta_0)}{d \theta}$$ of a univariate function $f : \mathbb{R} \to \mathbb{R}$ is the instantaneous rate of change of the function $f(\theta)$ with respect to its parameter $\theta$ at the point $\theta_0$.
+# Recall that the derivative 
+# 
+# $$
+# \frac{d f(\theta_0)}{d \theta}
+# $$
+# 
+#  of a univariate function $f : \mathbb{R} \to \mathbb{R}$ is the instantaneous rate of change of the function $f(\theta)$ with respect to its parameter $\theta$ at the point $\theta_0$.
 
 # The code below visualizes several derivatives of the quadratic function. Note that the derivatives are the slopes of the tangents at various points of the curve.
 
@@ -114,18 +122,26 @@ plt.title('Simple quadratic function')
 
 # ### 3.1.3.2. Partial Derivatives
 # 
-# The partial derivative $$\frac{\partial f(\theta)}{\partial \theta_j}$$ of a multivariate function $f : \mathbb{R}^d \to \mathbb{R}$ is the derivative of $f$ with respect to $\theta_j$ while all the other dimensions $\theta_k$ for $k\neq j$ are fixed.
+# The partial derivative 
+# 
+# $$
+# \frac{\partial f(\theta)}{\partial \theta_j}
+# $$
+# 
+#  of a multivariate function $f : \mathbb{R}^d \to \mathbb{R}$ is the derivative of $f$ with respect to $\theta_j$ while all the other dimensions $\theta_k$ for $k\neq j$ are fixed.
 
 # ### 3.1.3.3. The Gradient
 # 
 # The gradient $\nabla f$ is the vector of all the partial derivatives:
 # 
-# $$ \nabla f (\theta) = \begin{bmatrix}
+# $$ 
+# \nabla f (\theta) = \begin{bmatrix}
 # \frac{\partial f(\theta)}{\partial \theta_1} \\
 # \frac{\partial f(\theta)}{\partial \theta_2} \\
 # \vdots \\
 # \frac{\partial f(\theta)}{\partial \theta_d}
-# \end{bmatrix}.$$
+# \end{bmatrix}.
+# $$
 # 
 # The $j$-th entry of the vector $\nabla f (\theta)$ is the partial derivative $\frac{\partial f(\theta)}{\partial \theta_j}$ of $f$ with respect to the $j$-th component of $\theta$.
 
@@ -236,7 +252,10 @@ plt.axis('equal')
 # ### 3.3.2. Notation
 # 
 # More formally, if we want to optimize $J(\theta)$, we start with an initial guess $\theta_0$ for the parameters and repeat the following update until $\theta$ is no longer changing:
-# $$ \theta_i := \theta_{i-1} - \alpha \cdot \nabla J(\theta_{i-1}). $$
+# 
+# $$
+# \theta_i := \theta_{i-1} - \alpha \cdot \nabla J(\theta_{i-1}). 
+# $$
 # 
 # In code, this method may look as follows:
 # ```python
@@ -299,7 +318,10 @@ plt.axis('equal')
 # #### Gradient Descent Recap
 # 
 # A key ingredient will be gradient descent. Recall that if we want to optimize $J(\theta)$, we start with an initial guess $\theta_0$ for the parameters and repeat the following update:
-# $$ \theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). $$
+# 
+# $$ 
+# \theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). 
+# $$
 # 
 # As code, this method may look as follows:
 # ```python
@@ -344,13 +366,18 @@ plt.ylabel('Diabetes Risk')
 # ## 3.2. Linear Model Family
 # 
 # Recall that a linear model has the form
+# $$
 # \begin{align*}
 # y & = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d
 # \end{align*}
+# $$
 # where $x \in \mathbb{R}^d$ is a vector of features and $y$ is the target. The $\theta_j$ are the *parameters* of the model.
 # 
 # By using the notation $x_0 = 1$, we can represent the model in a vectorized form
-# $$ f_\theta(x) = \sum_{j=0}^d \theta_j \cdot x_j = \theta^\top x. $$
+# 
+# $$ 
+# f_\theta(x) = \sum_{j=0}^d \theta_j \cdot x_j = \theta^\top x. 
+# $$
 
 # Let's define our model in Python.
 
@@ -373,7 +400,11 @@ def f(X, theta):
 # ## 3.3. An Objective: Mean Squared Error
 # 
 # We pick $\theta$ to minimize the mean squared error (MSE). Slight variants of this objective are also known as the residual sum of squares (RSS) or the sum of squared residuals (SSR).
-# $$J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2$$
+# 
+# $$
+# J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2
+# $$
+# 
 # In other words, we are looking for the best compromise in $\theta$ over all the data points.
 
 # Let's implement the mean squared error.
@@ -396,15 +427,18 @@ def mean_squared_error(theta, X, y):
 # 
 # Let's work out the derivatives for $\frac{1}{2} \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2,$ the MSE of a linear model $f_\theta$ for one training example $(x^{(i)}, y^{(i)})$, which we denote $J^{(i)}(\theta)$.
 # 
+# $$
 # \begin{align*}
 # \frac{\partial}{\partial \theta_j} J^{(i)}(\theta) & = \frac{\partial}{\partial \theta_j} \left(\frac{1}{2} \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2\right) \\
 # & = \left( f_\theta(x^{(i)}) - y^{(i)} \right) \cdot \frac{\partial}{\partial \theta_j} \left( f_\theta(x^{(i)}) - y^{(i)} \right) \\
 # & = \left( f_\theta(x^{(i)}) - y^{(i)} \right) \cdot \frac{\partial}{\partial \theta_j} \left( \sum_{k=0}^d \theta_k \cdot x^{(i)}_k - y^{(i)} \right) \\
 # & = \left( f_\theta(x^{(i)}) - y^{(i)} \right) \cdot x^{(i)}_j
 # \end{align*}
+# $$
 
 # We can use this derivation to obtain an expression for the gradient of the MSE for a linear model
 # 
+# $$
 # \begin{align*}
 # \small
 # {\tiny \nabla_\theta J^{(i)} (\theta)} = \begin{bmatrix}
@@ -423,27 +457,23 @@ def mean_squared_error(theta, X, y):
 # =
 # \left( f_\theta(x^{(i)}) - y^{(i)} \right) \cdot x^{(i)}
 # \end{align*}
+# $$
 
 # Note that the MSE over the entire dataset is $J(\theta) = \frac{1}{n}\sum_{i=1}^n J^{(i)}(\theta)$. Therefore:
 # 
-# \begin{align*}
-# \nabla_\theta J (\theta) = \begin{bmatrix}
+# $$
+# \nabla_\theta J(\theta)=\left[\begin{array}{c}
 # \frac{\partial J(\theta)}{\partial \theta_0} \\
 # \frac{\partial J(\theta)}{\partial \theta_1} \\
 # \vdots \\
 # \frac{\partial J(\theta)}{\partial \theta_d}
-# \end{bmatrix}
-# =
-# \frac{1}{n}\sum_{i=1}^n
-# \begin{bmatrix}
+# \end{array}\right]=\frac{1}{n} \sum_{i=1}^n\left[\begin{array}{c}
 # \frac{\partial J^{(i)}(\theta)}{\partial \theta_0} \\
 # \frac{\partial J^{(i)}(\theta)}{\partial \theta_1} \\
 # \vdots \\
 # \frac{\partial J^{(i)}(\theta)}{\partial \theta_d}
-# \end{bmatrix}
-# =
-# \frac{1}{n} \sum_{i=1}^n \left( f_\theta(x^{(i)}) - y^{(i)} \right) \cdot x^{(i)}
-# \end{align*}
+# \end{array}\right]=\frac{1}{n} \sum_{i=1}^n\left(f_\theta\left(x^{(i)}\right)-y^{(i)}\right) \cdot x^{(i)}
+# $$
 
 # Let's implement this gradient.
 
@@ -570,20 +600,30 @@ X_train.head()
 # 
 # 
 # Similarly, we can vectorize the target variables into a vector $y \in \mathbb{R}^n$ of the form
-# $$ y = \begin{bmatrix}
+# 
+# $$ 
+# y = \begin{bmatrix}
 # y^{(1)} \\
 # y^{(2)} \\
 # \vdots \\
 # y^{(n)}
-# \end{bmatrix}.$$
+# \end{bmatrix}.
+# $$
 
 # ### 3.3.1.3. Squared Error in Matrix Form
 # 
 # Recall that we may fit a linear model by choosing $\theta$ that minimizes the squared error:
-# $$J(\theta)=\frac{1}{2}\sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2$$
+# 
+# $$
+# J(\theta)=\frac{1}{2}\sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2
+# $$
 
 # We can write this sum in matrix-vector form as:
-# $$J(\theta) = \frac{1}{2} (y-X\theta)^\top(y-X\theta) = \frac{1}{2} \|y-X\theta\|^2,$$
+# 
+# $$
+# J(\theta) = \frac{1}{2} (y-X\theta)^\top(y-X\theta) = \frac{1}{2} \|y-X\theta\|^2,
+# $$
+# 
 # where $X$ is the design matrix and $\|\cdot\|$ denotes the Euclidean norm.
 
 # ## 3.3.2. The Normal Equations
@@ -594,6 +634,7 @@ X_train.head()
 # 
 # Let's begin by observing that we can compute the gradient of the mean squared error as follows.
 # 
+# $$
 # \begin{align*}
 # \nabla_\theta J(\theta) 
 # & = \nabla_\theta \frac{1}{2} (X \theta - y)^\top  (X \theta - y) \\
@@ -602,6 +643,7 @@ X_train.head()
 # & = \frac{1}{2} \left( 2(X^\top X) \theta - 2X^\top y \right) \\
 # & = (X^\top X) \theta - X^\top y
 # \end{align*}
+# $$
 # 
 # We used the facts that $a^\top b = b^\top a$ (line 3), that $\nabla_x b^\top x = b$ (line 4), and that $\nabla_x x^\top A x = 2 A x$ for a symmetric matrix $A$ (line 4).
 
@@ -610,10 +652,16 @@ X_train.head()
 # We know from calculus that a function is minimized when its derivative is set to zero. In our case, our objective function is a (multivariate) quadratic; hence it only has one minimum, which is the global minimum.
 # 
 # Setting the above derivative to zero, we obtain the *normal equations*:
-# $$ (X^\top X) \theta = X^\top y.$$
+# 
+# $$ 
+# (X^\top X) \theta = X^\top y.
+# $$
 # 
 # Hence, the value $\theta^*$ that minimizes this objective is given by:
-# $$ \theta^* = (X^\top X)^{-1} X^\top y.$$
+# 
+# $$
+# \theta^* = (X^\top X)^{-1} X^\top y.
+# $$
 
 # Note that we assumed that the matrix $(X^\top X)$ is invertible; we will soon see a simple way of dealing with non-invertible matrices.
 
@@ -690,6 +738,7 @@ plt.legend(['Model', 'Prediction', 'Initial patients', 'New patients'])
 # 
 # We start with a brief review of polynomials.
 # Recall that a polynomial of degree $p$ is a function of the form
+# 
 # $$
 # a_p x^p + a_{p-1} x^{p-1} + ... + a_{1} x + a_0.
 # $$
@@ -727,6 +776,7 @@ plt.legend(["$x^3 + 2 x^2 + x + 1$"])
 # This means we can use our algorithms for linear models to learn non-linear features!
 # 
 # Specifically, given a one-dimensional continuous variable $x$, we can define the *polynomial feature* function $\phi : \mathbb{R} \to \mathbb{R}^{p+1}$ as
+# 
 # $$ \phi(x) = \begin{bmatrix}
 # 1 \\
 # x \\
@@ -737,7 +787,11 @@ plt.legend(["$x^3 + 2 x^2 + x + 1$"])
 # $$
 
 # The class of models of the form
-# $$ f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x) $$
+# 
+# $$ 
+# f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x) 
+# $$
+# 
 # with parameters $\theta$ and polynomial features $\phi$ is the set of $p$-degree polynomials.
 
 # * This model is non-linear in the input variable $x$, meaning that we can model complex data relationships.
@@ -826,12 +880,15 @@ plt.plot(x_line, y_train_pred)
 # $$
 
 # In general, a polynomial of degree $p$ over two variables $x_1, x_2$ is a function of the form
+# 
 # $$
 # f(x_1, x_2) = \sum_{i,j \geq 0 : i+j \leq p} a_{ij} x_1^i x_2^j.
 # $$
 
 # In our two-dimensional example, this corresponds to a feature function $\phi : \mathbb{R}^2 \to \mathbb{R}^6$ of the form
-# $$ \phi(x) = \begin{bmatrix}
+# 
+# $$ 
+# \phi(x) = \begin{bmatrix}
 # 1 \\
 # x_1 \\
 # x_1^2 \\
@@ -850,7 +907,11 @@ plt.plot(x_line, y_train_pred)
 # ### 3.4.4.2. Towards General Non-Linear Features
 # 
 # Any non-linear feature map $\phi(x) : \mathbb{R}^d \to \mathbb{R}^p$ can be used to obtain general models of the form
-# $$ f_\theta(x) := \theta^\top \phi(x) $$
+# 
+# $$ 
+# f_\theta(x) := \theta^\top \phi(x) 
+# $$
+# 
 # that are highly non-linear in $x$ but linear in $\theta$.
 
 # For example, here is a way of modeling complex periodic functions via a sum of sines and cosines.
