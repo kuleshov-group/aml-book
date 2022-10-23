@@ -4,13 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lecture 9: Density Estimation &#8212; Applied Machine Learning</title>
     
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -20,16 +18,20 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
+    
+      
+
+    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -37,21 +39,21 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Lecture 10: Clustering" href="lecture10-clustering.html" />
@@ -63,21 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
-
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -86,10 +74,9 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -107,15 +94,14 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
-                </a>
-            </li>
-        </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
@@ -159,17 +145,12 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -177,191 +158,94 @@ const thebe_selector_output = ".output, .cell_output"
 
 
           
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="header-article row sticky-top noprint">
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
         
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture9-density-estimation.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
->
-  
-
-<span class="headerbtn__icon-container">
-  
-    <img src="_static/images/logo_binder.svg">
-  </span>
-<span class="headerbtn__text-container">Binder</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture9-density-estimation.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="_sources/lecture9-density-estimation.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/lecture9-density-estimation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture9-density-estimation.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
     </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture9-density-estimation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
    Lecture 9: Density Estimation
@@ -545,11 +429,12 @@ title="Print to PDF"
  </li>
 </ul>
 
-    </nav>
-</div>
+            </nav>
+        </div>
     </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Lecture 9: Density Estimation</h1>
@@ -749,28 +634,27 @@ title="Print to PDF"
                     </div>
                 </div>
             </div>
-            <main id="main-content" role="main">
-                
+            
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="lecture-9-density-estimation">
-<h1>Lecture 9: Density Estimation<a class="headerlink" href="#lecture-9-density-estimation" title="Permalink to this headline">#</a></h1>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="outlier-detection-using-probabilistic-models">
-<h1>9.1. Outlier Detection Using Probabilistic Models<a class="headerlink" href="#outlier-detection-using-probabilistic-models" title="Permalink to this headline">#</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="lecture-9-density-estimation">
+<h1>Lecture 9: Density Estimation<a class="headerlink" href="#lecture-9-density-estimation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="outlier-detection-using-probabilistic-models">
+<h1>9.1. Outlier Detection Using Probabilistic Models<a class="headerlink" href="#outlier-detection-using-probabilistic-models" title="Permalink to this headline">¶</a></h1>
 <p>After the introduction of unsupervised learning from last lecture, we will now look at a specific problem which unsupervised learning can be used to solve, density estimation.</p>
 <p>Density estimation is the problem of estimating a probability distribution from data. Let’s first look at a motivating practical problem that involves performing density estimation: outlier detection.</p>
-<section id="review-unsupervised-learning">
-<h2>9.1.1. Review: Unsupervised Learning<a class="headerlink" href="#review-unsupervised-learning" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-unsupervised-learning">
+<h2>9.1.1. Review: Unsupervised Learning<a class="headerlink" href="#review-unsupervised-learning" title="Permalink to this headline">¶</a></h2>
 <p>We have a dataset <em>without</em> labels. Our goal is to learn something interesting about the structure of the data:</p>
 <ul class="simple">
 <li><p>Clusters hidden in the dataset.</p></li>
 <li><p>Useful signal hidden in noise, e.g. human speech over a noisy phone.</p></li>
 <li><p>Outliers: particularly unusual and/or interesting datapoints.</p></li>
 </ul>
-</section>
-<section id="outlier-detection">
-<h2>9.1.2. Outlier Detection<a class="headerlink" href="#outlier-detection" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="outlier-detection">
+<h2>9.1.2. Outlier Detection<a class="headerlink" href="#outlier-detection" title="Permalink to this headline">¶</a></h2>
 <p>Let’s us first formulate the problem of outlier detection.</p>
 <p>Suppose we have a (unsupervised) dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}\)</span>. For example, each <span class="math notranslate nohighlight">\(x^{(i)}\)</span>  could represent:</p>
 <ul class="simple">
@@ -778,25 +662,25 @@ title="Print to PDF"
 <li><p>The state of a machine in a factory</p></li>
 </ul>
 <p>The goal of outlier detection is, given a new input <span class="math notranslate nohighlight">\(x'\)</span>, we want to determine whether <span class="math notranslate nohighlight">\(x'\)</span> is “normal” or not. The notion of “normal” is elaborated in the below section.</p>
-<section id="data-distribution-and-outliers">
-<h3>9.1.2.1. Data Distribution and Outliers<a class="headerlink" href="#data-distribution-and-outliers" title="Permalink to this headline">#</a></h3>
+<div class="section" id="data-distribution-and-outliers">
+<h3>9.1.2.1. Data Distribution and Outliers<a class="headerlink" href="#data-distribution-and-outliers" title="Permalink to this headline">¶</a></h3>
 <p>Formally, we assume that the dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> is sampled IID from the <em>data distribution</em> <span class="math notranslate nohighlight">\(P_\text{data}\)</span>. We denote this as
 $<span class="math notranslate nohighlight">\(x \sim P_\text{data}.\)</span>$</p>
 <p>Outlier detection can be thought of as answering the question:</p>
 <div class="math notranslate nohighlight">
 \[ \text{Does the new point $x'$ originate from $P_\text{data}$?} \]</div>
-</section>
-</section>
-<section id="density-estimation">
-<h2>9.1.3. Density Estimation<a class="headerlink" href="#density-estimation" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="density-estimation">
+<h2>9.1.3. Density Estimation<a class="headerlink" href="#density-estimation" title="Permalink to this headline">¶</a></h2>
 <p>So how can we detect outliers? We can use density estimation to help us do that!</p>
 <p>Definition: An unsupervised probabilistic model is a probability distribution that maps datapoints to probabilities:
 $<span class="math notranslate nohighlight">\(P_\theta(x) : \mathcal{X} \to [0,1].\)</span><span class="math notranslate nohighlight">\(
 Probabilistic models often have *parameters* \)</span>\theta \in \Theta$.</p>
 <p>(For 9.1, we will assume our interested probabilistic models do have a set of finite parameters <span class="math notranslate nohighlight">\(\theta\)</span> that nicely describe the behavior of the probabilistic model, i.e., they are “parametric”. This means choosing a good model is a matter of choosing a good <span class="math notranslate nohighlight">\(\theta\)</span>)</p>
 <p>The task of <strong>density estimation</strong> is to learn a probablisitc model <span class="math notranslate nohighlight">\(P_\theta\)</span> on an unsupervised dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> to approximate the true data distribution <span class="math notranslate nohighlight">\(P_\text{data}\)</span>.</p>
-<section id="outlier-detection-using-density-estimation">
-<h3>9.1.3.1. Outlier Detection Using Density Estimation<a class="headerlink" href="#outlier-detection-using-density-estimation" title="Permalink to this headline">#</a></h3>
+<div class="section" id="outlier-detection-using-density-estimation">
+<h3>9.1.3.1. Outlier Detection Using Density Estimation<a class="headerlink" href="#outlier-detection-using-density-estimation" title="Permalink to this headline">¶</a></h3>
 <p>Recall that in outlier detection, whether an input is “normal” translates to whether the input originate from the data distribution <span class="math notranslate nohighlight">\(P_\text{data}\)</span>. We need to somewhat know <span class="math notranslate nohighlight">\(P_\text{data}\)</span> in order to say if an input is an outlier.</p>
 <p>Density estimation is precisely the task of estimating <span class="math notranslate nohighlight">\(P_\text{data}\)</span> with <span class="math notranslate nohighlight">\(P_\theta\)</span>.</p>
 <p>Thus, we can perform outlier detection with probabilistic models:</p>
@@ -804,9 +688,9 @@ Probabilistic models often have *parameters* \)</span>\theta \in \Theta$.</p>
 <li><p><strong>Density estimation</strong>: We fit <span class="math notranslate nohighlight">\(P_\theta\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> to approximate <span class="math notranslate nohighlight">\(P_\text{data}\)</span></p></li>
 <li><p><strong>Outlier detection</strong>: Given <span class="math notranslate nohighlight">\(x'\)</span>, we use <span class="math notranslate nohighlight">\(P_\theta(x')\)</span> to determine if <span class="math notranslate nohighlight">\(x'\)</span> is an outlier.</p></li>
 </ol>
-</section>
-<section id="why-use-probabilistic-models">
-<h3>9.1.3.2. Why Use Probabilistic Models?<a class="headerlink" href="#why-use-probabilistic-models" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="why-use-probabilistic-models">
+<h3>9.1.3.2. Why Use Probabilistic Models?<a class="headerlink" href="#why-use-probabilistic-models" title="Permalink to this headline">¶</a></h3>
 <p>There are many other tasks that we can solve with a good model <span class="math notranslate nohighlight">\(P_\theta\)</span>.</p>
 <ol class="simple">
 <li><p>Generation: sample new objects from <span class="math notranslate nohighlight">\(P_\theta\)</span>, such as images.</p></li>
@@ -814,9 +698,9 @@ Probabilistic models often have *parameters* \)</span>\theta \in \Theta$.</p>
 <li><p>Density estimation: approximate <span class="math notranslate nohighlight">\(P_\theta \approx P_\text{data}\)</span> and use it to solve any downstream task (generation, clustering, outlier detection, etc.).</p></li>
 </ol>
 <p>We are going to be interested in the latter.</p>
-</section>
-<section id="maximum-likelihood-estimation">
-<h3>9.1.3.3. Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="maximum-likelihood-estimation">
+<h3>9.1.3.3. Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Permalink to this headline">¶</a></h3>
 <p>So how exactly can one learn a probabilistic model <span class="math notranslate nohighlight">\(P_\theta(x)\)</span>, i.e., learn good/optimal <span class="math notranslate nohighlight">\(\theta\)</span>, that estimates the data distribution <span class="math notranslate nohighlight">\(P_\text{data}\)</span>?</p>
 <p>One way we can do that is by optimizing
 the <em>maximum log-likelihood</em> objective
@@ -829,9 +713,9 @@ $<span class="math notranslate nohighlight">\(
 D(P_\text{data} \| P_\theta) = \sum_{{\bf x}} P_\text{data}({\bf x}) \log \frac{P_\text{data}({\bf x})}{P_\theta({\bf x})}.
 \)</span>$</p>
 <p>The KL divergence is always non-negative, and equals zero when <span class="math notranslate nohighlight">\(P_\text{data}\)</span> and <span class="math notranslate nohighlight">\(P_\theta\)</span> are identical. This makes it a natural measure of similarity that’s useful for comparing distributions.</p>
-</section>
-<section id="toy-example-flipping-a-random-coin">
-<h3>9.1.3.4. Toy Example: Flipping a Random Coin<a class="headerlink" href="#toy-example-flipping-a-random-coin" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="toy-example-flipping-a-random-coin">
+<h3>9.1.3.4. Toy Example: Flipping a Random Coin<a class="headerlink" href="#toy-example-flipping-a-random-coin" title="Permalink to this headline">¶</a></h3>
 <p>How should we choose <span class="math notranslate nohighlight">\(P_\theta(x)\)</span>, i.e., choose <span class="math notranslate nohighlight">\(\theta\)</span>, if 3 out of 5 coin tosses are heads? Let’s apply maximum likelihood learning.</p>
 <ul class="simple">
 <li><p>Our model is <span class="math notranslate nohighlight">\(P_\theta(x=H)=\theta\)</span> and <span class="math notranslate nohighlight">\(P_\theta(x=T)=1-\theta\)</span></p></li>
@@ -867,14 +751,14 @@ D(P_\text{data} \| P_\theta) = \sum_{{\bf x}} P_\text{data}({\bf x}) \log \frac{
 <div class="math notranslate nohighlight">
 \[P(\text{ten tails}) =  \prod_{j=1}^{10} P_\theta(x^{(j)}=T) = (1-0.6)^{10} \approx 10^{-4}\]</div>
 <p>This gives us an estimate of whether certain sequences are likely or not. If they are not, then they are outliers!</p>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="kernel-density-estimation">
-<h1>9.2. Kernel Density Estimation<a class="headerlink" href="#kernel-density-estimation" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="kernel-density-estimation">
+<h1>9.2. Kernel Density Estimation<a class="headerlink" href="#kernel-density-estimation" title="Permalink to this headline">¶</a></h1>
 <p>Next, we will look at a more sophisticated technique for estimating densities.</p>
-<section id="review-density-estimation">
-<h2>9.2.1. Review: Density Estimation<a class="headerlink" href="#review-density-estimation" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-density-estimation">
+<h2>9.2.1. Review: Density Estimation<a class="headerlink" href="#review-density-estimation" title="Permalink to this headline">¶</a></h2>
 <p>Recall that the problem of density estimation is to approximate the data distribution <span class="math notranslate nohighlight">\(P_\text{data}\)</span> with the model <span class="math notranslate nohighlight">\(P\)</span>.
 $<span class="math notranslate nohighlight">\( P \approx P_\text{data}. \)</span>$</p>
 <p>(Notice that the probabilistic model <span class="math notranslate nohighlight">\(P\)</span> needs not be nicely characterized by a set of parameters <span class="math notranslate nohighlight">\(\theta\)</span>. They can be “non-parametric”)</p>
@@ -884,13 +768,13 @@ $<span class="math notranslate nohighlight">\( P \approx P_\text{data}. \)</span
 <li><p>Generating new samples <span class="math notranslate nohighlight">\(x\)</span></p></li>
 <li><p>Visualizing and understanding the structure of <span class="math notranslate nohighlight">\(P_\text{data}\)</span></p></li>
 </ul>
-</section>
-<section id="histogram-density-estimation">
-<h2>9.2.2. Histogram Density Estimation<a class="headerlink" href="#histogram-density-estimation" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="histogram-density-estimation">
+<h2>9.2.2. Histogram Density Estimation<a class="headerlink" href="#histogram-density-estimation" title="Permalink to this headline">¶</a></h2>
 <p>Perhaps, one of the simplest approaches to density estimation (constructing an estimating probabilistic model) is by forming a histogram. This definitely seems conceptually simpler than maximizing the likelihood of data with respect to a parameterized probabilistic model from earlier.</p>
 <p>To construct a histogram, we partition the input space <span class="math notranslate nohighlight">\(x\)</span> into a <span class="math notranslate nohighlight">\(d\)</span>-dimensional grid and counts the number of points in each cell/bin.</p>
-<section id="histogram-density-estimation-example">
-<h3>9.2.2.1. Histogram Density Estimation: Example<a class="headerlink" href="#histogram-density-estimation-example" title="Permalink to this headline">#</a></h3>
+<div class="section" id="histogram-density-estimation-example">
+<h3>9.2.2.1. Histogram Density Estimation: Example<a class="headerlink" href="#histogram-density-estimation-example" title="Permalink to this headline">¶</a></h3>
 <p>This is best illustrated by an example.</p>
 <p>Let’s start by creating a simple 1D dataset coming from a mixture of two Gaussians:</p>
 <div class="math notranslate nohighlight">
@@ -945,9 +829,9 @@ $<span class="math notranslate nohighlight">\( P \approx P_\text{data}. \)</span
 <img alt="_images/lecture9-density-estimation_24_1.png" src="_images/lecture9-density-estimation_24_1.png" />
 </div>
 </div>
-</section>
-<section id="limitations-of-histograms">
-<h3>9.2.2.2. Limitations of Histograms<a class="headerlink" href="#limitations-of-histograms" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="limitations-of-histograms">
+<h3>9.2.2.2. Limitations of Histograms<a class="headerlink" href="#limitations-of-histograms" title="Permalink to this headline">¶</a></h3>
 <p>Though conceptually simple, histogram-based methods have a number of shortcomings:</p>
 <ul class="simple">
 <li><p>The histogram is not “smooth”. We usually expect elements in the same local region of the data distribution to have somewhat similar probabilities (no sudden change).</p></li>
@@ -972,10 +856,10 @@ $<span class="math notranslate nohighlight">\( P \approx P_\text{data}. \)</span
 </div>
 </div>
 <p>As you can see, the two figures look very different even by just a small shift of bins.</p>
-</section>
-</section>
-<section id="id1">
-<h2>9.2.3. Kernel Density Estimation<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>9.2.3. Kernel Density Estimation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Kernel density estimation (KDE) is a different approach to density estimation that address some of the issues of histogram density estimation.</p>
 <ul class="simple">
 <li><p>In histogram density estimation, the density is proportional to:</p></li>
@@ -994,8 +878,8 @@ $<span class="math notranslate nohighlight">\( P \approx P_\text{data}. \)</span
 <li><p>If <span class="math notranslate nohighlight">\(x\)</span> is in an area with few points in <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>, then <span class="math notranslate nohighlight">\(P_\theta(x)\)</span> is small</p></li>
 </ul>
 <p>You can also view KDE as counting the % of points that fall in a “bin” centered at <span class="math notranslate nohighlight">\(x\)</span>.</p>
-<section id="tophat-kernel-density-estimation">
-<h3>9.2.3.1 Tophat Kernel Density Estimation<a class="headerlink" href="#tophat-kernel-density-estimation" title="Permalink to this headline">#</a></h3>
+<div class="section" id="tophat-kernel-density-estimation">
+<h3>9.2.3.1 Tophat Kernel Density Estimation<a class="headerlink" href="#tophat-kernel-density-estimation" title="Permalink to this headline">¶</a></h3>
 <p>The simplest form of this strategy (Tophat KDE) assumes a model of the form
 $<span class="math notranslate nohighlight">\(P_\delta(x) = \frac{N(x; \delta)}{n},\)</span><span class="math notranslate nohighlight">\(
 where
@@ -1033,9 +917,9 @@ P_\theta(x)
 &amp; = \sum_{i=1}^n \text{weight}(x^{(i)}, x).
 \end{align*}</p>
 <p>We count all points <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, but each gets a <span class="math notranslate nohighlight">\(\text{weight}(x^{(i)}, x)\)</span> that is large if <span class="math notranslate nohighlight">\(x^{(i)}\)</span> and <span class="math notranslate nohighlight">\(x\)</span> are “similar”. We will talk about this “similarity” in the following section.</p>
-</section>
-<section id="kernels-and-kernel-density-estimation">
-<h3>9.2.3.2. Kernels and Kernel Density Estimation<a class="headerlink" href="#kernels-and-kernel-density-estimation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="kernels-and-kernel-density-estimation">
+<h3>9.2.3.2. Kernels and Kernel Density Estimation<a class="headerlink" href="#kernels-and-kernel-density-estimation" title="Permalink to this headline">¶</a></h3>
 <p>A <em>kernel function</em> <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> maps pairs of vectors <span class="math notranslate nohighlight">\(x, z \in \mathcal{X}\)</span> to a real-valued score <span class="math notranslate nohighlight">\(K(x,z)\)</span>.</p>
 <ul class="simple">
 <li><p>A kernel represents the similarity between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span>.</p></li>
@@ -1048,9 +932,9 @@ This can be interpreted in several ways:</p>
 <li><p>We count the number of points “near” <span class="math notranslate nohighlight">\(x\)</span>, but each <span class="math notranslate nohighlight">\(x^{(i)}\)</span> has a weight <span class="math notranslate nohighlight">\(K(x, x^{(i)})\)</span> that depends on similarity between <span class="math notranslate nohighlight">\(x, x^{(i)}\)</span>.</p></li>
 <li><p>We place a “micro-density” <span class="math notranslate nohighlight">\(K(x, x^{(i)})\)</span> at each <span class="math notranslate nohighlight">\(x^{(i)}\)</span>; the final density <span class="math notranslate nohighlight">\(P(x)\)</span> is their sum.</p></li>
 </ul>
-</section>
-<section id="types-of-kernels">
-<h3>9.2.3.3. Types of Kernels<a class="headerlink" href="#types-of-kernels" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="types-of-kernels">
+<h3>9.2.3.3. Types of Kernels<a class="headerlink" href="#types-of-kernels" title="Permalink to this headline">¶</a></h3>
 <p>Here, we introduce a few kernels that are popular for density estimation.</p>
 <p>The following kernels are available in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.</p>
 <ul class="simple">
@@ -1105,9 +989,9 @@ This can be interpreted in several ways:</p>
 <img alt="_images/lecture9-density-estimation_42_1.png" src="_images/lecture9-density-estimation_42_1.png" />
 </div>
 </div>
-</section>
-<section id="kernel-density-estimation-example">
-<h3>9.2.3.4. Kernel Density Estimation: Example<a class="headerlink" href="#kernel-density-estimation-example" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="kernel-density-estimation-example">
+<h3>9.2.3.4. Kernel Density Estimation: Example<a class="headerlink" href="#kernel-density-estimation-example" title="Permalink to this headline">¶</a></h3>
 <p>Let’s look at an example in the context of the 1D points (mixture of two Gaussians) we have seen earlier.</p>
 <p>We will fit a model of the form
 $<span class="math notranslate nohighlight">\(P(x) = \sum_{i=1}^n K(x, x^{(i)})\)</span><span class="math notranslate nohighlight">\(
@@ -1142,14 +1026,14 @@ with a Gaussian kernel \)</span>K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2
 </div>
 </div>
 <p>Recall that the dataset is a mixture of two Gaussians centered at <span class="math notranslate nohighlight">\(x = 0\)</span> and <span class="math notranslate nohighlight">\(x = 5\)</span>. This estimate does look consistent with that.</p>
-</section>
-<section id="kde-in-higher-dimensions">
-<h3>9.2.3.5. KDE in Higher Dimensions<a class="headerlink" href="#kde-in-higher-dimensions" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="kde-in-higher-dimensions">
+<h3>9.2.3.5. KDE in Higher Dimensions<a class="headerlink" href="#kde-in-higher-dimensions" title="Permalink to this headline">¶</a></h3>
 <p>In principle, kernel density estimation also works in higher dimensions.</p>
 <p>However, the number of datapoints needed for a good fit incrases expoentially with the dimension, which limits the applications of this model in high dimensions.</p>
-</section>
-<section id="choosing-hyperparameters-for-kernels">
-<h3>9.2.3.6. Choosing Hyperparameters for Kernels<a class="headerlink" href="#choosing-hyperparameters-for-kernels" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="choosing-hyperparameters-for-kernels">
+<h3>9.2.3.6. Choosing Hyperparameters for Kernels<a class="headerlink" href="#choosing-hyperparameters-for-kernels" title="Permalink to this headline">¶</a></h3>
 <p>Each kernel has a notion of “bandwidth” <span class="math notranslate nohighlight">\(\delta\)</span>. This is a hyperparameter that controls the “smoothness” of the fit.</p>
 <ul class="simple">
 <li><p>We can choose it using inspection or heuristics like we did for <span class="math notranslate nohighlight">\(K\)</span> in <span class="math notranslate nohighlight">\(K\)</span>-Means.</p></li>
@@ -1182,9 +1066,9 @@ with a Gaussian kernel \)</span>K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2
 </div>
 </div>
 <p>You can see that the left figure is too smoothed out, making us lose a lot of information. On the other hand, the right figure is very sharp, making it less generalizable.</p>
-</section>
-<section id="algorithm-kernel-density-estimation">
-<h3>9.2.3.7. Algorithm: Kernel Density Estimation<a class="headerlink" href="#algorithm-kernel-density-estimation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="algorithm-kernel-density-estimation">
+<h3>9.2.3.7. Algorithm: Kernel Density Estimation<a class="headerlink" href="#algorithm-kernel-density-estimation" title="Permalink to this headline">¶</a></h3>
 <p>We summarize the kernel density estimation algorithm below:</p>
 <ul class="simple">
 <li><p><strong>Type</strong>: Unsupervised learning (density estimation).</p></li>
@@ -1192,9 +1076,9 @@ with a Gaussian kernel \)</span>K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2
 <li><p><strong>Objective function</strong>: Log-likelihood to choose optimal bandwidth.</p></li>
 <li><p><strong>Optimizer</strong>: Grid search.</p></li>
 </ul>
-</section>
-<section id="pros-and-cons-of-kde">
-<h3>9.2.3.8. Pros and Cons of KDE<a class="headerlink" href="#pros-and-cons-of-kde" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="pros-and-cons-of-kde">
+<h3>9.2.3.8. Pros and Cons of KDE<a class="headerlink" href="#pros-and-cons-of-kde" title="Permalink to this headline">¶</a></h3>
 <p>We have introduced kernel density estimation which overcomes some of the drawbacks of histogram density estimation introduced earlier. We summarize the pros and cons of KDE below:</p>
 <p>Pros:</p>
 <ul class="simple">
@@ -1205,24 +1089,24 @@ with a Gaussian kernel \)</span>K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2
 <li><p>Need to store entire dataset to make queries, which is computationally prohibitive.</p></li>
 <li><p>Number of data needed scale exponentially with dimension (“curse of dimensionality”).</p></li>
 </ul>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="nearest-neighbors">
-<h1>9.3. Nearest Neighbors<a class="headerlink" href="#nearest-neighbors" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="nearest-neighbors">
+<h1>9.3. Nearest Neighbors<a class="headerlink" href="#nearest-neighbors" title="Permalink to this headline">¶</a></h1>
 <p>We are now going to take a little detour back to supervised learning and apply some of these density esimation ideas to supervised learning.</p>
 <p>Precisely, we will look at an algorithm called Nearest Neighbors.</p>
-<section id="review-classification">
-<h2>9.3.1. Review: Classification<a class="headerlink" href="#review-classification" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-classification">
+<h2>9.3.1. Review: Classification<a class="headerlink" href="#review-classification" title="Permalink to this headline">¶</a></h2>
 <p>Consider a supervised training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
 <p>We distinguish between two types of supervised learning problems depending on the targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
 <ol class="simple">
 <li><p><strong>Regression</strong>: The target variable <span class="math notranslate nohighlight">\(y \in \mathcal{Y}\)</span> is continuous:  <span class="math notranslate nohighlight">\(\mathcal{Y} \subseteq \mathbb{R}\)</span>.</p></li>
 <li><p><strong>Classification</strong>: The target variable <span class="math notranslate nohighlight">\(y\)</span> is discrete and takes on one of <span class="math notranslate nohighlight">\(K\)</span> possible values:  <span class="math notranslate nohighlight">\(\mathcal{Y} = \{y_1, y_2, \ldots y_K\}\)</span>. Each discrete value corresponds to a <em>class</em> that we want to predict.</p></li>
 </ol>
-</section>
-<section id="a-simple-classification-algorithm-nearest-neighbors">
-<h2>9.3.2. A Simple Classification Algorithm: Nearest Neighbors<a class="headerlink" href="#a-simple-classification-algorithm-nearest-neighbors" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="a-simple-classification-algorithm-nearest-neighbors">
+<h2>9.3.2. A Simple Classification Algorithm: Nearest Neighbors<a class="headerlink" href="#a-simple-classification-algorithm-nearest-neighbors" title="Permalink to this headline">¶</a></h2>
 <p>Suppose we are given a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>. At inference time, we receive a query point <span class="math notranslate nohighlight">\(x'\)</span> and we want to predict its label <span class="math notranslate nohighlight">\(y'\)</span>.</p>
 <p>A really simple but surprisingly effective way of returning <span class="math notranslate nohighlight">\(y'\)</span> is the <em>nearest neighbors</em> approach.</p>
 <ul class="simple">
@@ -1253,9 +1137,9 @@ with a Gaussian kernel \)</span>K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2
 <img alt="_images/lecture9-density-estimation_58_1.png" src="_images/lecture9-density-estimation_58_1.png" />
 </div>
 </div>
-</section>
-<section id="choosing-a-distance-function">
-<h2>9.3.3. Choosing a Distance Function<a class="headerlink" href="#choosing-a-distance-function" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="choosing-a-distance-function">
+<h2>9.3.3. Choosing a Distance Function<a class="headerlink" href="#choosing-a-distance-function" title="Permalink to this headline">¶</a></h2>
 <p>How do we select the point <span class="math notranslate nohighlight">\(x\)</span> that is the closest to the query point <span class="math notranslate nohighlight">\(x'\)</span>? There are many options:</p>
 <ul class="simple">
 <li><p>The Euclidean distance <span class="math notranslate nohighlight">\(|| x - x' ||_2 = \sqrt{\sum_{j=1}^d |x_j - x'_j|^2)}\)</span> is a popular choice.</p></li>
@@ -1317,9 +1201,9 @@ with a Gaussian kernel \)</span>K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2
 </div>
 </div>
 <p>In the above example, the regions of the 2D space that are assigned to each class are highly irregular. In areas where the two classes overlap, the decision of the boundary flips between the classes, depending on which point is closest to it.</p>
-</section>
-<section id="k-nearest-neighbors">
-<h2>9.3.4. K-Nearest Neighbors<a class="headerlink" href="#k-nearest-neighbors" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="k-nearest-neighbors">
+<h2>9.3.4. K-Nearest Neighbors<a class="headerlink" href="#k-nearest-neighbors" title="Permalink to this headline">¶</a></h2>
 <p>Intuitively, we expect the true decision boundary to be smooth. Therefore, we average <span class="math notranslate nohighlight">\(K\)</span> nearest neighbors at a query point.</p>
 <ul class="simple">
 <li><p>Given a query datapoint <span class="math notranslate nohighlight">\(x'\)</span>, find the <span class="math notranslate nohighlight">\(K\)</span> training examples <span class="math notranslate nohighlight">\(\mathcal{N} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(K)}, y^{(K)})\} \subseteq D\)</span> that are closest to <span class="math notranslate nohighlight">\(x'\)</span>.</p></li>
@@ -1358,8 +1242,8 @@ with a Gaussian kernel \)</span>K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2
 <img alt="_images/lecture9-density-estimation_70_1.png" src="_images/lecture9-density-estimation_70_1.png" />
 </div>
 </div>
-<section id="knn-estimates-data-distribution">
-<h3>9.3.4.1. KNN Estimates Data Distribution<a class="headerlink" href="#knn-estimates-data-distribution" title="Permalink to this headline">#</a></h3>
+<div class="section" id="knn-estimates-data-distribution">
+<h3>9.3.4.1. KNN Estimates Data Distribution<a class="headerlink" href="#knn-estimates-data-distribution" title="Permalink to this headline">¶</a></h3>
 <p>Suppose that the output <span class="math notranslate nohighlight">\(y'\)</span> of KNN is the average target in the neighborhood <span class="math notranslate nohighlight">\(\mathcal{N}(x')\)</span> around the query <span class="math notranslate nohighlight">\(x'\)</span>.
 Observe that we can write:
 $<span class="math notranslate nohighlight">\(y' = \frac{1}{K} \sum_{(x, y) \in \mathcal{N}(x')} y \approx \mathbb{E}[y \mid x'].\)</span>$</p>
@@ -1369,9 +1253,9 @@ $<span class="math notranslate nohighlight">\(y' = \frac{1}{K} \sum_{(x, y) \in 
 <ul class="simple">
 <li><p>Thus <span class="math notranslate nohighlight">\(y'\)</span> is essentially a Monte Carlo estimate of <span class="math notranslate nohighlight">\(\mathbb{E}[y \mid x']\)</span> (the average of <span class="math notranslate nohighlight">\(K\)</span> samples from <span class="math notranslate nohighlight">\(\mathbb{P}(y\mid x')\)</span>).</p></li>
 </ul>
-</section>
-<section id="algorithm-k-nearest-neighbors">
-<h3>9.3.4.2. Algorithm: K-Nearest Neighbors<a class="headerlink" href="#algorithm-k-nearest-neighbors" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="algorithm-k-nearest-neighbors">
+<h3>9.3.4.2. Algorithm: K-Nearest Neighbors<a class="headerlink" href="#algorithm-k-nearest-neighbors" title="Permalink to this headline">¶</a></h3>
 <p>We summarize the K-Nearest Neighbors algorithm below:</p>
 <ul class="simple">
 <li><p><strong>Type</strong>: Supervised learning (regression and classification)</p></li>
@@ -1380,17 +1264,17 @@ $<span class="math notranslate nohighlight">\(y' = \frac{1}{K} \sum_{(x, y) \in 
 <li><p><strong>Optimizer</strong>: Non at training. Nearest neighbor search at inference using specialized search algorithms (Hashing, KD-trees).</p></li>
 <li><p><strong>Probabilistic interpretation</strong>: Directly approximating the density <span class="math notranslate nohighlight">\(P_\text{data}(y|x)\)</span>.</p></li>
 </ul>
-</section>
-<section id="non-parametric-models">
-<h3>9.3.4.3 Non-Parametric Models<a class="headerlink" href="#non-parametric-models" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="non-parametric-models">
+<h3>9.3.4.3 Non-Parametric Models<a class="headerlink" href="#non-parametric-models" title="Permalink to this headline">¶</a></h3>
 <p>Nearest neighbors is an example of a <em>non-parametric</em> model. Parametric vs. non-parametric are is a key distinguishing characteristic for machine learning models.</p>
 <p>A parametric model <span class="math notranslate nohighlight">\(f_\theta(x) : \mathcal{X} \times \Theta \to \mathcal{Y}\)</span> is defined by a finite set of parameters <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span> whose dimensionality is constant with respect to the dataset. Linear models of the form
 $<span class="math notranslate nohighlight">\( f_\theta(x) = \theta^\top x \)</span>$
 are an example of a parametric model.</p>
 <p>On the other hand, for a non-parametric model, the function <span class="math notranslate nohighlight">\(f\)</span> uses the entire training dataset (or a post-proccessed version of it) to make predictions, as in <span class="math notranslate nohighlight">\(K\)</span>-Nearest Neighbors. In other words, the complexity of the model increases with dataset size. Because of this, non-parametric models have the advantage of not losing any information at training time. Nevertheless, they are also computationally less tractable and may easily overfit the training set.</p>
-</section>
-<section id="pros-and-cons-of-knn">
-<h3>9.3.4.4. Pros and Cons of KNN<a class="headerlink" href="#pros-and-cons-of-knn" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="pros-and-cons-of-knn">
+<h3>9.3.4.4. Pros and Cons of KNN<a class="headerlink" href="#pros-and-cons-of-knn" title="Permalink to this headline">¶</a></h3>
 <p>We have introduced KNN, our first non-parametric model for supervised learning. We summarize the pros and cons of the algorithm below:</p>
 <p>Pros:</p>
 <ul class="simple">
@@ -1401,9 +1285,9 @@ are an example of a parametric model.</p>
 <li><p>Need to store entire dataset to make queries, which is computationally prohibitive.</p></li>
 <li><p>Number of data needed scale exponentially with dimension (“curse of dimensionality”).</p></li>
 </ul>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
     <script type="text/x-thebe-config">
     {
@@ -1427,11 +1311,9 @@ are an example of a parametric model.</p>
 
               </div>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="lecture8-unsupervised-learning.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1447,28 +1329,24 @@ are an example of a parametric model.</p>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            </footer>
+            
         </div>
     </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-    By Cornell University<br/>
-  
-      &copy; Copyright 2022.<br/>
-</p>
-        </footer>
-    </div>
+    <footer class="footer">
+  <p>
     
-</div>
+      By Cornell University<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
 
 
       </div>
     </div>
   
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
   </body>
 </html>

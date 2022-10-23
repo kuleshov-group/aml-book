@@ -4,13 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lecture 4: Classification and Logistic Regression &#8212; Applied Machine Learning</title>
     
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -20,16 +18,20 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
+    
+      
+
+    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -37,21 +39,21 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Lecture 5: Regularization" href="lecture5-regularization.html" />
@@ -63,21 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
-
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -86,10 +74,9 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -107,15 +94,14 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
-                </a>
-            </li>
-        </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
@@ -159,17 +145,12 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -177,191 +158,94 @@ const thebe_selector_output = ".output, .cell_output"
 
 
           
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="header-article row sticky-top noprint">
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
         
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture4-classification.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
->
-  
-
-<span class="headerbtn__icon-container">
-  
-    <img src="_static/images/logo_binder.svg">
-  </span>
-<span class="headerbtn__text-container">Binder</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture4-classification.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="_sources/lecture4-classification.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/lecture4-classification.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture4-classification.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
     </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture4-classification.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
    Lecture 4: Classification and Logistic Regression
@@ -665,11 +549,12 @@ title="Print to PDF"
  </li>
 </ul>
 
-    </nav>
-</div>
+            </nav>
+        </div>
     </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Lecture 4: Classification and Logistic Regression</h1>
@@ -989,27 +874,26 @@ title="Print to PDF"
                     </div>
                 </div>
             </div>
-            <main id="main-content" role="main">
-                
+            
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="lecture-4-classification-and-logistic-regression">
-<h1>Lecture 4: Classification and Logistic Regression<a class="headerlink" href="#lecture-4-classification-and-logistic-regression" title="Permalink to this headline">#</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="lecture-4-classification-and-logistic-regression">
+<h1>Lecture 4: Classification and Logistic Regression<a class="headerlink" href="#lecture-4-classification-and-logistic-regression" title="Permalink to this headline">¶</a></h1>
 <p>Next, we turn our attention to another important task in supervised learning—classificaiton. We define this problem and introduce a first set of algorithms.</p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="classification">
-<h1>4.1. Classification<a class="headerlink" href="#classification" title="Permalink to this headline">#</a></h1>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="classification">
+<h1>4.1. Classification<a class="headerlink" href="#classification" title="Permalink to this headline">¶</a></h1>
 <p>So far, every supervised learning algorithm that we’ve seen has been an instance of regression.</p>
 <p>We will next look at classification. First, let’s define what classification is.</p>
-<section id="review-components-of-a-supervised-machine-learning-problem">
-<h2>Review: Components of a Supervised Machine Learning Problem<a class="headerlink" href="#review-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-components-of-a-supervised-machine-learning-problem">
+<h2>Review: Components of a Supervised Machine Learning Problem<a class="headerlink" href="#review-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h2>
 <p>Recall that in order to apply supervised learning, we define a dataset and a learning algorithm.</p>
 <div class="math notranslate nohighlight">
 \[ \underbrace{\text{Dataset}}_\text{Features, Attributes, Targets} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} \]</div>
 <p>The output is a predictive model that maps inputs to targets. For instance, it can predict targets on new inputs.</p>
-</section>
-<section id="review-regression-vs-classification">
-<h2>4.1.1. Review: Regression vs. Classification<a class="headerlink" href="#review-regression-vs-classification" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="review-regression-vs-classification">
+<h2>4.1.1. Review: Regression vs. Classification<a class="headerlink" href="#review-regression-vs-classification" title="Permalink to this headline">¶</a></h2>
 <p>Consider a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
 <p>We distinguish between two types of supervised learning problems depnding on the targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
 <ol class="simple">
@@ -1020,9 +904,9 @@ title="Print to PDF"
 </ol>
 <p>An important special case of classification is when the number of classes <span class="math notranslate nohighlight">\(K=2\)</span>.</p>
 <p>In this case, we have an instance of a <em>binary classification</em> problem.</p>
-</section>
-<section id="a-classification-dataset-iris-flowers">
-<h2>4.1.2. A Classification Dataset: Iris Flowers<a class="headerlink" href="#a-classification-dataset-iris-flowers" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="a-classification-dataset-iris-flowers">
+<h2>4.1.2. A Classification Dataset: Iris Flowers<a class="headerlink" href="#a-classification-dataset-iris-flowers" title="Permalink to this headline">¶</a></h2>
 <p>To demonstrate classification algorithms, we are going to use the Iris flower dataset.</p>
 <p>It’s a classical dataset originally published by <a class="reference external" href="https://en.wikipedia.org/wiki/Ronald_Fisher">R. A. Fisher</a> in 1936. Nowadays, it’s widely used for demonstrating machine learning algorithms.</p>
 <p>We may again load this algorithm from <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. It comes with a useful description, which we print out.</p>
@@ -1227,9 +1111,9 @@ latter are NOT linearly separable from each other.
 <img alt="_images/lecture4-classification_14_1.png" src="_images/lecture4-classification_14_1.png" />
 </div>
 </div>
-</section>
-<section id="understanding-classification">
-<h2>4.1.3. Understanding Classification<a class="headerlink" href="#understanding-classification" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="understanding-classification">
+<h2>4.1.3. Understanding Classification<a class="headerlink" href="#understanding-classification" title="Permalink to this headline">¶</a></h2>
 <p>How is clasification different from regression?</p>
 <ul class="simple">
 <li><p>In regression, we try to fit a curve through the set of targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p></li>
@@ -1304,13 +1188,13 @@ latter are NOT linearly separable from each other.
 <img alt="_images/lecture4-classification_23_0.png" src="_images/lecture4-classification_23_0.png" />
 </div>
 </div>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="logistic-regression">
-<h1>4.2. Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="logistic-regression">
+<h1>4.2. Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h1>
 <p>Next, we are going to see our first classification algorithm: logistic regression.</p>
-<section id="binary-classification-and-the-iris-dataset">
-<h2>4.2.1. Binary Classification and the Iris Dataset<a class="headerlink" href="#binary-classification-and-the-iris-dataset" title="Permalink to this headline">#</a></h2>
+<div class="section" id="binary-classification-and-the-iris-dataset">
+<h2>4.2.1. Binary Classification and the Iris Dataset<a class="headerlink" href="#binary-classification-and-the-iris-dataset" title="Permalink to this headline">¶</a></h2>
 <p>We will to start by looking at binary (two-class) classification.</p>
 <p>To keep things simple, we will use the Iris dataset. We will attempt to distinguish class 0 (Iris Setosa) from the other two classes.</p>
 <p>We only use the first two features in the dataset. Our task is to tell apart Setosa flowers from non-Setosa flowers.</p>
@@ -1336,9 +1220,9 @@ latter are NOT linearly separable from each other.
 <img alt="_images/lecture4-classification_27_1.png" src="_images/lecture4-classification_27_1.png" />
 </div>
 </div>
-</section>
-<section id="a-first-attempt-at-classification-using-least-squares">
-<h2>4.2.2. A First Attempt At Classification Using Least Squares<a class="headerlink" href="#a-first-attempt-at-classification-using-least-squares" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="a-first-attempt-at-classification-using-least-squares">
+<h2>4.2.2. A First Attempt At Classification Using Least Squares<a class="headerlink" href="#a-first-attempt-at-classification-using-least-squares" title="Permalink to this headline">¶</a></h2>
 <p>Recall that the linear regression algorithm fits a linear model of the form
 $<span class="math notranslate nohighlight">\( f(x) = \sum_{j=0}^d \theta_j \cdot x_j = \theta^\top x. \)</span>$</p>
 <p>It minimizes the mean squared error (MSE)
@@ -1399,9 +1283,9 @@ on a dataset \)</span>{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)},
 <li><p>There is nothing to prevent outputs larger than one or smaller than zero, which is conceptually wrong</p></li>
 <li><p>We also don’t have optimal performance: at least one point is misclassified, and others are too close to the decision boundary.</p></li>
 </ul>
-</section>
-<section id="the-logistic-function">
-<h2>4.2.3. The Logistic Function<a class="headerlink" href="#the-logistic-function" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="the-logistic-function">
+<h2>4.2.3. The Logistic Function<a class="headerlink" href="#the-logistic-function" title="Permalink to this headline">¶</a></h2>
 <p>To address the fact that the output of linear regression is not in <span class="math notranslate nohighlight">\([0,1]\)</span>, we will instead attempt to <em>squeeze</em> it into that range using
 $<span class="math notranslate nohighlight">\( \sigma(z) = \frac{1}{1 + \exp(-z)}. \)</span>$
 This is known as the <em>sigmoid</em> or <em>logistic</em> function.</p>
@@ -1426,8 +1310,8 @@ This is known as the <em>sigmoid</em> or <em>logistic</em> function.</p>
 <img alt="_images/lecture4-classification_37_1.png" src="_images/lecture4-classification_37_1.png" />
 </div>
 </div>
-<section id="the-logistic-function-properties">
-<h3>4.2.3.1. The Logistic Function: Properties<a class="headerlink" href="#the-logistic-function-properties" title="Permalink to this headline">#</a></h3>
+<div class="section" id="the-logistic-function-properties">
+<h3>4.2.3.1. The Logistic Function: Properties<a class="headerlink" href="#the-logistic-function-properties" title="Permalink to this headline">¶</a></h3>
 <p>The sigmoid function is defined as
 $<span class="math notranslate nohighlight">\( \sigma(z) = \frac{1}{1 + \exp(-z)}. \)</span>$
 A few observations:</p>
@@ -1441,14 +1325,14 @@ A few observations:</p>
 <li><p>It is easy to show that the derivative of <span class="math notranslate nohighlight">\(\sigma(z)\)</span> has a simple form:
 <span class="math notranslate nohighlight">\(\frac{d\sigma}{dz} = \sigma(z)(1-\sigma(z)).\)</span></p></li>
 </ul>
-</section>
-</section>
-<section id="a-model-family-for-logistic-regression">
-<h2>4.2.4. A Model Family for Logistic Regression<a class="headerlink" href="#a-model-family-for-logistic-regression" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="a-model-family-for-logistic-regression">
+<h2>4.2.4. A Model Family for Logistic Regression<a class="headerlink" href="#a-model-family-for-logistic-regression" title="Permalink to this headline">¶</a></h2>
 <p>Next, we will use the logistic function to define our first classification algorithm—logistic regression.</p>
 <p>We will start by defining the model class for this algorithm. Later on we will also define the objective and the optimizer.</p>
-<section id="a-model-class">
-<h3>4.2.4.1. A Model Class<a class="headerlink" href="#a-model-class" title="Permalink to this headline">#</a></h3>
+<div class="section" id="a-model-class">
+<h3>4.2.4.1. A Model Class<a class="headerlink" href="#a-model-class" title="Permalink to this headline">¶</a></h3>
 <p>Logistic regression is a classification algorithm which uses a model <span class="math notranslate nohighlight">\(f_\theta\)</span> of the form
 $<span class="math notranslate nohighlight">\( f_\theta(x) = \sigma(\theta^\top x) = \frac{1}{1 + \exp(-\theta^\top x)}, \)</span><span class="math notranslate nohighlight">\(
 where 
@@ -1476,9 +1360,9 @@ The term <em>regression</em> is an unfortunate historical misnomer.</p>
 </div>
 </div>
 <p>Currently, this model is not very useful—we need to use it with a good set of weights <code class="docutils literal notranslate"><span class="pre">theta</span></code>. We will shortly explain how to find good <code class="docutils literal notranslate"><span class="pre">theta</span></code>.</p>
-</section>
-<section id="probabilistic-interpretations">
-<h3>4.2.4.2. Probabilistic Interpretations<a class="headerlink" href="#probabilistic-interpretations" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="probabilistic-interpretations">
+<h3>4.2.4.2. Probabilistic Interpretations<a class="headerlink" href="#probabilistic-interpretations" title="Permalink to this headline">¶</a></h3>
 <p>The logistic model can be interpreted to output a probability, and defines a conditional probability distribution as follows:</p>
 <p>\begin{align*}
 P_\theta(y=1 | x) &amp; = \sigma(\theta^\top x) \
@@ -1486,24 +1370,24 @@ P_\theta(y=0 | x) &amp; = 1-\sigma(\theta^\top x).
 \end{align*}</p>
 <p>Recall that a probability over <span class="math notranslate nohighlight">\(y\in \{0,1\}\)</span> is called Bernoulli.</p>
 <p>We will next use this probabilistic interpretation to define an objective for logistic regression.</p>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood">
-<h1>4.3. Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="maximum-likelihood">
+<h1>4.3. Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Permalink to this headline">¶</a></h1>
 <p>In order to train a logistic regression model, we need to define an objective.</p>
 <p>We derive this objective by first introducing a general principle for training machine learning models—the principle of maximum likelihood.</p>
-<section id="probabilistic-models">
-<h2>4.3.1. Probabilistic Models<a class="headerlink" href="#probabilistic-models" title="Permalink to this headline">#</a></h2>
-<section id="recall-supervised-learning-models">
-<h3>4.3.1.1. Recall: Supervised Learning Models<a class="headerlink" href="#recall-supervised-learning-models" title="Permalink to this headline">#</a></h3>
+<div class="section" id="probabilistic-models">
+<h2>4.3.1. Probabilistic Models<a class="headerlink" href="#probabilistic-models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="recall-supervised-learning-models">
+<h3>4.3.1.1. Recall: Supervised Learning Models<a class="headerlink" href="#recall-supervised-learning-models" title="Permalink to this headline">¶</a></h3>
 <p>A supervised learning model is a function
 $<span class="math notranslate nohighlight">\( f_\theta : \mathcal{X} \to \mathcal{Y} \)</span><span class="math notranslate nohighlight">\(
 that maps inputs \)</span>x \in \mathcal{X}<span class="math notranslate nohighlight">\( to targets \)</span>y \in \mathcal{Y}$.</p>
 <p>Models have <em>parameters</em> <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span> living in a set <span class="math notranslate nohighlight">\(\Theta\)</span>.</p>
-</section>
-<section id="probabilistic-machine-learning-models">
-<h3>4.3.1.2. Probabilistic Machine Learning Models<a class="headerlink" href="#probabilistic-machine-learning-models" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="probabilistic-machine-learning-models">
+<h3>4.3.1.2. Probabilistic Machine Learning Models<a class="headerlink" href="#probabilistic-machine-learning-models" title="Permalink to this headline">¶</a></h3>
 <p>Many supervised learning models have a probabilistic interpretation.
 Often a model <span class="math notranslate nohighlight">\(f_\theta\)</span> defines a probability distribution of the form</p>
 <p>\begin{align*}
@@ -1522,9 +1406,9 @@ P_\theta(y=1 | x) &amp; = \sigma(\theta^\top x) \
 P_\theta(y=0 | x) &amp; = 1-\sigma(\theta^\top x).
 \end{align*}</p>
 <p>Clearly this sums to one over <span class="math notranslate nohighlight">\(y\)</span> for all <span class="math notranslate nohighlight">\(x\)</span>.</p>
-</section>
-<section id="more-examples">
-<h3>4.3.1.2. More Examples<a class="headerlink" href="#more-examples" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="more-examples">
+<h3>4.3.1.2. More Examples<a class="headerlink" href="#more-examples" title="Permalink to this headline">¶</a></h3>
 <p>What are some other ways to define a distribution <span class="math notranslate nohighlight">\(P_\theta(y|x) : \mathcal{X} \times \mathcal{Y} \to [0,1]\)</span>?</p>
 <ul class="simple">
 <li><p>We start with an input <span class="math notranslate nohighlight">\(x\)</span>, and we pass it to a function <span class="math notranslate nohighlight">\(f\)</span>.</p></li>
@@ -1540,13 +1424,13 @@ P_\theta(y=0 | x) &amp; = 1-\sigma(\theta^\top x).
 <li><p>The distribution <span class="math notranslate nohighlight">\(P(y; \psi(x))\)</span> is a probability over <span class="math notranslate nohighlight">\(y\)</span> parameterized by <span class="math notranslate nohighlight">\(\psi(x)\)</span>.</p></li>
 </ul>
 <p>The above is an example of how for each <span class="math notranslate nohighlight">\(x\)</span> a model outputs a distribution over <span class="math notranslate nohighlight">\(y\)</span>. We will later see generative models that define a joint distribution <span class="math notranslate nohighlight">\(P(x,y)\)</span> over <span class="math notranslate nohighlight">\(x,y\)</span>.</p>
-</section>
-</section>
-<section id="id1">
-<h2>4.3.2. Maximum Likelihood<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>4.3.2. Maximum Likelihood<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Maximum likelihood is a general principle for deriving a training objective for any model that has a probabilistic interpretation.</p>
-<section id="conditional-maximum-likelihood">
-<h3>4.3.2.1. Conditional Maximum Likelihood<a class="headerlink" href="#conditional-maximum-likelihood" title="Permalink to this headline">#</a></h3>
+<div class="section" id="conditional-maximum-likelihood">
+<h3>4.3.2.1. Conditional Maximum Likelihood<a class="headerlink" href="#conditional-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
 <p>We can train any model that defines a probability distribution <span class="math notranslate nohighlight">\(P_\theta(y|x)\)</span> by optimizing
 the <em>conditional maximum likelihood</em> objective
 $<span class="math notranslate nohighlight">\(
@@ -1554,8 +1438,8 @@ L(\theta) = \prod_{i=1}^n P_\theta(y^{(i)}|{x}^{(i)})
 \)</span><span class="math notranslate nohighlight">\(
 defined over a dataset \)</span>\mathcal{D} = {(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})}$.</p>
 <p>This asks that for each input <span class="math notranslate nohighlight">\(x^{(i)}\)</span> in the dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>, <span class="math notranslate nohighlight">\(P_\theta\)</span> should assign a high probability to the correct target <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
-<section id="from-likelihood-to-log-likelihood">
-<h4>From Likelihood to Log-Likelihood<a class="headerlink" href="#from-likelihood-to-log-likelihood" title="Permalink to this headline">#</a></h4>
+<div class="section" id="from-likelihood-to-log-likelihood">
+<h4>From Likelihood to Log-Likelihood<a class="headerlink" href="#from-likelihood-to-log-likelihood" title="Permalink to this headline">¶</a></h4>
 <p>A lot of mathematical derivations and numerical calculations become simpler if we instead maximize the log of the likelihood:
 \begin{align*}
 \ell(\theta) = \log L(\theta) &amp; = \log \prod_{i=1}^n P_\theta(y^{(i)} | {x}^{(i)}) = \sum_{i=1}^n \log P_\theta(y^{(i)} | {x}^{(i)}).
@@ -1565,10 +1449,10 @@ Note that since the log is a monotonically increasing function, it doesn’t cha
 $<span class="math notranslate nohighlight">\(
 \max_\theta \ell(\theta) = \max_{\theta} \frac{1}{n}\sum_{i=1}^n \log P_\theta(y^{(i)} | {x}^{(i)}).
 \)</span>$</p>
-</section>
-</section>
-<section id="intuitions-for-maximum-likelihood">
-<h3>4.3.2.2. Intuitions for Maximum Likelihood<a class="headerlink" href="#intuitions-for-maximum-likelihood" title="Permalink to this headline">#</a></h3>
+</div>
+</div>
+<div class="section" id="intuitions-for-maximum-likelihood">
+<h3>4.3.2.2. Intuitions for Maximum Likelihood<a class="headerlink" href="#intuitions-for-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
 <p>Why is maximum likelihood a good objective? We can provide some initial intuitions.</p>
 <ul class="simple">
 <li><p>Given <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, our model defines a distribution <span class="math notranslate nohighlight">\(P_\theta(y|x^{(i)})\)</span> over <span class="math notranslate nohighlight">\(y\)</span></p></li>
@@ -1581,9 +1465,9 @@ $<span class="math notranslate nohighlight">\(
 <li><p>But <span class="math notranslate nohighlight">\(\sigma(\theta^\top x^{(i)})\)</span> is the output of <span class="math notranslate nohighlight">\(f_\theta(x^{(i)})\)</span>—hence maximum likelihood asks the model <span class="math notranslate nohighlight">\(f_\theta = \sigma(\theta^\top x)\)</span> to output values close to one when the true label is one.</p></li>
 <li><p>Similarly, when <span class="math notranslate nohighlight">\(y^{(i)}=0\)</span>, maximum likelihood asks <span class="math notranslate nohighlight">\(1-\sigma(\theta^\top x^{(i)})\)</span> to be large, hence <span class="math notranslate nohighlight">\(\sigma(\theta^\top x^{(i)})\)</span> will be small, and thus <span class="math notranslate nohighlight">\(f_\theta(x^{(i)})\)</span> will be close to zero when the true label is zero.</p></li>
 </ul>
-</section>
-<section id="id2">
-<h3>4.3.2.3. Maximum Likelihood<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="id2">
+<h3>4.3.2.3. Maximum Likelihood<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>More generally, we can train any model that defines a probability distribution <span class="math notranslate nohighlight">\(P_\theta(x,y)\)</span> by optimizing
 the <em>maximum likelihood</em> objective
 $<span class="math notranslate nohighlight">\(
@@ -1596,9 +1480,9 @@ defined over a dataset \)</span>\mathcal{D} = {(x^{(1)}, y^{(1)}), (x^{(2)}, y^{
 $<span class="math notranslate nohighlight">\(
 \max_\theta \ell(\theta) = \max_{\theta} \frac{1}{n}\sum_{i=1}^n \log P_\theta({x}^{(i)}, y^{(i)}).
 \)</span>$</p>
-</section>
-<section id="example-flipping-a-random-coin">
-<h3>4.3.2.2. Example: Flipping a Random Coin<a class="headerlink" href="#example-flipping-a-random-coin" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="example-flipping-a-random-coin">
+<h3>4.3.2.2. Example: Flipping a Random Coin<a class="headerlink" href="#example-flipping-a-random-coin" title="Permalink to this headline">¶</a></h3>
 <p>Consider a simple example in which we repeatedly toss a biased coin and record the outcomes.</p>
 <ul class="simple">
 <li><p>There are two possible outcomes: heads (<span class="math notranslate nohighlight">\(H\)</span>) and tails (<span class="math notranslate nohighlight">\(T\)</span>). A training dataset consists of tosses of the biased coin, e.g., <span class="math notranslate nohighlight">\(\mathcal{D}=\{H,H,T,H,T\}\)</span></p></li>
@@ -1609,9 +1493,9 @@ $<span class="math notranslate nohighlight">\(
 <ul class="simple">
 <li><p>Our task is to determine the probability <span class="math notranslate nohighlight">\(\theta\)</span> of seeing heads.</p></li>
 </ul>
-</section>
-<section id="finding-theta-using-maximum-likelihood">
-<h3>4.3.2.3. Finding <span class="math notranslate nohighlight">\(\theta\)</span> Using Maximum Likelihood<a class="headerlink" href="#finding-theta-using-maximum-likelihood" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="finding-theta-using-maximum-likelihood">
+<h3>4.3.2.3. Finding <span class="math notranslate nohighlight">\(\theta\)</span> Using Maximum Likelihood<a class="headerlink" href="#finding-theta-using-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
 <p>How should we choose <span class="math notranslate nohighlight">\(\theta\)</span> if 3 out of 5 tosses are heads? Let’s apply maximum likelihood learning.</p>
 <ul class="simple">
 <li><p>Our dataset is <span class="math notranslate nohighlight">\(\mathcal{D}=\{x^{(1)},x^{(2)},x^{(3)},x^{(4)},x^{(5)}\}=\{H,H,T,H,T\}\)</span></p></li>
@@ -1644,9 +1528,9 @@ $<span class="math notranslate nohighlight">\(
 </div>
 </div>
 <p>The likelihood <span class="math notranslate nohighlight">\(L(\theta)\)</span> is maximized by <span class="math notranslate nohighlight">\(\theta=0.6\)</span>, which is also what we expect intuitively since 3/5 tosses are heads.</p>
-</section>
-<section id="a-formula-for-coin-flips-using-maximum-likelihood">
-<h3>4.3.2.4. A Formula For Coin Flips Using Maximum Likelihood<a class="headerlink" href="#a-formula-for-coin-flips-using-maximum-likelihood" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="a-formula-for-coin-flips-using-maximum-likelihood">
+<h3>4.3.2.4. A Formula For Coin Flips Using Maximum Likelihood<a class="headerlink" href="#a-formula-for-coin-flips-using-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
 <p>Our log-likelihood function is
 \begin{eqnarray}
 \nonumber
@@ -1661,18 +1545,18 @@ The maximum likelihood estimate is the <span class="math notranslate nohighlight
 $<span class="math notranslate nohighlight">\(\theta^*= \frac{\#\,\text{heads}}{\#\,\text{heads}+\#\,\text{tails}}\)</span>$</p>
 <p>When exact solutions are not available, we can optimize the log likelihood numerically, e.g. using gradient descent.</p>
 <p>We will see examples of this later.</p>
-</section>
-</section>
-<section id="why-does-maximum-likelihood-work">
-<h2>4.3.3. Why Does Maximum Likelihood Work?<a class="headerlink" href="#why-does-maximum-likelihood-work" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="why-does-maximum-likelihood-work">
+<h2>4.3.3. Why Does Maximum Likelihood Work?<a class="headerlink" href="#why-does-maximum-likelihood-work" title="Permalink to this headline">¶</a></h2>
 <p>Next, we want to provide some more precise mathematical arguments for why maximum likelihood is a good objective. This section is not essential for understanding the key ideas of the course and is aimed at advanced readers who wish to gain a deeper understanding of the material.</p>
-<section id="the-data-distribution">
-<h3>4.3.3.1. The Data Distribution<a class="headerlink" href="#the-data-distribution" title="Permalink to this headline">#</a></h3>
+<div class="section" id="the-data-distribution">
+<h3>4.3.3.1. The Data Distribution<a class="headerlink" href="#the-data-distribution" title="Permalink to this headline">¶</a></h3>
 <p>In machine learning, it is common to assume that our dataset is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as
 $<span class="math notranslate nohighlight">\( x, y \sim P_\text{data}. \)</span>$</p>
 <p>The training set <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}\)</span> consists of <em>independent and identicaly distributed</em> (IID) samples from <span class="math notranslate nohighlight">\(P_\text{data}\)</span>.</p>
-<section id="iid-sampling">
-<h4>IID Sampling<a class="headerlink" href="#iid-sampling" title="Permalink to this headline">#</a></h4>
+<div class="section" id="iid-sampling">
+<h4>IID Sampling<a class="headerlink" href="#iid-sampling" title="Permalink to this headline">¶</a></h4>
 <p>The key assumption is that the training examples are <em>independent and identicaly distributed</em> (IID).</p>
 <ul class="simple">
 <li><p>Each training example is from the same distribution.</p></li>
@@ -1680,10 +1564,10 @@ $<span class="math notranslate nohighlight">\( x, y \sim P_\text{data}. \)</span
 </ul>
 <p><strong>Example</strong>: Flipping a coin. Each flip has same probability of heads &amp; tails and doesn’t depend on previous flips.</p>
 <p><strong>Counter-Example</strong>: Yearly census data. The population in each year will be close to that of the previous year.</p>
-</section>
-</section>
-<section id="data-distribution-an-example">
-<h3>4.3.3.2. Data Distribution: An Example<a class="headerlink" href="#data-distribution-an-example" title="Permalink to this headline">#</a></h3>
+</div>
+</div>
+<div class="section" id="data-distribution-an-example">
+<h3>4.3.3.2. Data Distribution: An Example<a class="headerlink" href="#data-distribution-an-example" title="Permalink to this headline">¶</a></h3>
 <p>Let’s implement an example of a data distribution in numpy.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1744,9 +1628,9 @@ for a random noise variable \)</span>\epsilon$.</p>
 <img alt="_images/lecture4-classification_87_1.png" src="_images/lecture4-classification_87_1.png" />
 </div>
 </div>
-</section>
-<section id="data-distribution-motivation">
-<h3>4.3.3.3. Data Distribution: Motivation<a class="headerlink" href="#data-distribution-motivation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="data-distribution-motivation">
+<h3>4.3.3.3. Data Distribution: Motivation<a class="headerlink" href="#data-distribution-motivation" title="Permalink to this headline">¶</a></h3>
 <p>Why assume that the dataset is sampled from a distribution?</p>
 <ul class="simple">
 <li><p>The process we model may be effectively random. If <span class="math notranslate nohighlight">\(y\)</span> is a stock price, there is randomness in the market that cannot be captured by a deterministic model.</p></li>
@@ -1757,9 +1641,9 @@ for a random noise variable \)</span>\epsilon$.</p>
 <ul class="simple">
 <li><p>We can use probability and statistics to analyze supervised learning algorithms and prove that they work.</p></li>
 </ul>
-</section>
-<section id="kl-divergences-and-maximum-likelihood">
-<h3>4.3.3.4. KL Divergences and Maximum Likelihood<a class="headerlink" href="#kl-divergences-and-maximum-likelihood" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="kl-divergences-and-maximum-likelihood">
+<h3>4.3.3.4. KL Divergences and Maximum Likelihood<a class="headerlink" href="#kl-divergences-and-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
 <p>Maximizing likelihood is closely related to minimizing the Kullback-Leibler (KL) divergence <span class="math notranslate nohighlight">\(D(\cdot\|\cdot)\)</span> between the model distribution and the data distribution.
 $<span class="math notranslate nohighlight">\(
 D(p \| q) = \sum_{{\bf x}} p({\bf x}) \log \frac{p({\bf x})}{q({\bf x})}.
@@ -1786,20 +1670,20 @@ The KL divergence is always non-negative, and equals zero when \)</span>p<span c
 \[
 \max_{\theta} \mathbb{E}_{\hat{P}(x, y)} \left[ \log P_\theta(y|x) \right] = \min_{\theta} \mathbb{E}_{\hat{P}(x)} \left[ KL(\hat{P}(y|x) || P_\theta(y|x) )\right].
 \]</div>
-</section>
-<section id="maximum-likelihood-interpretation-of-ols">
-<h3>4.3.4. Maximum Likelihood Interpretation of OLS<a class="headerlink" href="#maximum-likelihood-interpretation-of-ols" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="maximum-likelihood-interpretation-of-ols">
+<h3>4.3.4. Maximum Likelihood Interpretation of OLS<a class="headerlink" href="#maximum-likelihood-interpretation-of-ols" title="Permalink to this headline">¶</a></h3>
 <p>Finally, we want to conclude with another example of the principle of maximum likelihood. We will show that the ordinary least squares algorithm from the previous lecture is also an instance of maximum likelihood learning underneath the hood.</p>
-<section id="recall-ordinary-least-squares">
-<h4>Recall: Ordinary Least Squares<a class="headerlink" href="#recall-ordinary-least-squares" title="Permalink to this headline">#</a></h4>
+<div class="section" id="recall-ordinary-least-squares">
+<h4>Recall: Ordinary Least Squares<a class="headerlink" href="#recall-ordinary-least-squares" title="Permalink to this headline">¶</a></h4>
 <p>Recall that in ordinary least squares (OLS), we have a linear model of the form
 $<span class="math notranslate nohighlight">\(f(x) = \sum_{j=0}^d \theta_j \cdot x_j = \theta^\top x.\)</span>$</p>
 <p>At each training instance <span class="math notranslate nohighlight">\((x,y)\)</span>, we seek to minimize the squared error
 $<span class="math notranslate nohighlight">\((y - \theta^\top x)^2.\)</span>$</p>
-</section>
-</section>
-<section id="id3">
-<h3>4.3.4.1. Maximum Likelihood Interpretation of OLS<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>4.3.4.1. Maximum Likelihood Interpretation of OLS<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Let’s make our usual linear regression model probabilistic: assume that the targets and the inputs are related by</p>
 <div class="math notranslate nohighlight">
 \[ y = \theta^\top x + \epsilon, \]</div>
@@ -1821,14 +1705,14 @@ using maximum likelihood.</p>
 <p>Least squares thus amounts to fitting a Gaussian  model <span class="math notranslate nohighlight">\(\mathcal{N}(y; \mu(x), \sigma)\)</span> with a standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> of one and a mean of <span class="math notranslate nohighlight">\(\mu(x) = \theta^\top x\)</span>.</p>
 <p>Note in particular that OLS implicitly makes the assumption that the noise is Gaussian around the mean.</p>
 <p>When that’s not the case, you may want to also experiment with other kinds of models.</p>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="learning-a-logistic-regression-model">
-<h1>4.4. Learning a Logistic Regression Model<a class="headerlink" href="#learning-a-logistic-regression-model" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="learning-a-logistic-regression-model">
+<h1>4.4. Learning a Logistic Regression Model<a class="headerlink" href="#learning-a-logistic-regression-model" title="Permalink to this headline">¶</a></h1>
 <p>Next, we will use maximum likelihood to learn the parameters of a logistic regression model.</p>
-<section id="review-logistic-regression-model-family">
-<h2>Review: Logistic Regression Model Family<a class="headerlink" href="#review-logistic-regression-model-family" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-logistic-regression-model-family">
+<h2>Review: Logistic Regression Model Family<a class="headerlink" href="#review-logistic-regression-model-family" title="Permalink to this headline">¶</a></h2>
 <p>Recall that a logistic model defines (“parameterizes”) a probability distribution <span class="math notranslate nohighlight">\(P_\theta(y|x) : \mathcal{X} \times \mathcal{Y} \to [0,1]\)</span> as follows:</p>
 <p>\begin{align*}
 P_\theta(y=1 | x) &amp; = \sigma(\theta^\top x) \
@@ -1838,9 +1722,9 @@ P_\theta(y=0 | x) &amp; = 1-\sigma(\theta^\top x).
 \begin{align*}
 P_\theta(y | x) = \sigma(\theta^\top x)^y \cdot (1-\sigma(\theta^\top x))^{1-y}
 \end{align*}</p>
-</section>
-<section id="defining-an-objective-for-logistic-regression-using-maximum-lilkelihood">
-<h2>4.4.1. Defining an Objective for Logistic Regression Using Maximum Lilkelihood<a class="headerlink" href="#defining-an-objective-for-logistic-regression-using-maximum-lilkelihood" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="defining-an-objective-for-logistic-regression-using-maximum-lilkelihood">
+<h2>4.4.1. Defining an Objective for Logistic Regression Using Maximum Lilkelihood<a class="headerlink" href="#defining-an-objective-for-logistic-regression-using-maximum-lilkelihood" title="Permalink to this headline">¶</a></h2>
 <p>Following the principle of maximum likelihood, we want to optimize the following objective defined over a binary classification dataset  <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.
 \begin{align*}
 \ell(\theta) &amp; = \frac{1}{n}\sum_{i=1}^n \log P_\theta (y^{(i)} \mid x^{(i)}) \
@@ -1867,13 +1751,13 @@ P_\theta(y | x) = \sigma(\theta^\top x)^y \cdot (1-\sigma(\theta^\top x))^{1-y}
 </div>
 </div>
 </div>
-</section>
-<section id="optimizing-the-logistic-regression-objective-using-gradient-descent">
-<h2>4.4.2. Optimizing the Logistic Regression Objective Using Gradient Descent<a class="headerlink" href="#optimizing-the-logistic-regression-objective-using-gradient-descent" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="optimizing-the-logistic-regression-objective-using-gradient-descent">
+<h2>4.4.2. Optimizing the Logistic Regression Objective Using Gradient Descent<a class="headerlink" href="#optimizing-the-logistic-regression-objective-using-gradient-descent" title="Permalink to this headline">¶</a></h2>
 <p>The missing piece for defining the logistic regression algorithm is an optimizer for the maximum likelihood of a logistic regression model.</p>
 <p>We will use for this task gradient descent, which we saw in the last lecture.</p>
-<section id="gradient-of-the-log-likelihood">
-<h3>4.4.2.1. Gradient of the Log-Likelihood<a class="headerlink" href="#gradient-of-the-log-likelihood" title="Permalink to this headline">#</a></h3>
+<div class="section" id="gradient-of-the-log-likelihood">
+<h3>4.4.2.1. Gradient of the Log-Likelihood<a class="headerlink" href="#gradient-of-the-log-likelihood" title="Permalink to this headline">¶</a></h3>
 <p>We want to use gradient descent to maximize the log-likelihood, hence our objective is
 <span class="math notranslate nohighlight">\(J(\theta) = - \ell(\theta).\)</span></p>
 <p>We can show that the gradient of the negative log-likelihood equals:
@@ -1901,9 +1785,9 @@ P_\theta(y | x) = \sigma(\theta^\top x)^y \cdot (1-\sigma(\theta^\top x))^{1-y}
 </div>
 </div>
 </div>
-</section>
-<section id="gradient-descent">
-<h3>4.4.2.2. Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="gradient-descent">
+<h3>4.4.2.2. Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permalink to this headline">¶</a></h3>
 <p>Recall, that if we want to minimize an objective <span class="math notranslate nohighlight">\(J(\theta)\)</span>, we may start with an initial guess <span class="math notranslate nohighlight">\(\theta_0\)</span> for the parameters and repeat the following update:</p>
 <div class="math notranslate nohighlight">
 \[ \theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). \]</div>
@@ -2000,10 +1884,10 @@ Iteration 200000. Log-likelihood: -0.010076
 </div>
 </div>
 <p>We see that both algorithms give us similar results!</p>
-</section>
-</section>
-<section id="algorithm-logistic-regression">
-<h2>4.4.3. Algorithm: Logistic Regression<a class="headerlink" href="#algorithm-logistic-regression" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="algorithm-logistic-regression">
+<h2>4.4.3. Algorithm: Logistic Regression<a class="headerlink" href="#algorithm-logistic-regression" title="Permalink to this headline">¶</a></h2>
 <p>We have now fully defined our first classificaiton algorithm—logistic regression. We summarize its key components below.</p>
 <ul class="simple">
 <li><p><strong>Type</strong>: Supervised learning (binary classification)</p></li>
@@ -2012,8 +1896,8 @@ Iteration 200000. Log-likelihood: -0.010076
 <li><p><strong>Optimizer</strong>: Gradient descent.</p></li>
 <li><p><strong>Probabilistic interpretation</strong>: Parametrized Bernoulli distribution.</p></li>
 </ul>
-<section id="additional-observations-about-logistic-regression">
-<h3>4.3.3.1. Additional Observations About Logistic Regression<a class="headerlink" href="#additional-observations-about-logistic-regression" title="Permalink to this headline">#</a></h3>
+<div class="section" id="additional-observations-about-logistic-regression">
+<h3>4.3.3.1. Additional Observations About Logistic Regression<a class="headerlink" href="#additional-observations-about-logistic-regression" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Logistic regression finds a linear decision boundary. This is the set of points for which <span class="math notranslate nohighlight">\(P(y=1|x)=P(y=0|x)\)</span>, or equivalently:
 \begin{align*}
@@ -2026,14 +1910,14 @@ The set of <span class="math notranslate nohighlight">\(x\)</span> for which <sp
 <ul class="simple">
 <li><p>Unlike least squares, we don’t have a closed form solution (a formula) for the optimal <span class="math notranslate nohighlight">\(\theta\)</span>. We can nonetheless find it numerically via gradient descent.</p></li>
 </ul>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="softmax-regression-for-multi-class-classification">
-<h1>4.5. Softmax Regression for Multi-Class Classification<a class="headerlink" href="#softmax-regression-for-multi-class-classification" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="softmax-regression-for-multi-class-classification">
+<h1>4.5. Softmax Regression for Multi-Class Classification<a class="headerlink" href="#softmax-regression-for-multi-class-classification" title="Permalink to this headline">¶</a></h1>
 <p>Finally, let’s look at an extension of logistic regression to an arbitrary number of classes.</p>
-<section id="multi-class-classification">
-<h2>4.5.1. Multi-Class Classification<a class="headerlink" href="#multi-class-classification" title="Permalink to this headline">#</a></h2>
+<div class="section" id="multi-class-classification">
+<h2>4.5.1. Multi-Class Classification<a class="headerlink" href="#multi-class-classification" title="Permalink to this headline">¶</a></h2>
 <p>Logistic regression only applies to binary classification problems. What if we have an arbitrary number of classes <span class="math notranslate nohighlight">\(K\)</span>?</p>
 <ul class="simple">
 <li><p>The simplest approach that can be used with any machine learning algorithm is the “one vs. all” approach. We train one classifer for each class to distinguish that class from all the others.</p></li>
@@ -2064,9 +1948,9 @@ The set of <span class="math notranslate nohighlight">\(x\)</span> for which <sp
 <img alt="_images/lecture4-classification_129_1.png" src="_images/lecture4-classification_129_1.png" />
 </div>
 </div>
-</section>
-<section id="the-softmax-function">
-<h2>4.5.2. The Softmax Function<a class="headerlink" href="#the-softmax-function" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="the-softmax-function">
+<h2>4.5.2. The Softmax Function<a class="headerlink" href="#the-softmax-function" title="Permalink to this headline">¶</a></h2>
 <p>The logistic function <span class="math notranslate nohighlight">\(\sigma : \mathbb{R} \to [0,1]\)</span> “squeezes” the score <span class="math notranslate nohighlight">\(z\in\mathbb{R}\)</span> of a class into a probability in <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
 <p>The <em>softmax</em> function <span class="math notranslate nohighlight">\(\vec \sigma : \mathbb{R}^K \to [0,1]^K\)</span> is a multi-class version of <span class="math notranslate nohighlight">\(\sigma\)</span></p>
 <ul class="simple">
@@ -2084,20 +1968,20 @@ $<span class="math notranslate nohighlight">\( \frac{\exp(z_1)}{\exp(z_1) + \exp
 <p>Assuming that <span class="math notranslate nohighlight">\(z_1 =0\)</span> means that <span class="math notranslate nohighlight">\(\exp(z_1) = 1\)</span> and softmax becomes
 $<span class="math notranslate nohighlight">\( \sigma(\vec z)_1 = \frac{1}{1 + \exp(z_2)}. \)</span>$
 This is effectively our sigmoid function. Hence softmax generalizes the sigmoid function.</p>
-</section>
-<section id="softmax-regression">
-<h2>4.5.3. Softmax Regression<a class="headerlink" href="#softmax-regression" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="softmax-regression">
+<h2>4.5.3. Softmax Regression<a class="headerlink" href="#softmax-regression" title="Permalink to this headline">¶</a></h2>
 <p>We will now use the softmax function to define a generalization of logistic regression to multi-class classification. The resulting algorithm is called softmax regression.</p>
-<section id="recall-logistic-regression">
-<h3>Recall: Logistic Regression<a class="headerlink" href="#recall-logistic-regression" title="Permalink to this headline">#</a></h3>
+<div class="section" id="recall-logistic-regression">
+<h3>Recall: Logistic Regression<a class="headerlink" href="#recall-logistic-regression" title="Permalink to this headline">¶</a></h3>
 <p>Logistic regression is a classification algorithm which uses a model <span class="math notranslate nohighlight">\(f_\theta\)</span> of the form
 $<span class="math notranslate nohighlight">\( f_\theta(x) = \sigma(\theta^\top x) = \frac{1}{1 + \exp(-\theta^\top x)}, \)</span><span class="math notranslate nohighlight">\(
 where 
 \)</span><span class="math notranslate nohighlight">\( \sigma(z) = \frac{1}{1 + \exp(-z)} \)</span>$
 is the <em>sigmoid</em> or <em>logistic</em> function. It trains this model using maximum likelihood.</p>
-</section>
-<section id="softmax-regression-model-class">
-<h3>4.5.3.1. Softmax Regression: Model Class<a class="headerlink" href="#softmax-regression-model-class" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="softmax-regression-model-class">
+<h3>4.5.3.1. Softmax Regression: Model Class<a class="headerlink" href="#softmax-regression-model-class" title="Permalink to this headline">¶</a></h3>
 <p>Softmax regression is a multi-class classification algorithm which uses a model <span class="math notranslate nohighlight">\(f_\theta : \mathcal{X} \to [0,1]^K\)</span> that generalizes logistic regression.</p>
 <p>Softmax regression works as follows:</p>
 <ol class="simple">
@@ -2116,17 +2000,17 @@ where each \)</span>\theta_l \in \mathbb{R}^d<span class="math notranslate nohig
 <p>As before, we can assume without loss of generality that <span class="math notranslate nohighlight">\(z_1=0\)</span> (or equivalently that <span class="math notranslate nohighlight">\(\theta_1=0\)</span>). This doesn’t change the set of functions <span class="math notranslate nohighlight">\(\mathcal{X} \to [0,1]^K\)</span> that our model class can represent.</p>
 <p>Note again that softmax regression is actually a <strong>classification</strong> algorithm.
 The term <em>regression</em> is an unfortunate historical misnomer.</p>
-</section>
-<section id="softmax-regression-probabilistic-interpretation">
-<h3>4.5.4.2. Softmax Regression: Probabilistic Interpretation<a class="headerlink" href="#softmax-regression-probabilistic-interpretation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="softmax-regression-probabilistic-interpretation">
+<h3>4.5.4.2. Softmax Regression: Probabilistic Interpretation<a class="headerlink" href="#softmax-regression-probabilistic-interpretation" title="Permalink to this headline">¶</a></h3>
 <p>The softmax model outputs a vector of probabilities, and defines a conditional probability distribution as follows:</p>
 <p>\begin{align*}
 P_\theta(y=k | x) &amp; = \vec\sigma(\vec z)<em>k =\frac{\exp(\theta_k^\top x)}{\sum</em>{l=1}^K \exp(\theta_l^\top x)}.
 \end{align*}</p>
 <p>Recall that a probability over <span class="math notranslate nohighlight">\(y\in \{1,2,...,K\}\)</span> is called Categorical.</p>
-</section>
-<section id="softmax-regression-learning-objective-and-optimizer">
-<h3>4.5.4.3. Softmax Regression: Learning Objective and Optimizer<a class="headerlink" href="#softmax-regression-learning-objective-and-optimizer" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="softmax-regression-learning-objective-and-optimizer">
+<h3>4.5.4.3. Softmax Regression: Learning Objective and Optimizer<a class="headerlink" href="#softmax-regression-learning-objective-and-optimizer" title="Permalink to this headline">¶</a></h3>
 <p>We again maximize likelihood over a dataset  <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.
 \begin{align*}
 L(\theta) &amp; = \prod_{i=1}^n P_\theta (y^{(i)} \mid x^{(i)}) = \prod_{i=1}^n \vec \sigma(\vec z^{(i)})<em>{y^{(i)}} \
@@ -2161,9 +2045,9 @@ L(\theta) &amp; = \prod_{i=1}^n P_\theta (y^{(i)} \mid x^{(i)}) = \prod_{i=1}^n 
 <img alt="_images/lecture4-classification_149_0.png" src="_images/lecture4-classification_149_0.png" />
 </div>
 </div>
-</section>
-<section id="algorithm-softmax-regression">
-<h3>4.5.4.4. Algorithm: Softmax Regression<a class="headerlink" href="#algorithm-softmax-regression" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="algorithm-softmax-regression">
+<h3>4.5.4.4. Algorithm: Softmax Regression<a class="headerlink" href="#algorithm-softmax-regression" title="Permalink to this headline">¶</a></h3>
 <p>We summarize the full algorithm below.</p>
 <ul class="simple">
 <li><p><strong>Type</strong>: Supervised learning (multi-class classification)</p></li>
@@ -2172,9 +2056,9 @@ L(\theta) &amp; = \prod_{i=1}^n P_\theta (y^{(i)} \mid x^{(i)}) = \prod_{i=1}^n 
 <li><p><strong>Optimizer</strong>: Gradient descent.</p></li>
 <li><p><strong>Probabilistic interpretation</strong>: Parametrized categorical distribution.</p></li>
 </ul>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
     <script type="text/x-thebe-config">
     {
@@ -2198,11 +2082,9 @@ L(\theta) &amp; = \prod_{i=1}^n P_\theta (y^{(i)} \mid x^{(i)}) = \prod_{i=1}^n 
 
               </div>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="lecture3-linear-regression.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -2218,28 +2100,24 @@ L(\theta) &amp; = \prod_{i=1}^n P_\theta (y^{(i)} \mid x^{(i)}) = \prod_{i=1}^n 
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            </footer>
+            
         </div>
     </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-    By Cornell University<br/>
-  
-      &copy; Copyright 2022.<br/>
-</p>
-        </footer>
-    </div>
+    <footer class="footer">
+  <p>
     
-</div>
+      By Cornell University<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
 
 
       </div>
     </div>
   
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
   </body>
 </html>

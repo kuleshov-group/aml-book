@@ -4,13 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lecture 3: Linear Regression &#8212; Applied Machine Learning</title>
     
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -20,16 +18,20 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
+    
+      
+
+    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -37,21 +39,21 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Lecture 4: Classification and Logistic Regression" href="lecture4-classification.html" />
@@ -63,21 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
-
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -86,10 +74,9 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -107,15 +94,14 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
-                </a>
-            </li>
-        </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
@@ -159,17 +145,12 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -177,191 +158,94 @@ const thebe_selector_output = ".output, .cell_output"
 
 
           
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="header-article row sticky-top noprint">
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
         
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture3-linear-regression.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
->
-  
-
-<span class="headerbtn__icon-container">
-  
-    <img src="_static/images/logo_binder.svg">
-  </span>
-<span class="headerbtn__text-container">Binder</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture3-linear-regression.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="_sources/lecture3-linear-regression.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/lecture3-linear-regression.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture3-linear-regression.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
     </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture3-linear-regression.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
    Lecture 3: Linear Regression
@@ -578,11 +462,12 @@ title="Print to PDF"
  </li>
 </ul>
 
-    </nav>
-</div>
+            </nav>
+        </div>
     </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Lecture 3: Linear Regression</h1>
@@ -815,26 +700,25 @@ title="Print to PDF"
                     </div>
                 </div>
             </div>
-            <main id="main-content" role="main">
-                
+            
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="lecture-3-linear-regression">
-<h1>Lecture 3: Linear Regression<a class="headerlink" href="#lecture-3-linear-regression" title="Permalink to this headline">#</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="lecture-3-linear-regression">
+<h1>Lecture 3: Linear Regression<a class="headerlink" href="#lecture-3-linear-regression" title="Permalink to this headline">¶</a></h1>
 <p>Our previous lecture defined the task of supervised learing. In this lecture, we will now define our first supervised learning algorithm—ordinary least squares (OLS). The OLS algorithm performs linear regression—it fits a linear model to a regression dataset.</p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="calculus-review">
-<h1>3.1. Calculus Review<a class="headerlink" href="#calculus-review" title="Permalink to this headline">#</a></h1>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="calculus-review">
+<h1>3.1. Calculus Review<a class="headerlink" href="#calculus-review" title="Permalink to this headline">¶</a></h1>
 <p>Before we present our first supervised learning algorithm, we will do a quick calculus review.</p>
-<section id="recall-components-of-a-supervised-machine-learning-problem">
-<h2>Recall: Components of a Supervised Machine Learning Problem<a class="headerlink" href="#recall-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">#</a></h2>
+<div class="section" id="recall-components-of-a-supervised-machine-learning-problem">
+<h2>Recall: Components of a Supervised Machine Learning Problem<a class="headerlink" href="#recall-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h2>
 <p>To apply supervised learning, we define a dataset and a learning algorithm.</p>
 <div class="math notranslate nohighlight">
 \[ \underbrace{\text{Dataset}}_\text{Features, Attributes, Targets} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} \]</div>
 <p>The output is a predictive model that maps inputs to targets. For instance, it can predict targets on new inputs.</p>
-</section>
-<section id="optimization">
-<h2>3.1.1. Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="optimization">
+<h2>3.1.1. Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">¶</a></h2>
 <p>Recall that a key part of a supervised learning algorithm is the optimizer, which takes</p>
 <ul class="simple">
 <li><p>an objective <span class="math notranslate nohighlight">\(J\)</span> (also called a loss function) and</p></li>
@@ -890,12 +774,12 @@ title="Print to PDF"
 <img alt="_images/lecture3-linear-regression_9_1.png" src="_images/lecture3-linear-regression_9_1.png" />
 </div>
 </div>
-</section>
-<section id="calculus-review-derivatives-and-gradients">
-<h2>3.1.3. Calculus Review: Derivatives and Gradients<a class="headerlink" href="#calculus-review-derivatives-and-gradients" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="calculus-review-derivatives-and-gradients">
+<h2>3.1.3. Calculus Review: Derivatives and Gradients<a class="headerlink" href="#calculus-review-derivatives-and-gradients" title="Permalink to this headline">¶</a></h2>
 <p>The key tool from calculus that we will use is the derivative and its extensions</p>
-<section id="derivatives">
-<h3>3.1.3.1. Derivatives<a class="headerlink" href="#derivatives" title="Permalink to this headline">#</a></h3>
+<div class="section" id="derivatives">
+<h3>3.1.3.1. Derivatives<a class="headerlink" href="#derivatives" title="Permalink to this headline">¶</a></h3>
 <p>Recall that the derivative</p>
 <div class="math notranslate nohighlight">
 \[
@@ -951,18 +835,18 @@ title="Print to PDF"
 <img alt="_images/lecture3-linear-regression_13_1.png" src="_images/lecture3-linear-regression_13_1.png" />
 </div>
 </div>
-</section>
-<section id="partial-derivatives">
-<h3>3.1.3.2. Partial Derivatives<a class="headerlink" href="#partial-derivatives" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="partial-derivatives">
+<h3>3.1.3.2. Partial Derivatives<a class="headerlink" href="#partial-derivatives" title="Permalink to this headline">¶</a></h3>
 <p>The partial derivative</p>
 <div class="math notranslate nohighlight">
 \[
 \frac{\partial f(\theta)}{\partial \theta_j}
 \]</div>
 <p>of a multivariate function <span class="math notranslate nohighlight">\(f : \mathbb{R}^d \to \mathbb{R}\)</span> is the derivative of <span class="math notranslate nohighlight">\(f\)</span> with respect to <span class="math notranslate nohighlight">\(\theta_j\)</span> while all the other dimensions <span class="math notranslate nohighlight">\(\theta_k\)</span> for <span class="math notranslate nohighlight">\(k\neq j\)</span> are fixed.</p>
-</section>
-<section id="the-gradient">
-<h3>3.1.3.3. The Gradient<a class="headerlink" href="#the-gradient" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="the-gradient">
+<h3>3.1.3.3. The Gradient<a class="headerlink" href="#the-gradient" title="Permalink to this headline">¶</a></h3>
 <p>The gradient <span class="math notranslate nohighlight">\(\nabla f\)</span> is the vector of all the partial derivatives:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split} 
@@ -1080,18 +964,18 @@ title="Print to PDF"
 <img alt="_images/lecture3-linear-regression_23_1.png" src="_images/lecture3-linear-regression_23_1.png" />
 </div>
 </div>
-</section>
-</section>
-<section id="gradient-descent">
-<h2>3.3. Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="gradient-descent">
+<h2>3.3. Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permalink to this headline">¶</a></h2>
 <p>Next, we will use gradients to define an important algorithm called <em>gradient descent</em>.</p>
-<section id="intuition">
-<h3>3.3.1. Intuition<a class="headerlink" href="#intuition" title="Permalink to this headline">#</a></h3>
+<div class="section" id="intuition">
+<h3>3.3.1. Intuition<a class="headerlink" href="#intuition" title="Permalink to this headline">¶</a></h3>
 <p>Gradient descent is a very common optimization algorithm used in machine learning.</p>
 <p>The intuition behind gradient descent is to repeatedly obtain the gradient to determine the direction in which the function decreases most steeply and take a step in that direction.</p>
-</section>
-<section id="notation">
-<h3>3.3.2. Notation<a class="headerlink" href="#notation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="notation">
+<h3>3.3.2. Notation<a class="headerlink" href="#notation" title="Permalink to this headline">¶</a></h3>
 <p>More formally, if we want to optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span>, we start with an initial guess <span class="math notranslate nohighlight">\(\theta_0\)</span> for the parameters and repeat the following update until <span class="math notranslate nohighlight">\(\theta\)</span> is no longer changing:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1152,15 +1036,15 @@ title="Print to PDF"
 </div>
 </div>
 <p>Each gradient is orthognal to the level curve, and the minues one times the gradient (the “steepest descent direction”) points inwards toward the minimum. By repeatedly following the steepest descent direction, we arrive at the minimum.</p>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="gradient-descent-in-linear-models">
-<h1>3.2. Gradient Descent in Linear Models<a class="headerlink" href="#gradient-descent-in-linear-models" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="gradient-descent-in-linear-models">
+<h1>3.2. Gradient Descent in Linear Models<a class="headerlink" href="#gradient-descent-in-linear-models" title="Permalink to this headline">¶</a></h1>
 <p>To better understand gradients and gradient descent, let’s further explore their properties in the context of linear models.</p>
 <p>Specifically, we will define a combination of model class, objective, and optimizer—this will give us our first supervised learning algorithm.</p>
-<section id="gradient-descent-recap">
-<h2>Gradient Descent Recap<a class="headerlink" href="#gradient-descent-recap" title="Permalink to this headline">#</a></h2>
+<div class="section" id="gradient-descent-recap">
+<h2>Gradient Descent Recap<a class="headerlink" href="#gradient-descent-recap" title="Permalink to this headline">¶</a></h2>
 <p>A key ingredient will be gradient descent. Recall that if we want to optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span>, we start with an initial guess <span class="math notranslate nohighlight">\(\theta_0\)</span> for the parameters and repeat the following update:</p>
 <div class="math notranslate nohighlight">
 \[ 
@@ -1173,9 +1057,9 @@ title="Print to PDF"
     <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_prev</span> <span class="o">-</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">(</span><span class="n">theta_prev</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="a-supervised-learning-task-predicting-diabetes">
-<h2>3.1. A Supervised Learning Task: Predicting Diabetes<a class="headerlink" href="#a-supervised-learning-task-predicting-diabetes" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="a-supervised-learning-task-predicting-diabetes">
+<h2>3.1. A Supervised Learning Task: Predicting Diabetes<a class="headerlink" href="#a-supervised-learning-task-predicting-diabetes" title="Permalink to this headline">¶</a></h2>
 <p>In this section, we are going to again use the UCI Diabetes Dataset.</p>
 <ul class="simple">
 <li><p>For each patient we have a access to their BMI and an estimate of diabetes risk (from 0-400).</p></li>
@@ -1214,9 +1098,9 @@ title="Print to PDF"
 <img alt="_images/lecture3-linear-regression_34_1.png" src="_images/lecture3-linear-regression_34_1.png" />
 </div>
 </div>
-</section>
-<section id="linear-model-family">
-<h2>3.2. Linear Model Family<a class="headerlink" href="#linear-model-family" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="linear-model-family">
+<h2>3.2. Linear Model Family<a class="headerlink" href="#linear-model-family" title="Permalink to this headline">¶</a></h2>
 <p>Recall that a linear model has the form</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1248,9 +1132,9 @@ f_\theta(x) = \sum_{j=0}^d \theta_j \cdot x_j = \theta^\top x.
 </div>
 </div>
 </div>
-</section>
-<section id="an-objective-mean-squared-error">
-<h2>3.3. An Objective: Mean Squared Error<a class="headerlink" href="#an-objective-mean-squared-error" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="an-objective-mean-squared-error">
+<h2>3.3. An Objective: Mean Squared Error<a class="headerlink" href="#an-objective-mean-squared-error" title="Permalink to this headline">¶</a></h2>
 <p>We pick <span class="math notranslate nohighlight">\(\theta\)</span> to minimize the mean squared error (MSE). Slight variants of this objective are also known as the residual sum of squares (RSS) or the sum of squared residuals (SSR).</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1273,8 +1157,8 @@ J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2
 </div>
 </div>
 </div>
-<section id="mean-squared-error-derivatives-and-gradients">
-<h3>3.3.1. Mean Squared Error: Derivatives and Gradients<a class="headerlink" href="#mean-squared-error-derivatives-and-gradients" title="Permalink to this headline">#</a></h3>
+<div class="section" id="mean-squared-error-derivatives-and-gradients">
+<h3>3.3.1. Mean Squared Error: Derivatives and Gradients<a class="headerlink" href="#mean-squared-error-derivatives-and-gradients" title="Permalink to this headline">¶</a></h3>
 <p>Let’s work out the derivatives for <span class="math notranslate nohighlight">\(\frac{1}{2} \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2,\)</span> the MSE of a linear model <span class="math notranslate nohighlight">\(f_\theta\)</span> for one training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span>, which we denote <span class="math notranslate nohighlight">\(J^{(i)}(\theta)\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -1341,10 +1225,10 @@ J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="gradient-descent-for-linear-regression">
-<h2>3.4. Gradient Descent for Linear Regression<a class="headerlink" href="#gradient-descent-for-linear-regression" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="gradient-descent-for-linear-regression">
+<h2>3.4. Gradient Descent for Linear Regression<a class="headerlink" href="#gradient-descent-for-linear-regression" title="Permalink to this headline">¶</a></h2>
 <p>Putting this together with the gradient descent algorithm, we obtain a learning method for training linear models.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span><span class="p">,</span> <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">random_initialization</span><span class="p">()</span>
 <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">J</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="n">J</span><span class="p">(</span><span class="n">theta_prev</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">conv_threshold</span><span class="p">:</span>
@@ -1405,14 +1289,14 @@ Iteration 400. MSE: 0.013701
 </div>
 </div>
 <p>Note that the result is similar to what we obtained in the previous lecture by invoking the optimizer in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.</p>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="ordinary-least-squares">
-<h1>3.3. Ordinary Least Squares<a class="headerlink" href="#ordinary-least-squares" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="ordinary-least-squares">
+<h1>3.3. Ordinary Least Squares<a class="headerlink" href="#ordinary-least-squares" title="Permalink to this headline">¶</a></h1>
 <p>In practice, there is a more effective way than gradient descent to find linear model parameters.</p>
 <p>This method will produce our first non-toy supervised learning algorithm: Ordinary Least Squares.</p>
-<section id="review-the-gradient">
-<h2>Review: The Gradient<a class="headerlink" href="#review-the-gradient" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-the-gradient">
+<h2>Review: The Gradient<a class="headerlink" href="#review-the-gradient" title="Permalink to this headline">¶</a></h2>
 <p>The gradient <span class="math notranslate nohighlight">\(\nabla_\theta f\)</span> further extends the derivative to multivariate functions <span class="math notranslate nohighlight">\(f : \mathbb{R}^d \to \mathbb{R}\)</span>, and is defined at a point <span class="math notranslate nohighlight">\(\theta_0\)</span> as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split} \nabla_\theta f (\theta_0) = \begin{bmatrix}
@@ -1422,13 +1306,13 @@ Iteration 400. MSE: 0.013701
 \frac{\partial f(\theta_0)}{\partial \theta_d}
 \end{bmatrix}.\end{split}\]</div>
 <p>In other words, the <span class="math notranslate nohighlight">\(j\)</span>-th entry of the vector <span class="math notranslate nohighlight">\(\nabla_\theta f (\theta_0)\)</span> is the partial derivative <span class="math notranslate nohighlight">\(\frac{\partial f(\theta_0)}{\partial \theta_j}\)</span> of <span class="math notranslate nohighlight">\(f\)</span> with respect to the <span class="math notranslate nohighlight">\(j\)</span>-th component of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
-</section>
-<section id="id1">
-<h2>3.3.1. Notation<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="id1">
+<h2>3.3.1. Notation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>First, we start by introducing some notation.
 Suppose that we have a dataset of size <span class="math notranslate nohighlight">\(n\)</span> (e.g., <span class="math notranslate nohighlight">\(n\)</span> patients), indexed by <span class="math notranslate nohighlight">\(i=1,2,...,n\)</span>. Each <span class="math notranslate nohighlight">\(x^{(i)}\)</span> is a vector of <span class="math notranslate nohighlight">\(d\)</span> features.</p>
-<section id="design-matrix">
-<h3>3.3.1.1. Design Matrix<a class="headerlink" href="#design-matrix" title="Permalink to this headline">#</a></h3>
+<div class="section" id="design-matrix">
+<h3>3.3.1.1. Design Matrix<a class="headerlink" href="#design-matrix" title="Permalink to this headline">¶</a></h3>
 <p>Machine learning algorithms are most easily defined in the language of linear algebra. Therefore, it will be useful to represent the entire dataset as one matrix <span class="math notranslate nohighlight">\(X \in \mathbb{R}^{n \times d}\)</span>, of the form:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split} X = \begin{bmatrix}
@@ -1559,9 +1443,9 @@ x^{(n)}_1 &amp; x^{(n)}_2 &amp; \ldots &amp; x^{(n)}_d
 </table>
 </div></div></div>
 </div>
-</section>
-<section id="the-target-vector">
-<h3>3.3.1.2. The Target Vector<a class="headerlink" href="#the-target-vector" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="the-target-vector">
+<h3>3.3.1.2. The Target Vector<a class="headerlink" href="#the-target-vector" title="Permalink to this headline">¶</a></h3>
 <p>Similarly, we can vectorize the target variables into a vector <span class="math notranslate nohighlight">\(y \in \mathbb{R}^n\)</span> of the form</p>
 <div class="math notranslate nohighlight">
 \[\begin{split} 
@@ -1572,9 +1456,9 @@ y^{(2)} \\
 y^{(n)}
 \end{bmatrix}.
 \end{split}\]</div>
-</section>
-<section id="squared-error-in-matrix-form">
-<h3>3.3.1.3. Squared Error in Matrix Form<a class="headerlink" href="#squared-error-in-matrix-form" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="squared-error-in-matrix-form">
+<h3>3.3.1.3. Squared Error in Matrix Form<a class="headerlink" href="#squared-error-in-matrix-form" title="Permalink to this headline">¶</a></h3>
 <p>Recall that we may fit a linear model by choosing <span class="math notranslate nohighlight">\(\theta\)</span> that minimizes the squared error:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1586,13 +1470,13 @@ J(\theta)=\frac{1}{2}\sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2
 J(\theta) = \frac{1}{2} (y-X\theta)^\top(y-X\theta) = \frac{1}{2} \|y-X\theta\|^2,
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(X\)</span> is the design matrix and <span class="math notranslate nohighlight">\(\|\cdot\|\)</span> denotes the Euclidean norm.</p>
-</section>
-</section>
-<section id="the-normal-equations">
-<h2>3.3.2. The Normal Equations<a class="headerlink" href="#the-normal-equations" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="the-normal-equations">
+<h2>3.3.2. The Normal Equations<a class="headerlink" href="#the-normal-equations" title="Permalink to this headline">¶</a></h2>
 <p>Next, we will use this notation to derive a very important formula in supervised learning—the normal equations.</p>
-<section id="the-gradient-of-the-squared-error">
-<h3>3.3.2.1. The Gradient of the Squared Error<a class="headerlink" href="#the-gradient-of-the-squared-error" title="Permalink to this headline">#</a></h3>
+<div class="section" id="the-gradient-of-the-squared-error">
+<h3>3.3.2.1. The Gradient of the Squared Error<a class="headerlink" href="#the-gradient-of-the-squared-error" title="Permalink to this headline">¶</a></h3>
 <p>Let’s begin by observing that we can compute the gradient of the mean squared error as follows.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -1606,9 +1490,9 @@ J(\theta) = \frac{1}{2} (y-X\theta)^\top(y-X\theta) = \frac{1}{2} \|y-X\theta\|^
 \end{align*}
 \end{split}\]</div>
 <p>We used the facts that <span class="math notranslate nohighlight">\(a^\top b = b^\top a\)</span> (line 3), that <span class="math notranslate nohighlight">\(\nabla_x b^\top x = b\)</span> (line 4), and that <span class="math notranslate nohighlight">\(\nabla_x x^\top A x = 2 A x\)</span> for a symmetric matrix <span class="math notranslate nohighlight">\(A\)</span> (line 4).</p>
-</section>
-<section id="computing-model-parameters-via-the-normal-equations">
-<h3>3.3.2.2. Computing Model Parameters via the Normal Equations<a class="headerlink" href="#computing-model-parameters-via-the-normal-equations" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="computing-model-parameters-via-the-normal-equations">
+<h3>3.3.2.2. Computing Model Parameters via the Normal Equations<a class="headerlink" href="#computing-model-parameters-via-the-normal-equations" title="Permalink to this headline">¶</a></h3>
 <p>We know from calculus that a function is minimized when its derivative is set to zero. In our case, our objective function is a (multivariate) quadratic; hence it only has one minimum, which is the global minimum.</p>
 <p>Setting the above derivative to zero, we obtain the <em>normal equations</em>:</p>
 <div class="math notranslate nohighlight">
@@ -1627,8 +1511,8 @@ J(\theta) = \frac{1}{2} (y-X\theta)^\top(y-X\theta) = \frac{1}{2} \|y-X\theta\|^
 <li><p>In contrast, gradient descent is an iterative optimization procedure that is often slower on small datasets.</p></li>
 <li><p>The analytical approach is what is most commonly used in practice.</p></li>
 </ul>
-<section id="a-small-experiment">
-<h4>A Small Experiment<a class="headerlink" href="#a-small-experiment" title="Permalink to this headline">#</a></h4>
+<div class="section" id="a-small-experiment">
+<h4>A Small Experiment<a class="headerlink" href="#a-small-experiment" title="Permalink to this headline">¶</a></h4>
 <p>Let’s now apply the normal equations to the Diabetes dataset.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1727,11 +1611,11 @@ J(\theta) = \frac{1}{2} (y-X\theta)^\top(y-X\theta) = \frac{1}{2} \|y-X\theta\|^
 </div>
 <p>Again, red cross are predictions, red dots are true values. The model gives us very accurate predictions.</p>
 <p>Note again that while we are visualizing the data with the BMI on the x-axis, the model actually uses all of the features.</p>
-</section>
-</section>
-</section>
-<section id="id2">
-<h2>3.3.4. Ordinary Least Squares<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>3.3.4. Ordinary Least Squares<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <p>The above procedure gives us our first non-toy supervised learning algorithm—ordinary least squares (OLS). We can succinctly define OLS in terms of the algorithm components we defined in the last lecture.</p>
 <ul class="simple">
 <li><p><strong>Type</strong>: Supervised learning (regression)</p></li>
@@ -1740,13 +1624,13 @@ J(\theta) = \frac{1}{2} (y-X\theta)^\top(y-X\theta) = \frac{1}{2} \|y-X\theta\|^
 <li><p><strong>Optimizer</strong>: Normal equations</p></li>
 </ul>
 <p>We will define many algorithms in this way throughout the course.</p>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="non-linear-least-squares">
-<h1>3.4. Non-Linear Least Squares<a class="headerlink" href="#non-linear-least-squares" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="non-linear-least-squares">
+<h1>3.4. Non-Linear Least Squares<a class="headerlink" href="#non-linear-least-squares" title="Permalink to this headline">¶</a></h1>
 <p>Ordinary Least Squares can only learn linear relationships in the data. Can we also use it to model more complex relationships?</p>
-<section id="review-polynomial-functions">
-<h2>3.4.1. Review: Polynomial Functions<a class="headerlink" href="#review-polynomial-functions" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-polynomial-functions">
+<h2>3.4.1. Review: Polynomial Functions<a class="headerlink" href="#review-polynomial-functions" title="Permalink to this headline">¶</a></h2>
 <p>We start with a brief review of polynomials.
 Recall that a polynomial of degree <span class="math notranslate nohighlight">\(p\)</span> is a function of the form</p>
 <div class="math notranslate nohighlight">
@@ -1786,9 +1670,9 @@ a_p x^p + a_{p-1} x^{p-1} + ... + a_{1} x + a_0.
 <img alt="_images/lecture3-linear-regression_74_1.png" src="_images/lecture3-linear-regression_74_1.png" />
 </div>
 </div>
-</section>
-<section id="modeling-non-linear-relationships-with-polynomial-regression">
-<h2>3.4.2. Modeling Non-Linear Relationships With Polynomial Regression<a class="headerlink" href="#modeling-non-linear-relationships-with-polynomial-regression" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="modeling-non-linear-relationships-with-polynomial-regression">
+<h2>3.4.2. Modeling Non-Linear Relationships With Polynomial Regression<a class="headerlink" href="#modeling-non-linear-relationships-with-polynomial-regression" title="Permalink to this headline">¶</a></h2>
 <p>Note that the set of <span class="math notranslate nohighlight">\(p\)</span>-th degree polynomials forms a linear model with parameters <span class="math notranslate nohighlight">\(a_p, a_{p-1}, ..., a_0\)</span>.
 This means we can use our algorithms for linear models to learn non-linear features!</p>
 <p>Specifically, given a one-dimensional continuous variable <span class="math notranslate nohighlight">\(x\)</span>, we can define the <em>polynomial feature</em> function <span class="math notranslate nohighlight">\(\phi : \mathbb{R} \to \mathbb{R}^{p+1}\)</span> as</p>
@@ -1813,8 +1697,8 @@ f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x)
 <ul class="simple">
 <li><p>It is a linear model as a function of the parameters <span class="math notranslate nohighlight">\(\theta\)</span>, meaning that we can use our familiar ordinary least squares algorithm to learn these features.</p></li>
 </ul>
-<section id="polynomial-features-for-diabetes-risk-prediction">
-<h3>3.4.2.1. Polynomial Features for Diabetes RIsk Prediction<a class="headerlink" href="#polynomial-features-for-diabetes-risk-prediction" title="Permalink to this headline">#</a></h3>
+<div class="section" id="polynomial-features-for-diabetes-risk-prediction">
+<h3>3.4.2.1. Polynomial Features for Diabetes RIsk Prediction<a class="headerlink" href="#polynomial-features-for-diabetes-risk-prediction" title="Permalink to this headline">¶</a></h3>
 <p>In this section, we are going to again use the UCI Diabetes Dataset.</p>
 <ul class="simple">
 <li><p>For each patient we have a access to a measurement of their body mass index (BMI) and a quantiative diabetes risk score (from 0-300).</p></li>
@@ -1930,9 +1814,9 @@ f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x)
 </table>
 </div></div></div>
 </div>
-</section>
-<section id="diabetes-risk-prediction-with-polynomial-regression">
-<h3>3.4.2.2. Diabetes RIsk Prediction with Polynomial Regression<a class="headerlink" href="#diabetes-risk-prediction-with-polynomial-regression" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="diabetes-risk-prediction-with-polynomial-regression">
+<h3>3.4.2.2. Diabetes RIsk Prediction with Polynomial Regression<a class="headerlink" href="#diabetes-risk-prediction-with-polynomial-regression" title="Permalink to this headline">¶</a></h3>
 <p>By training a linear model on this featurization of the diabetes dataset, we can obtain a polynomial model of diabetest risk as a function of BMI.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1959,10 +1843,10 @@ f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x)
 </div>
 </div>
 <p>Notice how the above third-degree polynomial represents a much better fit to the data!</p>
-</section>
-</section>
-<section id="multivariate-polynomial-regression">
-<h2>3.4.3. Multivariate Polynomial Regression<a class="headerlink" href="#multivariate-polynomial-regression" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="multivariate-polynomial-regression">
+<h2>3.4.3. Multivariate Polynomial Regression<a class="headerlink" href="#multivariate-polynomial-regression" title="Permalink to this headline">¶</a></h2>
 <p>We can construct non-linear functions of multiple variables by using multivariate polynomials.</p>
 <p>For example, a polynomial of degree <span class="math notranslate nohighlight">\(2\)</span> over two variables <span class="math notranslate nohighlight">\(x_1, x_2\)</span> is a function of the form</p>
 <!-- $$
@@ -1990,12 +1874,12 @@ x_1 x_2
 \end{bmatrix}.
 \end{split}\]</div>
 <p>The same approach can be used to specify polynomials of any degree and over any number of variables.</p>
-</section>
-<section id="id3">
-<h2>3.4.4. Non-Linear Least Squares<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="id3">
+<h2>3.4.4. Non-Linear Least Squares<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>We can further extend this approach by going from polynomial to general non-linear features. Combining non-linear features with normal equations gives us an algorithm called non-linear least squares.</p>
-<section id="towards-general-non-linear-features">
-<h3>3.4.4.2. Towards General Non-Linear Features<a class="headerlink" href="#towards-general-non-linear-features" title="Permalink to this headline">#</a></h3>
+<div class="section" id="towards-general-non-linear-features">
+<h3>3.4.4.2. Towards General Non-Linear Features<a class="headerlink" href="#towards-general-non-linear-features" title="Permalink to this headline">¶</a></h3>
 <p>Any non-linear feature map <span class="math notranslate nohighlight">\(\phi(x) : \mathbb{R}^d \to \mathbb{R}^p\)</span> can be used to obtain general models of the form</p>
 <div class="math notranslate nohighlight">
 \[ 
@@ -2035,9 +1919,9 @@ f_\theta(x) := \theta^\top \phi(x)
 <img alt="_images/lecture3-linear-regression_91_1.png" src="_images/lecture3-linear-regression_91_1.png" />
 </div>
 </div>
-</section>
-<section id="algorithm-non-linear-least-squares">
-<h3>3.4.4.2. Algorithm: Non-Linear Least Squares<a class="headerlink" href="#algorithm-non-linear-least-squares" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="algorithm-non-linear-least-squares">
+<h3>3.4.4.2. Algorithm: Non-Linear Least Squares<a class="headerlink" href="#algorithm-non-linear-least-squares" title="Permalink to this headline">¶</a></h3>
 <p>Because the above model is still linear in <span class="math notranslate nohighlight">\(\theta\)</span>, we can apply the normal equations. This yields the following algorithm, which we again characterize via its components.</p>
 <ul class="simple">
 <li><p><strong>Type</strong>: Supervised learning (regression)</p></li>
@@ -2046,9 +1930,9 @@ f_\theta(x) := \theta^\top \phi(x)
 <li><p><strong>Objective function</strong>: Mean squared error</p></li>
 <li><p><strong>Optimizer</strong>: Normal equations</p></li>
 </ul>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
     <script type="text/x-thebe-config">
     {
@@ -2072,11 +1956,9 @@ f_\theta(x) := \theta^\top \phi(x)
 
               </div>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="lecture2-supervised-learning.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -2092,28 +1974,24 @@ f_\theta(x) := \theta^\top \phi(x)
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            </footer>
+            
         </div>
     </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-    By Cornell University<br/>
-  
-      &copy; Copyright 2022.<br/>
-</p>
-        </footer>
-    </div>
+    <footer class="footer">
+  <p>
     
-</div>
+      By Cornell University<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
 
 
       </div>
     </div>
   
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
   </body>
 </html>

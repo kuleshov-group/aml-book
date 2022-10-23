@@ -4,13 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lecture 8: Unsupervised Learning &#8212; Applied Machine Learning</title>
     
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -20,16 +18,20 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
+    
+      
+
+    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -37,21 +39,21 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Lecture 9: Density Estimation" href="lecture9-density-estimation.html" />
@@ -63,21 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
-
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -86,10 +74,9 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -107,15 +94,14 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
-                </a>
-            </li>
-        </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
@@ -159,17 +145,12 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -177,191 +158,94 @@ const thebe_selector_output = ".output, .cell_output"
 
 
           
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="header-article row sticky-top noprint">
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
         
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture8-unsupervised-learning.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
->
-  
-
-<span class="headerbtn__icon-container">
-  
-    <img src="_static/images/logo_binder.svg">
-  </span>
-<span class="headerbtn__text-container">Binder</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture8-unsupervised-learning.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="_sources/lecture8-unsupervised-learning.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/lecture8-unsupervised-learning.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture8-unsupervised-learning.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
     </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture8-unsupervised-learning.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
    Lecture 8: Unsupervised Learning
@@ -534,11 +418,12 @@ title="Print to PDF"
  </li>
 </ul>
 
-    </nav>
-</div>
+            </nav>
+        </div>
     </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Lecture 8: Unsupervised Learning</h1>
@@ -727,15 +612,14 @@ title="Print to PDF"
                     </div>
                 </div>
             </div>
-            <main id="main-content" role="main">
-                
+            
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="lecture-8-unsupervised-learning">
-<h1>Lecture 8: Unsupervised Learning<a class="headerlink" href="#lecture-8-unsupervised-learning" title="Permalink to this headline">#</a></h1>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="introduction-to-unsupervised-learning">
-<h1>8.1. Introduction to Unsupervised Learning<a class="headerlink" href="#introduction-to-unsupervised-learning" title="Permalink to this headline">#</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="lecture-8-unsupervised-learning">
+<h1>Lecture 8: Unsupervised Learning<a class="headerlink" href="#lecture-8-unsupervised-learning" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="introduction-to-unsupervised-learning">
+<h1>8.1. Introduction to Unsupervised Learning<a class="headerlink" href="#introduction-to-unsupervised-learning" title="Permalink to this headline">¶</a></h1>
 <p>As mentioned before, the three main types of machine learning methods are supervised learning, unsupervised learning, and Reinforcement learning. We were focusing on supervised learning for the last few lectures, but now we will shift our attention to another primary learning paradigm, unsupervised learning.</p>
 <p>Let’s start by understanding what is unsupervised learning at a high level, starting with a dataset and an algorithm.</p>
 <p>Unlike supervised Learning, in unsupervised Learning, we have a dataset <em>without</em> labels. Even though our data points are not labeled, we can still learn interesting things about the structure of the data including:</p>
@@ -748,11 +632,11 @@ title="Print to PDF"
 <div class="math notranslate nohighlight">
 \[ \text{Dataset} + \text{Learning Algorithm} \to \text{Unsupervised Model} \]</div>
 <p>The unsupervised model describes interesting structures in the data. For instance, it can identify interesting hidden clusters.</p>
-<section id="unsupervised-learning-example">
-<h2>8.1.1. Unsupervised Learning - Example<a class="headerlink" href="#unsupervised-learning-example" title="Permalink to this headline">#</a></h2>
+<div class="section" id="unsupervised-learning-example">
+<h2>8.1.1. Unsupervised Learning - Example<a class="headerlink" href="#unsupervised-learning-example" title="Permalink to this headline">¶</a></h2>
 <p>To concretize the ideas of unsupervised learning, let’s look at an example of an unsupervised learning model.</p>
-<section id="unsupervised-learning-example-dataset">
-<h3>8.1.1.1. Unsupervised Learning - Example Dataset<a class="headerlink" href="#unsupervised-learning-example-dataset" title="Permalink to this headline">#</a></h3>
+<div class="section" id="unsupervised-learning-example-dataset">
+<h3>8.1.1.1. Unsupervised Learning - Example Dataset<a class="headerlink" href="#unsupervised-learning-example-dataset" title="Permalink to this headline">¶</a></h3>
 <p>As an example of an unsupervised learning dataset, we will use our Iris flower dataset example, but we will discard the labels.</p>
 <p>We start by loading this dataset.</p>
 <div class="cell docutils container">
@@ -864,9 +748,9 @@ latter are NOT linearly separable from each other.
 <img alt="_images/lecture8-unsupervised-learning_9_2.png" src="_images/lecture8-unsupervised-learning_9_2.png" />
 </div>
 </div>
-</section>
-<section id="unsupervised-learning-example-algorithm">
-<h3>8.1.1.2. Unsupervised Learning - Example Algorithm<a class="headerlink" href="#unsupervised-learning-example-algorithm" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="unsupervised-learning-example-algorithm">
+<h3>8.1.1.2. Unsupervised Learning - Example Algorithm<a class="headerlink" href="#unsupervised-learning-example-algorithm" title="Permalink to this headline">¶</a></h3>
 <p>We can use this dataset, with only sepal length and width as features and without labels, as input to a popular unsupervised learning algorithm, <span class="math notranslate nohighlight">\(K\)</span>-means.</p>
 <ul class="simple">
 <li><p>The algorithm seeks to find <span class="math notranslate nohighlight">\(K\)</span> hidden clusters in the data.</p></li>
@@ -932,10 +816,10 @@ latter are NOT linearly separable from each other.
 </div>
 </div>
 <p>Hopefully, this example helps convince you that there is usually interesting structural information you can learn using unsupervised learning algorithms from totally unlabeled data.</p>
-</section>
-</section>
-<section id="applications-of-unsupervised-learning">
-<h2>8.1.2. Applications of Unsupervised Learning<a class="headerlink" href="#applications-of-unsupervised-learning" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="applications-of-unsupervised-learning">
+<h2>8.1.2. Applications of Unsupervised Learning<a class="headerlink" href="#applications-of-unsupervised-learning" title="Permalink to this headline">¶</a></h2>
 <p>Now, you might ask in what applications do we not have labels and want to use unsupervised learning?</p>
 <p>Here are some applications we use it for:</p>
 <ul class="simple">
@@ -949,13 +833,13 @@ latter are NOT linearly separable from each other.
 <li><p>DNA Analysis: Unsupervised learning can be used to perform Dimensionality Reduction, which can be applied to DNA to reveal the geography of each country.</p></li>
 <li><p>Facial Feature Learning: Modern unsupervised algorithms based on deep learning can uncover structure in human face datasets.</p></li>
 </ul>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-language-of-unsupervised-learning">
-<h1>8.2. The Language of Unsupervised Learning<a class="headerlink" href="#the-language-of-unsupervised-learning" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="the-language-of-unsupervised-learning">
+<h1>8.2. The Language of Unsupervised Learning<a class="headerlink" href="#the-language-of-unsupervised-learning" title="Permalink to this headline">¶</a></h1>
 <p>Next, let’s look at how to define an unsupervised learning problem more formally.</p>
-<section id="unsupervised-learning-setting">
-<h2>8.2.1. Unsupervised Learning - Setting<a class="headerlink" href="#unsupervised-learning-setting" title="Permalink to this headline">#</a></h2>
+<div class="section" id="unsupervised-learning-setting">
+<h2>8.2.1. Unsupervised Learning - Setting<a class="headerlink" href="#unsupervised-learning-setting" title="Permalink to this headline">¶</a></h2>
 <p>Once again, at a high level, an unsupervised machine learning problem has the following structure:</p>
 <div class="math notranslate nohighlight">
 \[ \underbrace{\text{Dataset}}_\text{Attributes, Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Unsupervised Model} \]</div>
@@ -968,51 +852,51 @@ $<span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1
 <li><p>An <strong>objective</strong> function, which defines how good a model is.</p></li>
 <li><p>An <strong>optimizer</strong>, which finds the best predictive model in the model class according to the objective function</p></li>
 </ul>
-<section id="model-notation">
-<h3>8.2.1.1. Model: Notation<a class="headerlink" href="#model-notation" title="Permalink to this headline">#</a></h3>
+<div class="section" id="model-notation">
+<h3>8.2.1.1. Model: Notation<a class="headerlink" href="#model-notation" title="Permalink to this headline">¶</a></h3>
 <p>We’ll say that a model is a function
 $<span class="math notranslate nohighlight">\( f_\theta : \mathcal{X} \to \mathcal{S} \)</span><span class="math notranslate nohighlight">\(
 that maps inputs \)</span>x \in \mathcal{X}<span class="math notranslate nohighlight">\( to some notion of structure \)</span>s \in \mathcal{S}<span class="math notranslate nohighlight">\(. Models may have *parameters* \)</span>\theta \in \Theta<span class="math notranslate nohighlight">\( living in a set \)</span>\Theta$</p>
 <p>Structures can take many forms (clusters, low-dimensional representations, etc.), and we will see many examples.</p>
-</section>
-<section id="model-class-notation">
-<h3>8.2.1.2. Model Class: Notation<a class="headerlink" href="#model-class-notation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="model-class-notation">
+<h3>8.2.1.2. Model Class: Notation<a class="headerlink" href="#model-class-notation" title="Permalink to this headline">¶</a></h3>
 <p>Formally, the model class is a set
 $<span class="math notranslate nohighlight">\(\mathcal{M} = \{f_\theta \mid f_\theta : \mathcal{X} \to \mathcal{S}; \; \theta \in \Theta \}.\)</span>$
 of possible models (models with different parameters) that map input features to structural elements.</p>
-</section>
-<section id="objective-notation">
-<h3>8.2.1.3. Objective: Notation<a class="headerlink" href="#objective-notation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="objective-notation">
+<h3>8.2.1.3. Objective: Notation<a class="headerlink" href="#objective-notation" title="Permalink to this headline">¶</a></h3>
 <p>We again define an <em>objective function</em> (also called a <em>loss function</em>)
 $<span class="math notranslate nohighlight">\(J(\theta) : \Theta \to [0, \infty), \)</span><span class="math notranslate nohighlight">\(
 which describes the extent to which \)</span>f_\theta<span class="math notranslate nohighlight">\( &quot;fits&quot; the data \)</span>\mathcal{D} = {x^{(i)} \mid i = 1,2,…,n}$.</p>
-</section>
-<section id="optimizer-notation">
-<h3>8.2.1.4. Optimizer: Notation<a class="headerlink" href="#optimizer-notation" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="optimizer-notation">
+<h3>8.2.1.4. Optimizer: Notation<a class="headerlink" href="#optimizer-notation" title="Permalink to this headline">¶</a></h3>
 <p>An optimizer finds a model <span class="math notranslate nohighlight">\(f_\theta \in \mathcal{M}\)</span> with the smallest value of the objective <span class="math notranslate nohighlight">\(J\)</span>.
 \begin{align*}
 \min_{\theta \in \Theta} J(\theta)
 \end{align*}</p>
 <p>Intuitively, this is the function that bests “fits” the data on the training dataset.</p>
-</section>
-</section>
-<section id="an-example-k-means">
-<h2>8.2.2. An Example: <span class="math notranslate nohighlight">\(K\)</span>-Means<a class="headerlink" href="#an-example-k-means" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="an-example-k-means">
+<h2>8.2.2. An Example: <span class="math notranslate nohighlight">\(K\)</span>-Means<a class="headerlink" href="#an-example-k-means" title="Permalink to this headline">¶</a></h2>
 <p>As an example, let’s mathematically define the <span class="math notranslate nohighlight">\(K\)</span>-Means algorithm that we saw earlier.</p>
 <p>Recall that:</p>
 <ul class="simple">
 <li><p>The algorithm seeks to find <span class="math notranslate nohighlight">\(K\)</span> hidden clusters in the data.</p></li>
 <li><p>Each cluster is characterized by its centroid (its mean).</p></li>
 </ul>
-<section id="the-k-means-model">
-<h3>8.2.2.1. The <span class="math notranslate nohighlight">\(K\)</span>-Means Model<a class="headerlink" href="#the-k-means-model" title="Permalink to this headline">#</a></h3>
+<div class="section" id="the-k-means-model">
+<h3>8.2.2.1. The <span class="math notranslate nohighlight">\(K\)</span>-Means Model<a class="headerlink" href="#the-k-means-model" title="Permalink to this headline">¶</a></h3>
 <p>The parameters <span class="math notranslate nohighlight">\(\theta\)</span> of the model are <span class="math notranslate nohighlight">\(K\)</span> <em>centroids</em> <span class="math notranslate nohighlight">\(c_1, c_2, \ldots c_K \in \mathcal{X}\)</span>. The class of <span class="math notranslate nohighlight">\(x\)</span> is <span class="math notranslate nohighlight">\(k\)</span> if <span class="math notranslate nohighlight">\(c_k\)</span> is the closest centroid to <span class="math notranslate nohighlight">\(x\)</span> (for this lecture, let’s assume the distance metric in use is Euclidean distance, although the algorithm works with any distance metric of your choice).</p>
 <p>We can think of the model returned by <span class="math notranslate nohighlight">\(K\)</span>-Means as a function
 $<span class="math notranslate nohighlight">\(f_\theta : \mathcal{X} \to \mathcal{S}\)</span><span class="math notranslate nohighlight">\(
 that assigns each input \)</span>x<span class="math notranslate nohighlight">\( to a cluster \)</span>s \in \mathcal{S} = {1,2,\ldots,K}$.</p>
-</section>
-<section id="k-means-at-a-high-level">
-<h3>8.2.2.2. K-Means at a High Level<a class="headerlink" href="#k-means-at-a-high-level" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="k-means-at-a-high-level">
+<h3>8.2.2.2. K-Means at a High Level<a class="headerlink" href="#k-means-at-a-high-level" title="Permalink to this headline">¶</a></h3>
 <p>At a high level, <span class="math notranslate nohighlight">\(K\)</span>-means performs the following steps.</p>
 <p>Starting from random centroids, we repeat until convergence:</p>
 <ol class="simple">
@@ -1020,16 +904,16 @@ that assigns each input \)</span>x<span class="math notranslate nohighlight">\( 
 <li><p>Set each centroid to be the center of the its cluster</p></li>
 </ol>
 <p>This is best illustrated visually - see <a class="reference external" href="https://commons.wikimedia.org/wiki/File:K-means_convergence.gif">Wikipedia</a></p>
-</section>
-<section id="the-k-means-objective">
-<h3>8.2.2.3. The <span class="math notranslate nohighlight">\(K\)</span>-Means Objective<a class="headerlink" href="#the-k-means-objective" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="the-k-means-objective">
+<h3>8.2.2.3. The <span class="math notranslate nohighlight">\(K\)</span>-Means Objective<a class="headerlink" href="#the-k-means-objective" title="Permalink to this headline">¶</a></h3>
 <p>How do we determine whether <span class="math notranslate nohighlight">\(f_\theta\)</span> is a good clustering of the dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>?</p>
 <p>We seek centroids <span class="math notranslate nohighlight">\(c_k\)</span> such that the distance between the points and their closest centroid is minimized:
 $<span class="math notranslate nohighlight">\(J(\theta) = \sum_{i=1}^n || x^{(i)} - \text{centroid}(f_\theta(x^{(i)})) ||,\)</span><span class="math notranslate nohighlight">\(
 where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight">\( denotes the centroid for cluster \)</span>k$.</p>
-</section>
-<section id="the-k-means-optimizer">
-<h3>8.2.2.4. The <span class="math notranslate nohighlight">\(K\)</span>-Means Optimizer<a class="headerlink" href="#the-k-means-optimizer" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="the-k-means-optimizer">
+<h3>8.2.2.4. The <span class="math notranslate nohighlight">\(K\)</span>-Means Optimizer<a class="headerlink" href="#the-k-means-optimizer" title="Permalink to this headline">¶</a></h3>
 <p>We can optimize this in a two-step process, starting with an initial random cluster assignment <span class="math notranslate nohighlight">\(f_\theta(x)\)</span>.</p>
 <p>Starting with random centroids <span class="math notranslate nohighlight">\(c_k\)</span>, repeat until convergence:</p>
 <ol class="simple">
@@ -1037,9 +921,9 @@ where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight
 <li><p>Set each <span class="math notranslate nohighlight">\(c_k\)</span> to be the center of its cluster <span class="math notranslate nohighlight">\(\{x^{(i)} \mid f(x^{(i)}) = k\}\)</span>.</p></li>
 </ol>
 <p>Though we do not prove it here, this process is guaranteed to converge after a finite number of iterations.</p>
-</section>
-<section id="algorithm-k-means">
-<h3>8.2.2.5. Algorithm: K-Means<a class="headerlink" href="#algorithm-k-means" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="algorithm-k-means">
+<h3>8.2.2.5. Algorithm: K-Means<a class="headerlink" href="#algorithm-k-means" title="Permalink to this headline">¶</a></h3>
 <p>We summarize the <span class="math notranslate nohighlight">\(K\)</span>-means algorithm below:</p>
 <ul class="simple">
 <li><p><strong>Type</strong>: Unsupervised learning (clustering)</p></li>
@@ -1047,19 +931,19 @@ where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight
 <li><p><strong>Objective function</strong>: Sum of distances (of your choice) to the closest centroids</p></li>
 <li><p><strong>Optimizer</strong>: Iterative optimization procedure.</p></li>
 </ul>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="unsupervised-learning-in-practice">
-<h1>8.3. Unsupervised Learning in Practice<a class="headerlink" href="#unsupervised-learning-in-practice" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="unsupervised-learning-in-practice">
+<h1>8.3. Unsupervised Learning in Practice<a class="headerlink" href="#unsupervised-learning-in-practice" title="Permalink to this headline">¶</a></h1>
 <p>We will now look at some practical considerations to keep in mind when applying unsupervised learning.</p>
-<section id="review-generalization">
-<h2>8.3.1. Review: Generalization<a class="headerlink" href="#review-generalization" title="Permalink to this headline">#</a></h2>
+<div class="section" id="review-generalization">
+<h2>8.3.1. Review: Generalization<a class="headerlink" href="#review-generalization" title="Permalink to this headline">¶</a></h2>
 <p>In machine learning, <strong>generalization</strong> is the property of predictive models to achieve good performance on new, holdout data that is distinct from the training set.</p>
 <p>How does generalization apply to unsupervised learning?</p>
-</section>
-<section id="an-unsupervised-learning-dataset">
-<h2>8.3.2. An Unsupervised Learning Dataset<a class="headerlink" href="#an-unsupervised-learning-dataset" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="an-unsupervised-learning-dataset">
+<h2>8.3.2. An Unsupervised Learning Dataset<a class="headerlink" href="#an-unsupervised-learning-dataset" title="Permalink to this headline">¶</a></h2>
 <p>Consider the following dataset, consisting of datapoints generated by a mixture of four Gaussian distributions. A sample from this mixture distribution should form roughly four clusters.</p>
 <p>We visualize a sample of 100 datapoints below:</p>
 <div class="cell docutils container">
@@ -1099,9 +983,9 @@ where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight
 <img alt="_images/lecture8-unsupervised-learning_41_1.png" src="_images/lecture8-unsupervised-learning_41_1.png" />
 </div>
 </div>
-</section>
-<section id="underfitting-in-unsupervised-learning">
-<h2>8.3.3. Underfitting in Unsupervised Learning<a class="headerlink" href="#underfitting-in-unsupervised-learning" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="underfitting-in-unsupervised-learning">
+<h2>8.3.3. Underfitting in Unsupervised Learning<a class="headerlink" href="#underfitting-in-unsupervised-learning" title="Permalink to this headline">¶</a></h2>
 <p>Underfitting happens when we are not able to fully learn the signal hidden in the data. In the context of <span class="math notranslate nohighlight">\(K\)</span>-Means, this means our <span class="math notranslate nohighlight">\(K\)</span> is lower than the actual number of clusters in the data.</p>
 <p>Let’s run <span class="math notranslate nohighlight">\(K\)</span>-Means on our toy dataset made in the previous section 8.3.2.</p>
 <div class="cell docutils container">
@@ -1158,9 +1042,9 @@ where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight
 <img alt="_images/lecture8-unsupervised-learning_48_0.png" src="_images/lecture8-unsupervised-learning_48_0.png" />
 </div>
 </div>
-</section>
-<section id="overfitting-in-unsupervised-learning">
-<h2>8.3.4. Overfitting in Unsupervised Learning<a class="headerlink" href="#overfitting-in-unsupervised-learning" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="overfitting-in-unsupervised-learning">
+<h2>8.3.4. Overfitting in Unsupervised Learning<a class="headerlink" href="#overfitting-in-unsupervised-learning" title="Permalink to this headline">¶</a></h2>
 <p>Overfitting happens when we fit the noise, but not the signal. In our example, this means fitting small, local noise clusters rather than the true global clusters.</p>
 <p>We demonstrate it below by setting <span class="math notranslate nohighlight">\(K = 50\)</span>:</p>
 <div class="cell docutils container">
@@ -1199,9 +1083,9 @@ where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight
 <img alt="_images/lecture8-unsupervised-learning_52_1.png" src="_images/lecture8-unsupervised-learning_52_1.png" />
 </div>
 </div>
-</section>
-<section id="generalization-in-unsupervised-learning">
-<h2>8.3.5. Generalization in Unsupervised Learning<a class="headerlink" href="#generalization-in-unsupervised-learning" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="generalization-in-unsupervised-learning">
+<h2>8.3.5. Generalization in Unsupervised Learning<a class="headerlink" href="#generalization-in-unsupervised-learning" title="Permalink to this headline">¶</a></h2>
 <p>To talk about generalization, we usually assume that the dataset is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as
 $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
 <p>Moreover, we assume the dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}\)</span> consists of <em>independent and identicaly distributed</em> (IID) samples from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
@@ -1238,8 +1122,8 @@ $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
 </div>
 <p>The red diamond dots represent the learned clusters, and the circle dots represent datapoints in each class.</p>
 <p>Underfitting is the case where you have more actual clusters than learned clusters, while overfitting is the case where you have less actual clusters than learned clusters.</p>
-<section id="detecting-overfitting-and-underfitting">
-<h3>8.3.5.1. Detecting Overfitting and Underfitting<a class="headerlink" href="#detecting-overfitting-and-underfitting" title="Permalink to this headline">#</a></h3>
+<div class="section" id="detecting-overfitting-and-underfitting">
+<h3>8.3.5.1. Detecting Overfitting and Underfitting<a class="headerlink" href="#detecting-overfitting-and-underfitting" title="Permalink to this headline">¶</a></h3>
 <p>Though the figures above tell us if the model is overfitting or underfitting, in real-life scenarios when our data is not two-dimensional, visualizing the data and the cluster centers might not help us detect overfitting or underfitting.</p>
 <p>Generally, in unsupervised learning, overfitting and underfitting are more difficult to quantify than in supervised learning because:</p>
 <ul class="simple">
@@ -1247,9 +1131,9 @@ $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
 <li><p>If we know the true labels, we can measure the accuracy of the clustering. But we do not have labels for unsupervised learning.</p></li>
 </ul>
 <p>If our model is probabilistic, one thing we can do to detect overfitting without labels is to compare the log-likelihood between the training set and a holdout set (next lecture!).</p>
-</section>
-<section id="the-elbow-method">
-<h3>8.3.5.2. The Elbow Method<a class="headerlink" href="#the-elbow-method" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="the-elbow-method">
+<h3>8.3.5.2. The Elbow Method<a class="headerlink" href="#the-elbow-method" title="Permalink to this headline">¶</a></h3>
 <p>Now, in terms of a practical method one can use to tune hyper-parameters in unsupervised learning, e.g., choosing <span class="math notranslate nohighlight">\(K\)</span> for <span class="math notranslate nohighlight">\(K\)</span>-means, there is the elbow method.</p>
 <p>The elbow method is as follows:</p>
 <ul class="simple">
@@ -1281,9 +1165,9 @@ $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
 <img alt="_images/lecture8-unsupervised-learning_63_1.png" src="_images/lecture8-unsupervised-learning_63_1.png" />
 </div>
 </div>
-</section>
-<section id="reducing-overfitting">
-<h3>8.3.5.3. Reducing Overfitting<a class="headerlink" href="#reducing-overfitting" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="reducing-overfitting">
+<h3>8.3.5.3. Reducing Overfitting<a class="headerlink" href="#reducing-overfitting" title="Permalink to this headline">¶</a></h3>
 <p>Choosing hyper-parameters according to the elbow method is one thing you can do to avoid overfitting.</p>
 <p>In general, there are multiple ways to control overfitting including:</p>
 <ol class="simple">
@@ -1291,17 +1175,17 @@ $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
 <li><p>Penalize complexity in objective (e.g., penalize large <span class="math notranslate nohighlight">\(K\)</span>)</p></li>
 <li><p>Use a probabilistic model and regularize it.</p></li>
 </ol>
-</section>
-<section id="generalization-in-unsupervised-learning-summary">
-<h3>8.3.5.4. Generalization in Unsupervised Learning: Summary<a class="headerlink" href="#generalization-in-unsupervised-learning-summary" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="generalization-in-unsupervised-learning-summary">
+<h3>8.3.5.4. Generalization in Unsupervised Learning: Summary<a class="headerlink" href="#generalization-in-unsupervised-learning-summary" title="Permalink to this headline">¶</a></h3>
 <p>As you can see, the concept of generalization applies to both supervised and unsupervised learning.</p>
 <ul class="simple">
 <li><p>In supervised learning, it is easier to quantify via accuracy.</p></li>
 <li><p>In unsupervised learning, we may not be able to easily detect overfitting, but it still happens. So we have discussed practical methods to reduce overfitting.</p></li>
 </ul>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
     <script type="text/x-thebe-config">
     {
@@ -1325,11 +1209,9 @@ $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
 
               </div>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="lecture6-naive-bayes.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1345,28 +1227,24 @@ $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            </footer>
+            
         </div>
     </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-    By Cornell University<br/>
-  
-      &copy; Copyright 2022.<br/>
-</p>
-        </footer>
-    </div>
+    <footer class="footer">
+  <p>
     
-</div>
+      By Cornell University<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
 
 
       </div>
     </div>
   
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
   </body>
 </html>

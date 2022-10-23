@@ -4,13 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lecture 2: Supervised Machine Learning &#8212; Applied Machine Learning</title>
     
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -20,16 +18,20 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
+    
+      
+
+    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -37,21 +39,21 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Lecture 3: Linear Regression" href="lecture3-linear-regression.html" />
@@ -63,21 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
-
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -86,10 +74,9 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -107,15 +94,14 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
-                </a>
-            </li>
-        </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Lecture 2: Supervised Machine Learning
@@ -159,17 +145,12 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-            </div>
-            
-        </div>
-    </div>
-    <div id="rtd-footer-container"></div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -177,191 +158,94 @@ const thebe_selector_output = ".output, .cell_output"
 
 
           
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="header-article row sticky-top noprint">
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
         
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture2-supervised-learning.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
->
-  
-
-<span class="headerbtn__icon-container">
-  
-    <img src="_static/images/logo_binder.svg">
-  </span>
-<span class="headerbtn__text-container">Binder</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture2-supervised-learning.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="_sources/lecture2-supervised-learning.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/lecture2-supervised-learning.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flecture2-supervised-learning.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
     </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lecture2-supervised-learning.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
    Lecture 2: Supervised Machine Learning
@@ -585,11 +469,12 @@ title="Print to PDF"
  </li>
 </ul>
 
-    </nav>
-</div>
+            </nav>
+        </div>
     </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Lecture 2: Supervised Machine Learning</h1>
@@ -829,48 +714,47 @@ title="Print to PDF"
                     </div>
                 </div>
             </div>
-            <main id="main-content" role="main">
-                
+            
               <div>
                 
   <p><left><img width=10% src="img/cornell_tech2.svg"></left></p>
-<section class="tex2jax_ignore mathjax_ignore" id="lecture-2-supervised-machine-learning">
-<h1>Lecture 2: Supervised Machine Learning<a class="headerlink" href="#lecture-2-supervised-machine-learning" title="Permalink to this headline">#</a></h1>
+<div class="tex2jax_ignore mathjax_ignore section" id="lecture-2-supervised-machine-learning">
+<h1>Lecture 2: Supervised Machine Learning<a class="headerlink" href="#lecture-2-supervised-machine-learning" title="Permalink to this headline">¶</a></h1>
 <p>We saw in the previous lecture that there exist three types of machine learning—supervised, unsupervised, and reinforcement learning. This lecture will focus on supervised learning.</p>
 <!-- Supervised learning is by far the most common type of machine learning. This lecture will focus on supervised learning, define precisely what it is, and provide a few examples. -->
 <p>We will explain what supervised learning is, and introduce mathematical notation that will be useful throughout the course for defining algorithms.</p>
-<section id="what-is-supervised-learning">
-<h2>What is Supervised Learning?<a class="headerlink" href="#what-is-supervised-learning" title="Permalink to this headline">#</a></h2>
+<div class="section" id="what-is-supervised-learning">
+<h2>What is Supervised Learning?<a class="headerlink" href="#what-is-supervised-learning" title="Permalink to this headline">¶</a></h2>
 <p>At a very high level, supervised learning works as follows:</p>
 <ol class="simple">
 <li><p>First, we collect a dataset of labeled training examples (input-output pairs).</p></li>
 <li><p>We train a model to output accurate predictions on this dataset.</p></li>
 <li><p>When the model sees new, similar data, it will also be accurate.</p></li>
 </ol>
-<section id="an-example">
-<h3>An Example<a class="headerlink" href="#an-example" title="Permalink to this headline">#</a></h3>
+<div class="section" id="an-example">
+<h3>An Example<a class="headerlink" href="#an-example" title="Permalink to this headline">¶</a></h3>
 <p>Consider an autonomous vehicle that needs to recognize objects on the road: pedestrians, cars, etc.</p>
 <center><img width=70% src="img/tesla_data.png"/></center>
 <p>One way of building an object detection system would be to specify by hand the properties defining each object: e.g., a car has four wheels, has windows, etc. However this approach does not scale: we can’t handle all the edge cases well.</p>
 <p>Instead, we can apply supervised learning: we collect a large dataset of cars and provide them as exmaples to a supervised learning algorithm. The algorithm then automatically learns what features define a car!</p>
 <p>This approach vastly outperforms human programmers trying to write rules by hand, and is currently the only viable way to program object detection systems.</p>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="elements-of-a-supervised-machine-learning-problem">
-<h1>2.1. Elements of A Supervised Machine Learning Problem<a class="headerlink" href="#elements-of-a-supervised-machine-learning-problem" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="elements-of-a-supervised-machine-learning-problem">
+<h1>2.1. Elements of A Supervised Machine Learning Problem<a class="headerlink" href="#elements-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h1>
 <p>Next, let’s define supervised learning more precisely. To make things concerete, we will use a simple running example—predicting the diabetes risk of a patient from their BMI.</p>
-<section id="three-components-of-supervised-machine-learning">
-<h2>Three Components of Supervised Machine Learning<a class="headerlink" href="#three-components-of-supervised-machine-learning" title="Permalink to this headline">#</a></h2>
+<div class="section" id="three-components-of-supervised-machine-learning">
+<h2>Three Components of Supervised Machine Learning<a class="headerlink" href="#three-components-of-supervised-machine-learning" title="Permalink to this headline">¶</a></h2>
 <p>It is useful to think of supervised learning as involving three key elements: a dataset, a learning algorithm, and a predictive model.</p>
 <p>To apply supervised learning, we define a dataset and a learning algorithm.</p>
 <div class="math notranslate nohighlight">
 \[ \text{Dataset} + \text{Learning Algorithm} \to \text{Predictive Model} \]</div>
 <p>The output is a predictive model that maps inputs to targets. For instance, it can predict targets on new inputs.</p>
 <p>We will now dissect and give examples of each of these three elements.</p>
-</section>
-<section id="a-supervised-learning-dataset">
-<h2>2.1.1. A Supervised Learning Dataset<a class="headerlink" href="#a-supervised-learning-dataset" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="a-supervised-learning-dataset">
+<h2>2.1.1. A Supervised Learning Dataset<a class="headerlink" href="#a-supervised-learning-dataset" title="Permalink to this headline">¶</a></h2>
 <p>Let’s start with a simple example of a supervised learning problem: predicting diabetes risk.</p>
 <p>We start with a dataset of diabetes patients.</p>
 <ul class="simple">
@@ -977,13 +861,13 @@ title="Print to PDF"
 </div>
 </div>
 <p>We see from the above simple visualization that the the diabetes risk increases with the patient’s BMI.</p>
-</section>
-<section id="a-supervised-learning-algorithm">
-<h2>2.1.2. A Supervised Learning Algorithm<a class="headerlink" href="#a-supervised-learning-algorithm" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="a-supervised-learning-algorithm">
+<h2>2.1.2. A Supervised Learning Algorithm<a class="headerlink" href="#a-supervised-learning-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>Next, suppose we wanted to predict the risk of a new patient given their BMI. We will use supervised learning for this. We already have a dataset of (BMI, risk) pairs—now we will give an exmaple of a supervised learning algorithm that learns the relationship between BMI and risk from this data.</p>
 <p>Again, it will be useful to think about a supervised learning algorithm as having two components: a model class and an optimizer.</p>
-<section id="the-model-class">
-<h3>2.1.2.1. The Model Class<a class="headerlink" href="#the-model-class" title="Permalink to this headline">#</a></h3>
+<div class="section" id="the-model-class">
+<h3>2.1.2.1. The Model Class<a class="headerlink" href="#the-model-class" title="Permalink to this headline">¶</a></h3>
 <p>Intuitively, the model class represents the set of possible relationships between BMI and risk that we believe to be true. In practice, we can’t search the space of all possible mappings between BMI and risk (we will see later several reasons for why that’s the case). Therefore, we have to choose a set of possible mappings, and then choose the one we think is the best in this class.</p>
 <p>Let’s assume for this example that risk is a linear function of BMI. In other words, for some unknown <span class="math notranslate nohighlight">\(\theta_0, \theta_1 \in \mathbb{R}\)</span>, we have
 $<span class="math notranslate nohighlight">\( y = \theta_1 \cdot x + \theta_0, \)</span><span class="math notranslate nohighlight">\(
@@ -1005,9 +889,9 @@ where \)</span>x<span class="math notranslate nohighlight">\( is the BMI (also c
 </div>
 </div>
 <p>Our supervised learning algorithm will attempt to choose the linear relationship fits well the training data that we have.</p>
-</section>
-<section id="the-optimizer">
-<h3>2.1.2.2. The Optimizer<a class="headerlink" href="#the-optimizer" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="the-optimizer">
+<h3>2.1.2.2. The Optimizer<a class="headerlink" href="#the-optimizer" title="Permalink to this headline">¶</a></h3>
 <p>Given our assumption that <span class="math notranslate nohighlight">\(x,y\)</span> follow the a linear relationship, the goal of a supervised learning algorithm is to find a good set of parameters consistent with the data.</p>
 <p>This is an optimization problem—we want to maximize the fit between the model and the data over the space of all possible models. The component of a supervised learning algorithm that performs this search procedure is called the optimizer.</p>
 <p>We will soon dive deeper into optimization algorithms for machine learning, but for now, let’s call the <code class="docutils literal notranslate"><span class="pre">sklearn.linear_model</span></code> library to find a <span class="math notranslate nohighlight">\(\theta_1, \theta_0\)</span> that fit the data well.</p>
@@ -1039,10 +923,10 @@ Intercept (theta0): 	 -797.0817390342369
 </div>
 </div>
 <p>Here, we used <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> to find the best slope and intercept to the above dataset.</p>
-</section>
-</section>
-<section id="a-supervised-learning-model">
-<h2>2.1.3. A Supervised Learning Model<a class="headerlink" href="#a-supervised-learning-model" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="a-supervised-learning-model">
+<h2>2.1.3. A Supervised Learning Model<a class="headerlink" href="#a-supervised-learning-model" title="Permalink to this headline">¶</a></h2>
 <p>The supervised learning algorithm gave us a pair of parameters <span class="math notranslate nohighlight">\(\theta_1^*, \theta_0^*\)</span>. These define the <em>predictive model</em> <span class="math notranslate nohighlight">\(f^*\)</span>, defined as
 $<span class="math notranslate nohighlight">\( f(x) = \theta_1^* \cdot x + \theta_0^*, \)</span><span class="math notranslate nohighlight">\(
 where again \)</span>x<span class="math notranslate nohighlight">\( is the BMI, and \)</span>y$ is the diabetes risk score.</p>
@@ -1064,9 +948,9 @@ where again \)</span>x<span class="math notranslate nohighlight">\( is the BMI, 
 </div>
 </div>
 <p>Our visualization seems reasonable: we see that the linear model that we found is close to the observed data and captures the trend we noticed earlier—higher BMI are associated with higher diabetes risk.</p>
-</section>
-<section id="making-new-predictions">
-<h2>2.1.4. Making New Predictions<a class="headerlink" href="#making-new-predictions" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="making-new-predictions">
+<h2>2.1.4. Making New Predictions<a class="headerlink" href="#making-new-predictions" title="Permalink to this headline">¶</a></h2>
 <p>Recall that one of the goals of supervised learning is to predict the diabetes of new patients.</p>
 <p>Given a new dataset of patients with a known BMI, we can use the model that we have just found to estimate their  risk.</p>
 <p>Formally, given an <span class="math notranslate nohighlight">\(x_\text{new}\)</span>, we can output prediction <span class="math notranslate nohighlight">\(y_\text{new}\)</span> as
@@ -1120,16 +1004,16 @@ $<span class="math notranslate nohighlight">\( y_\text{new} = f(x_\text{new}) = 
 </div>
 <p>For each patient, we look up their BMI <span class="math notranslate nohighlight">\(x\)</span> and compute the value <span class="math notranslate nohighlight">\(f(x)\)</span> of the linear model <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(x\)</span>. On the above figure, <span class="math notranslate nohighlight">\(f(x)\)</span> is denoted by a red cross.</p>
 <p>We can compare the predicted value of <span class="math notranslate nohighlight">\(f(x)\)</span> to the known true risk <span class="math notranslate nohighlight">\(y\)</span> (which the model didn’t see, and which is denoted by a red circle). The model is especially accurate on the leftmost patient: the prediction <span class="math notranslate nohighlight">\(f(x)\)</span> and the true <span class="math notranslate nohighlight">\(y\)</span> almost overlap. The model is somewhat off on the other two points—however, it still correctly identifies them as being at a higher risk.</p>
-</section>
-<section id="why-supervised-learning">
-<h2>2.1.3 Why Supervised Learning?<a class="headerlink" href="#why-supervised-learning" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="why-supervised-learning">
+<h2>2.1.3 Why Supervised Learning?<a class="headerlink" href="#why-supervised-learning" title="Permalink to this headline">¶</a></h2>
 <p>We have just seen a simple example of a supervised learning algorithm. Again, we want to emphasize that supervised learning is a powerful tool that can solve many important problems, such as:</p>
 <ul class="simple">
 <li><p>Making predictions on new data. Here, we just gave a very simple example of this use case. However, you can imagine using much more data to characterize a patient: their age, gender, historical blood pressure, medical notes, etc. Supervised learning is extremely powerful, and can often outperform humans at prediction if given enough data.</p></li>
 <li><p>Understanding the mechanisms through which input variables affect targets. Instead of using the predictions from the model, we may investigate the model itself. In the above example, we inspected the slope of the model, and noted that it was positive. Thus, we have inferred from data that a high BMI tends to increase diabetes risk.</p></li>
 </ul>
-<section id="applications-of-supervised-learning">
-<h3>2.1.3.1. Applications of Supervised Learning<a class="headerlink" href="#applications-of-supervised-learning" title="Permalink to this headline">#</a></h3>
+<div class="section" id="applications-of-supervised-learning">
+<h3>2.1.3.1. Applications of Supervised Learning<a class="headerlink" href="#applications-of-supervised-learning" title="Permalink to this headline">¶</a></h3>
 <p>More generally, supervised learning finds applications in many areas. In fact, many of the most important applications of machine learning are supervised:</p>
 <ul class="simple">
 <li><p>Classifying medical images. Similarly to how we predicted risk of BMI we may, for example, predict the severity of a cancer tumor from its image.</p></li>
@@ -1137,22 +1021,22 @@ $<span class="math notranslate nohighlight">\( y_\text{new} = f(x_\text{new}) = 
 <li><p>Detecting objects in a self-driving car. Again, we can explain to an algorithm what defines a car by providing many examples of cars. This enables the algorithm to detect new cars.</p></li>
 </ul>
 <p>We will see many more examples in this course.</p>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="anatomy-of-a-supervised-learning-problem-the-dataset">
-<h1>2.2. Anatomy of a Supervised Learning Problem: The Dataset<a class="headerlink" href="#anatomy-of-a-supervised-learning-problem-the-dataset" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="anatomy-of-a-supervised-learning-problem-the-dataset">
+<h1>2.2. Anatomy of a Supervised Learning Problem: The Dataset<a class="headerlink" href="#anatomy-of-a-supervised-learning-problem-the-dataset" title="Permalink to this headline">¶</a></h1>
 <p>We have seen an example of supervised machine learning.</p>
 <p>Let’s now examine more closely the components of a supervised learning problem, starting with the dataset.</p>
-<section id="recall-three-components-of-a-supervised-machine-learning-problem">
-<h2>Recall: Three Components of a Supervised Machine Learning Problem<a class="headerlink" href="#recall-three-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">#</a></h2>
+<div class="section" id="recall-three-components-of-a-supervised-machine-learning-problem">
+<h2>Recall: Three Components of a Supervised Machine Learning Problem<a class="headerlink" href="#recall-three-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h2>
 <p>To apply supervised learning, we define a dataset and a learning algorithm.</p>
 <div class="math notranslate nohighlight">
 \[ \text{Dataset} + \text{Learning Algorithm} \to \text{Predictive Model} \]</div>
 <p>The output is a predictive model that maps inputs to targets. For instance, it can predict targets on new inputs.</p>
-</section>
-<section id="what-is-a-supervised-learning-dataset">
-<h2>2.2.1. What is a Supervised Learning Dataset?<a class="headerlink" href="#what-is-a-supervised-learning-dataset" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="what-is-a-supervised-learning-dataset">
+<h2>2.2.1. What is a Supervised Learning Dataset?<a class="headerlink" href="#what-is-a-supervised-learning-dataset" title="Permalink to this headline">¶</a></h2>
 <p>Let’s dive deeper into what’s a supervised learning dataset.</p>
 <p>We will again use the UCI Diabetes Dataset as our example.</p>
 <p>The UCI dataset contains many additional data columns besides <code class="docutils literal notranslate"><span class="pre">bmi</span></code>, including age, sex, and blood pressure. We can ask <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> to give us more information about this dataset.</p>
@@ -1213,9 +1097,9 @@ Bradley Efron, Trevor Hastie, Iain Johnstone and Robert Tibshirani (2004) &quot;
 </div>
 </div>
 </div>
-</section>
-<section id="a-supervised-learning-dataset-notation">
-<h2>2.2.2. A Supervised Learning Dataset: Notation<a class="headerlink" href="#a-supervised-learning-dataset-notation" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="a-supervised-learning-dataset-notation">
+<h2>2.2.2. A Supervised Learning Dataset: Notation<a class="headerlink" href="#a-supervised-learning-dataset-notation" title="Permalink to this headline">¶</a></h2>
 <p>We say that a training dataset of size <span class="math notranslate nohighlight">\(n\)</span> (e.g., <span class="math notranslate nohighlight">\(n\)</span> patients) is a set
 $<span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}\)</span>$</p>
 <p>Each <span class="math notranslate nohighlight">\(x^{(i)}\)</span> denotes an input (e.g., the measurements for patient <span class="math notranslate nohighlight">\(i\)</span>), and each <span class="math notranslate nohighlight">\(y^{(i)} \in \mathcal{Y}\)</span> is a target (e.g., the diabetes risk). You may think of <span class="math notranslate nohighlight">\(x^{(i)}\)</span> as a column vector containing numbers useful for predicting <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
@@ -1334,9 +1218,9 @@ $<span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)})
 </div>
 <p>In this example, each row <span class="math notranslate nohighlight">\(i\)</span> is a vector defining defining <span class="math notranslate nohighlight">\(x^{(i)}\)</span>. If <span class="math notranslate nohighlight">\(x^{(i)}\)</span> is a column vector, each row <span class="math notranslate nohighlight">\(i\)</span> is <span class="math notranslate nohighlight">\((x^{(i)})^\top\)</span>.</p>
 <p>Note that some numbers are unusual (e.g., age is negative). This is because <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> normalized this data to have mean zero and standard deviation one.</p>
-</section>
-<section id="training-dataset-inputs">
-<h2>2.2.3. Training Dataset: Inputs<a class="headerlink" href="#training-dataset-inputs" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="training-dataset-inputs">
+<h2>2.2.3. Training Dataset: Inputs<a class="headerlink" href="#training-dataset-inputs" title="Permalink to this headline">¶</a></h2>
 <p>More precisely, an input <span class="math notranslate nohighlight">\(x^{(i)} \in \mathcal{X}\)</span> is a <span class="math notranslate nohighlight">\(d\)</span>-dimensional vector of the form
 $<span class="math notranslate nohighlight">\( x^{(i)} = \begin{bmatrix}
 x^{(i)}_1 \\
@@ -1369,8 +1253,8 @@ Name: 0, dtype: float64
 </div>
 </div>
 </div>
-<section id="attributes">
-<h3>2.2.3.1. Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">#</a></h3>
+<div class="section" id="attributes">
+<h3>2.2.3.1. Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
 <p>We refer to the numerical variables describing the patient as <em>attributes</em>. Examples of attributes include:</p>
 <ul class="simple">
 <li><p>The age of a patient.</p></li>
@@ -1378,9 +1262,9 @@ Name: 0, dtype: float64
 <li><p>The patient’s BMI.</p></li>
 </ul>
 <p>Note that thes attributes in the above example have been mean-centered at zero and re-scaled to have a variance of one.</p>
-</section>
-<section id="features">
-<h3>2.2.3.1. Features<a class="headerlink" href="#features" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="features">
+<h3>2.2.3.1. Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
 <p>Often, an input object has many attributes, and we want to use these attributes to define more complex descriptions of the input.</p>
 <ul class="simple">
 <li><p>Is the patient old and a man? (Useful if old men are at risk).</p></li>
@@ -1510,14 +1394,14 @@ $<span class="math notranslate nohighlight">\( \phi(x^{(i)}) = \left[\begin{arra
 \phi(x^{(i)})_p
 \end{array} \right]\)</span><span class="math notranslate nohighlight">\(
 We say that \)</span>\phi(x^{(i)})<span class="math notranslate nohighlight">\( is a *featurized* input, and each \)</span>\phi(x^{(i)})_j$ is a <em>feature</em>.</p>
-<section id="features-vs-attributes">
-<h4>Features vs Attributes<a class="headerlink" href="#features-vs-attributes" title="Permalink to this headline">#</a></h4>
+<div class="section" id="features-vs-attributes">
+<h4>Features vs Attributes<a class="headerlink" href="#features-vs-attributes" title="Permalink to this headline">¶</a></h4>
 <p>In practice, the terms attribute and features are often used interchangeably. Most authors refer to <span class="math notranslate nohighlight">\(x^{(i)}\)</span> as a vector of features.</p>
 <p>We will follow this convention and use the term “attribute” only when there is ambiguity between features and attributes.</p>
-</section>
-</section>
-<section id="features-discrete-vs-continuous">
-<h3>2.2.3.3. Features: Discrete vs. Continuous<a class="headerlink" href="#features-discrete-vs-continuous" title="Permalink to this headline">#</a></h3>
+</div>
+</div>
+<div class="section" id="features-discrete-vs-continuous">
+<h3>2.2.3.3. Features: Discrete vs. Continuous<a class="headerlink" href="#features-discrete-vs-continuous" title="Permalink to this headline">¶</a></h3>
 <p>Features can be either discrete or continuous. We will see that some ML algorthims handle these differently.</p>
 <p>The BMI feature that we have seen earlier is an example of a continuous feature.</p>
 <p>We can visualize its distribution.</p>
@@ -1553,10 +1437,10 @@ We say that \)</span>\phi(x^{(i)})<span class="math notranslate nohighlight">\( 
 <img alt="_images/lecture2-supervised-learning_54_21.png" src="_images/lecture2-supervised-learning_54_21.png" />
 </div>
 </div>
-</section>
-</section>
-<section id="targets">
-<h2>2.3.4. Targets<a class="headerlink" href="#targets" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="targets">
+<h2>2.3.4. Targets<a class="headerlink" href="#targets" title="Permalink to this headline">¶</a></h2>
 <p>For each patient, we may be interested in predicting a quantity of interest, the <em>target</em>. In our example, this is the patient’s diabetes risk.</p>
 <p>Formally, when <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> form a <em>training example</em>, each <span class="math notranslate nohighlight">\(y^{(i)} \in \mathcal{Y}\)</span> is a target. We call <span class="math notranslate nohighlight">\(\mathcal{Y}\)</span> the target space.</p>
 <p>We plot the distirbution of risk scores below.</p>
@@ -1575,8 +1459,8 @@ We say that \)</span>\phi(x^{(i)})<span class="math notranslate nohighlight">\( 
 <img alt="_images/lecture2-supervised-learning_57_11.png" src="_images/lecture2-supervised-learning_57_11.png" />
 </div>
 </div>
-<section id="targets-regression-vs-classification">
-<h3>2.3.4.1. Targets: Regression vs. Classification<a class="headerlink" href="#targets-regression-vs-classification" title="Permalink to this headline">#</a></h3>
+<div class="section" id="targets-regression-vs-classification">
+<h3>2.3.4.1. Targets: Regression vs. Classification<a class="headerlink" href="#targets-regression-vs-classification" title="Permalink to this headline">¶</a></h3>
 <p>We distinguish between two broad types of supervised learning problems that differ in the form of the target variable.</p>
 <ol class="simple">
 <li><p><strong>Regression</strong>: The target variable <span class="math notranslate nohighlight">\(y\)</span> is continuous. We are fitting a curve in a high-dimensional feature space that approximates the shape of the dataset.</p></li>
@@ -1631,10 +1515,10 @@ We say that \)</span>\phi(x^{(i)})<span class="math notranslate nohighlight">\( 
 </div>
 </div>
 <p>The dots inside each circle indicate the predicitons we have made. We correctly predict on each patient.</p>
-</section>
-</section>
-<section id="the-feature-matrix">
-<h2>2.2.5. The Feature Matrix<a class="headerlink" href="#the-feature-matrix" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="the-feature-matrix">
+<h2>2.2.5. The Feature Matrix<a class="headerlink" href="#the-feature-matrix" title="Permalink to this headline">¶</a></h2>
 <p>Machine learning algorithms are most easily defined in the language of linear algebra. Therefore, it will be useful to represent the entire dataset as one matrix <span class="math notranslate nohighlight">\(X \in \mathbb{R}^{n \times d}\)</span>, of the form:
 $<span class="math notranslate nohighlight">\( X = \begin{bmatrix}
 x^{(1)}_1 &amp; x^{(2)}_1 &amp; \ldots &amp; x^{(n)}_1 \\
@@ -1649,20 +1533,20 @@ x^{(2)} \\
 \vdots \\
 x^{(n)}
 \end{bmatrix}.\)</span>$</p>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="anatomy-of-a-supervised-learning-problem-the-learning-algorithm">
-<h1>2.3. Anatomy of a Supervised Learning Problem: The Learning Algorithm<a class="headerlink" href="#anatomy-of-a-supervised-learning-problem-the-learning-algorithm" title="Permalink to this headline">#</a></h1>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="anatomy-of-a-supervised-learning-problem-the-learning-algorithm">
+<h1>2.3. Anatomy of a Supervised Learning Problem: The Learning Algorithm<a class="headerlink" href="#anatomy-of-a-supervised-learning-problem-the-learning-algorithm" title="Permalink to this headline">¶</a></h1>
 <p>Let’s now turn our attention to the second key element of supervised learning—the learning algorithm.</p>
-<section id="id1">
-<h2>Recall: Three Components of a Supervised Machine Learning Problem<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<div class="section" id="id1">
+<h2>Recall: Three Components of a Supervised Machine Learning Problem<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>To apply supervised learning, we define a dataset and a learning algorithm.</p>
 <div class="math notranslate nohighlight">
 \[ \text{Dataset} + \text{Learning Algorithm} \to \text{Predictive Model} \]</div>
 <p>The output is a predictive model that maps inputs to targets. For instance, it can predict targets on new inputs.</p>
-</section>
-<section id="three-components-of-a-supervised-machine-learning-algorithm">
-<h2>2.3.1. Three Components of a Supervised Machine Learning Algorithm<a class="headerlink" href="#three-components-of-a-supervised-machine-learning-algorithm" title="Permalink to this headline">#</a></h2>
+</div>
+<div class="section" id="three-components-of-a-supervised-machine-learning-algorithm">
+<h2>2.3.1. Three Components of a Supervised Machine Learning Algorithm<a class="headerlink" href="#three-components-of-a-supervised-machine-learning-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>We can also define the high-level structure of a supervised learning algorithm as consisting of three components:</p>
 <ul class="simple">
 <li><p>A <strong>model class</strong>: the set of possible models we consider.</p></li>
@@ -1788,28 +1672,28 @@ x^{(n)}
 </table>
 </div></div></div>
 </div>
-</section>
-<section id="id2">
-<h2>2.3.2. The Model Class<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
-<section id="defining-a-model">
-<h3>Defining a Model<a class="headerlink" href="#defining-a-model" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="id2">
+<h2>2.3.2. The Model Class<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="defining-a-model">
+<h3>Defining a Model<a class="headerlink" href="#defining-a-model" title="Permalink to this headline">¶</a></h3>
 <p>We’ll say that a model is a function
 $<span class="math notranslate nohighlight">\( f : \mathcal{X} \to \mathcal{Y} \)</span><span class="math notranslate nohighlight">\(
 that maps inputs \)</span>x \in \mathcal{X}<span class="math notranslate nohighlight">\( to targets \)</span>y \in \mathcal{Y}$.</p>
 <p>Often, models have <em>parameters</em> <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span> living in a set <span class="math notranslate nohighlight">\(\Theta\)</span>. We will then write the model as
 $<span class="math notranslate nohighlight">\( f_\theta : \mathcal{X} \to \mathcal{Y} \)</span><span class="math notranslate nohighlight">\(
 to denote that it's parametrized by \)</span>\theta$.</p>
-</section>
-<section id="defining-a-model-class">
-<h3>Defining a Model Class<a class="headerlink" href="#defining-a-model-class" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="defining-a-model-class">
+<h3>Defining a Model Class<a class="headerlink" href="#defining-a-model-class" title="Permalink to this headline">¶</a></h3>
 <p>Formally, the model class is a set
 $<span class="math notranslate nohighlight">\(\mathcal{M} \subseteq \{f \mid f : \mathcal{X} \to \mathcal{Y} \}\)</span>$
 of possible models that map input features to targets.</p>
 <p>When the models <span class="math notranslate nohighlight">\(f_\theta\)</span> are paremetrized by <em>parameters</em> <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span> living in some set <span class="math notranslate nohighlight">\(\Theta\)</span>. Thus we can also write
 $<span class="math notranslate nohighlight">\(\mathcal{M} = \{f_\theta \mid \theta \in \Theta \}.\)</span>$</p>
-</section>
-<section id="id3">
-<h3>An Example<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="id3">
+<h3>An Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>One simple approach is to assume that <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are related by a linear model of the form
 \begin{align*}
 y &amp; = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + … + \theta_d \cdot x_d
@@ -1818,20 +1702,20 @@ where <span class="math notranslate nohighlight">\(x\)</span> is a featurized in
 <p>The <span class="math notranslate nohighlight">\(\theta_j\)</span> are the <em>parameters</em> of the model, <span class="math notranslate nohighlight">\(\Theta = \mathbb{R}^{d+1}\)</span>, and <span class="math notranslate nohighlight">\(\mathcal{M} = \{ \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d \mid \theta \in \mathbb{R}^{d+1} \}\)</span></p>
 <!-- By using the notation $x_0 = 1$, we can represent the model in a vectorized form
 $$ y = \sum_{j=0}^d \beta_j \cdot x_j = \vec \beta \cdot \vec x. $$
-where $\vec x$ is a vector of features. --></section>
-</section>
-<section id="the-objective">
-<h2>2.3.3. The Objective<a class="headerlink" href="#the-objective" title="Permalink to this headline">#</a></h2>
+where $\vec x$ is a vector of features. --></div>
+</div>
+<div class="section" id="the-objective">
+<h2>2.3.3. The Objective<a class="headerlink" href="#the-objective" title="Permalink to this headline">¶</a></h2>
 <p>Given a training set, how do we pick the parameters <span class="math notranslate nohighlight">\(\theta\)</span> for the model? A natural approach is to select <span class="math notranslate nohighlight">\(\theta\)</span> such that <span class="math notranslate nohighlight">\(f_\theta(x^{(i)})\)</span> is close to <span class="math notranslate nohighlight">\(y^{(i)}\)</span> on a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}\)</span></p>
-<section id="notation">
-<h3>Notation<a class="headerlink" href="#notation" title="Permalink to this headline">#</a></h3>
+<div class="section" id="notation">
+<h3>Notation<a class="headerlink" href="#notation" title="Permalink to this headline">¶</a></h3>
 <p>To capture this intuition, we define an <em>objective function</em> (also called a <em>loss function</em>)
 $<span class="math notranslate nohighlight">\(J(f) : \mathcal{M} \to [0, \infty), \)</span><span class="math notranslate nohighlight">\(
 which describes the extent to which \)</span>f<span class="math notranslate nohighlight">\( &quot;fits&quot; the data \)</span>\mathcal{D} = {(x^{(i)}, y^{(i)}) \mid i = 1,2,…,n}$.</p>
 <p>When <span class="math notranslate nohighlight">\(f\)</span> is parametrized by <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span>, the objective becomes a function <span class="math notranslate nohighlight">\(J(\theta) : \Theta \to [0, \infty).\)</span></p>
-</section>
-<section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>What would are some possible objective functions? We will see many, but here are a few examples:</p>
 <ul class="simple">
 <li><p>Mean squared error: $<span class="math notranslate nohighlight">\(J(\theta) = \frac{1}{2n} \sum_{i=1}^n \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2\)</span>$</p></li>
@@ -1857,22 +1741,22 @@ Mean absolute error: 1.00
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="id4">
-<h2>2.3.4. The Optimizer<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>2.3.4. The Optimizer<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <p>Given our assumption that <span class="math notranslate nohighlight">\(x,y\)</span> follow the a linear relationship, the goal of a supervised learning algorithm is to find a good set of parameters consistent with the data.</p>
-<section id="id5">
-<h3>Notation<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<div class="section" id="id5">
+<h3>Notation<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>At a high-level an optimizer takes an objective <span class="math notranslate nohighlight">\(J\)</span> and a model class <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> and finds a model <span class="math notranslate nohighlight">\(f \in \mathcal{M}\)</span> with the smallest value of the objective <span class="math notranslate nohighlight">\(J\)</span>.</p>
 <p>\begin{align*}
 \min_{f \in \mathcal{M}} J(f)
 \end{align*}</p>
 <p>Intuitively, this is the function that bests “fits” the data on the training dataset.</p>
 <p>When <span class="math notranslate nohighlight">\(f\)</span> is parametrized by <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span>, the optimizer minimizes a function <span class="math notranslate nohighlight">\(J(\theta)\)</span> over all <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span>.</p>
-</section>
-<section id="id6">
-<h3>An Example<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+</div>
+<div class="section" id="id6">
+<h3>An Example<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>We will see that behind the scenes, the <code class="docutils literal notranslate"><span class="pre">sklearn.linear_models.LinearRegression</span></code> algorithm optimizes the MSE loss.</p>
 <p>\begin{align*}
 \min_{\theta \in \mathbb{R}} \frac{1}{2n} \sum_{i=1}^n \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2
@@ -1948,17 +1832,17 @@ Test set mean squared error on random inputs: 15887.97
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="summary-components-of-a-supervised-machine-learning-problem">
-<h2>2.3.5. Summary: Components of a Supervised Machine Learning Problem<a class="headerlink" href="#summary-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">#</a></h2>
+</div>
+</div>
+<div class="section" id="summary-components-of-a-supervised-machine-learning-problem">
+<h2>2.3.5. Summary: Components of a Supervised Machine Learning Problem<a class="headerlink" href="#summary-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h2>
 <p>In conclusion, we defined in this lecture the task of supervised learning as well as its key elements. Formally, to apply supervised learning, we define a dataset and a learning algorithm.</p>
 <div class="math notranslate nohighlight">
 \[ \underbrace{\text{Dataset}}_\text{Features, Attributes, Targets} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} \]</div>
 <p>A dataset consists of training examples, which are pairs of inputs and targets. Each input is a vector of features or attributes. A learning algorithm can be fully defined by a model class, objective and optimizer.</p>
 <p>The output of a supervised learning is a predictive model that maps inputs to targets. For instance, it can predict targets on new inputs.</p>
-</section>
-</section>
+</div>
+</div>
 
     <script type="text/x-thebe-config">
     {
@@ -1982,11 +1866,9 @@ Test set mean squared error on random inputs: 15887.97
 
               </div>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="intro.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -2002,28 +1884,24 @@ Test set mean squared error on random inputs: 15887.97
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            </footer>
+            
         </div>
     </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-    By Cornell University<br/>
-  
-      &copy; Copyright 2022.<br/>
-</p>
-        </footer>
-    </div>
+    <footer class="footer">
+  <p>
     
-</div>
+      By Cornell University<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
 
 
       </div>
     </div>
   
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
   </body>
 </html>
