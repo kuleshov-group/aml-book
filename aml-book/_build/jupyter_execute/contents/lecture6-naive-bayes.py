@@ -285,10 +285,13 @@ for doc, category in zip(docs_new, predicted):
 # This says that we should choose parameters $\theta$ such that for each input $x^{(i)}$ in the dataset $\mathcal{D}$, $P_\theta$ assigns a high probability to the correct target $y^{(i)}$.
 
 # In the logistic regression example, we optimize the following objective defined over a binary classification dataset  $\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}$.
+# 
+# $$
 # \begin{align*}
 # \ell(\theta) & = \frac{1}{n}\sum_{i=1}^n \log P_\theta (y^{(i)} \mid x^{(i)}) \\
 # & = \frac{1}{n}\sum_{i=1}^n {y^{(i)}} \cdot \log \sigma(\theta^\top x^{(i)}) + (1-y^{(i)}) \cdot \log (1-\sigma(\theta^\top x^{(i)})).
 # \end{align*}
+# $$
 # 
 # This objective is also often called the log-loss, or cross-entropy.
 
