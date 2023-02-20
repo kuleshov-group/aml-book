@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Markdown Files &#8212; Applied Machine Learning</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
@@ -28,8 +29,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
@@ -44,13 +44,13 @@
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
     <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -99,43 +99,48 @@
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture2-supervised-learning.html">
+  <a class="reference internal" href="contents/lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture3-linear-regression.html">
+  <a class="reference internal" href="contents/lecture3-linear-regression.html">
    Lecture 3: Linear Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture4-classification.html">
+  <a class="reference internal" href="contents/lecture4-classification.html">
    Lecture 4: Classification and Logistic Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture5-regularization.html">
+  <a class="reference internal" href="contents/lecture5-regularization.html">
    Lecture 5: Regularization
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture6-naive-bayes.html">
+  <a class="reference internal" href="contents/lecture6-naive-bayes.html">
    Lecture 6: Generative Models and Naive Bayes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+  <a class="reference internal" href="contents/lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture9-density-estimation.html">
+  <a class="reference internal" href="contents/lecture9-density-estimation.html">
    Lecture 9: Density Estimation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture10-clustering.html">
+  <a class="reference internal" href="contents/lecture10-clustering.html">
    Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
   </a>
  </li>
 </ul>
@@ -294,21 +299,21 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="markdown-files">
+  <section class="tex2jax_ignore mathjax_ignore" id="markdown-files">
 <h1>Markdown Files<a class="headerlink" href="#markdown-files" title="Permalink to this headline">¶</a></h1>
 <p>Whether you write your book’s content in Jupyter Notebooks (<code class="docutils literal notranslate"><span class="pre">.ipynb</span></code>) or
 in regular markdown files (<code class="docutils literal notranslate"><span class="pre">.md</span></code>), you’ll write in the same flavor of markdown
 called <strong>MyST Markdown</strong>.
 This is a simple file to help you get started and show off some syntax.</p>
-<div class="section" id="what-is-myst">
+<section id="what-is-myst">
 <h2>What is MyST?<a class="headerlink" href="#what-is-myst" title="Permalink to this headline">¶</a></h2>
 <p>MyST stands for “Markedly Structured Text”. It
 is a slight variation on a flavor of markdown called “CommonMark” markdown,
 with small syntax extensions to allow you to write <strong>roles</strong> and <strong>directives</strong>
 in the Sphinx ecosystem.</p>
 <p>For more about MyST, see <a class="reference external" href="https://jupyterbook.org/content/myst.html">the MyST Markdown Overview</a>.</p>
-</div>
-<div class="section" id="sample-roles-and-directives">
+</section>
+<section id="sample-roles-and-directives">
 <h2>Sample Roles and Directives<a class="headerlink" href="#sample-roles-and-directives" title="Permalink to this headline">¶</a></h2>
 <p>Roles and directives are two of the most powerful tools in Jupyter Book. They
 are kind of like functions, but written in a markup language. They both
@@ -323,8 +328,8 @@ that is being called.</p>
 </div>
 <p>It will be rendered in a special box when you build your book.</p>
 <p>Here is an inline directive to refer to a document: <a class="reference internal" href="markdown-notebooks.html"><span class="doc">Notebooks with MyST Markdown</span></a>.</p>
-</div>
-<div class="section" id="citations">
+</section>
+<section id="citations">
 <h2>Citations<a class="headerlink" href="#citations" title="Permalink to this headline">¶</a></h2>
 <p>You can also cite references that are stored in a <code class="docutils literal notranslate"><span class="pre">bibtex</span></code> file. For example,
 the following syntax: <code class="docutils literal notranslate"><span class="pre">{cite}`holdgraf_evidence_2014`</span></code> will render like
@@ -340,13 +345,13 @@ then the bibliography is inserted with:</p>
 </dd>
 </dl>
 </p>
-</div>
-<div class="section" id="learn-more">
+</section>
+<section id="learn-more">
 <h2>Learn more<a class="headerlink" href="#learn-more" title="Permalink to this headline">¶</a></h2>
 <p>This is just a simple starter to get you started.
 You can learn a lot more at <a class="reference external" href="https://jupyterbook.org">jupyterbook.org</a>.</p>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -360,7 +365,7 @@ You can learn a lot more at <a class="reference external" href="https://jupyterb
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./."
         },
         predefinedOutput: true
@@ -382,7 +387,7 @@ You can learn a lot more at <a class="reference external" href="https://jupyterb
     
       By Cornell University<br/>
     
-        &copy; Copyright 2021.<br/>
+        &copy; Copyright 2022.<br/>
   </p>
 </footer>
 </main>

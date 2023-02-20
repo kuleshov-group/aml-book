@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Notebooks with MyST Markdown &#8212; Applied Machine Learning</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
@@ -28,8 +29,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
@@ -44,13 +44,13 @@
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
     <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -99,43 +99,48 @@
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture2-supervised-learning.html">
+  <a class="reference internal" href="contents/lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture3-linear-regression.html">
+  <a class="reference internal" href="contents/lecture3-linear-regression.html">
    Lecture 3: Linear Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture4-classification.html">
+  <a class="reference internal" href="contents/lecture4-classification.html">
    Lecture 4: Classification and Logistic Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture5-regularization.html">
+  <a class="reference internal" href="contents/lecture5-regularization.html">
    Lecture 5: Regularization
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture6-naive-bayes.html">
+  <a class="reference internal" href="contents/lecture6-naive-bayes.html">
    Lecture 6: Generative Models and Naive Bayes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+  <a class="reference internal" href="contents/lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture9-density-estimation.html">
+  <a class="reference internal" href="contents/lecture9-density-estimation.html">
    Lecture 9: Density Estimation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture10-clustering.html">
+  <a class="reference internal" href="contents/lecture10-clustering.html">
    Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
   </a>
  </li>
 </ul>
@@ -304,12 +309,12 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="notebooks-with-myst-markdown">
+  <section class="tex2jax_ignore mathjax_ignore" id="notebooks-with-myst-markdown">
 <h1>Notebooks with MyST Markdown<a class="headerlink" href="#notebooks-with-myst-markdown" title="Permalink to this headline">¶</a></h1>
 <p>Jupyter Book also lets you write text-based notebooks using MyST Markdown.
 See <a class="reference external" href="https://jupyterbook.org/file-types/myst-notebooks.html">the Notebooks with MyST Markdown documentation</a> for more detailed instructions.
 This page shows off a notebook written in MyST Markdown.</p>
-<div class="section" id="an-example-cell">
+<section id="an-example-cell">
 <h2>An example cell<a class="headerlink" href="#an-example-cell" title="Permalink to this headline">¶</a></h2>
 <p>With MyST Markdown, you can define code cells with a directive like so:</p>
 <div class="cell docutils container">
@@ -326,8 +331,8 @@ in-line with the rest of your content.</p>
 <p class="admonition-title">See also</p>
 <p>Jupyter Book uses <a class="reference external" href="https://jupytext.readthedocs.io/en/latest/">Jupytext</a> to convert text-based files to notebooks, and can support <a class="reference external" href="https://jupyterbook.org/file-types/jupytext.html">many other text-based notebook files</a>.</p>
 </div>
-</div>
-<div class="section" id="create-a-notebook-with-myst-markdown">
+</section>
+<section id="create-a-notebook-with-myst-markdown">
 <h2>Create a notebook with MyST Markdown<a class="headerlink" href="#create-a-notebook-with-myst-markdown" title="Permalink to this headline">¶</a></h2>
 <p>MyST Markdown notebooks are defined by two things:</p>
 <ol class="simple">
@@ -336,15 +341,15 @@ See the YAML at the top of this page for example.</p></li>
 <li><p>The presence of <code class="docutils literal notranslate"><span class="pre">{code-cell}</span></code> directives, which will be executed with your book.</p></li>
 </ol>
 <p>That’s all that is needed to get started!</p>
-</div>
-<div class="section" id="quickly-add-yaml-metadata-for-myst-notebooks">
+</section>
+<section id="quickly-add-yaml-metadata-for-myst-notebooks">
 <h2>Quickly add YAML metadata for MyST Notebooks<a class="headerlink" href="#quickly-add-yaml-metadata-for-myst-notebooks" title="Permalink to this headline">¶</a></h2>
 <p>If you have a markdown file and you’d like to quickly add YAML metadata to it, so that Jupyter Book will treat it as a MyST Markdown Notebook, run the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span><span class="o">-</span><span class="n">book</span> <span class="n">myst</span> <span class="n">init</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">markdownfile</span><span class="o">.</span><span class="n">md</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -358,7 +363,7 @@ See the YAML at the top of this page for example.</p></li>
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./."
         },
         predefinedOutput: true
@@ -380,7 +385,7 @@ See the YAML at the top of this page for example.</p></li>
     
       By Cornell University<br/>
     
-        &copy; Copyright 2021.<br/>
+        &copy; Copyright 2022.<br/>
   </p>
 </footer>
 </main>

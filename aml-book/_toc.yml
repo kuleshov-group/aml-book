@@ -7,11 +7,17 @@ chapters:
 # - file: markdown
 # - file: notebooks
 # - file: markdown-notebooks
-- file: lecture2-supervised-learning
-- file: lecture3-linear-regression
-- file: lecture4-classification
-- file: lecture5-regularization
-- file: lecture6-naive-bayes
-- file: lecture8-unsupervised-learning
-- file: lecture9-density-estimation
-- file: lecture10-clustering
+- file: contents/lecture2-supervised-learning
+- file: contents/lecture3-linear-regression
+- file: contents/lecture4-classification
+- file: contents/lecture5-regularization
+- file: contents/lecture6-naive-bayes
+- file: contents/lecture7-gaussian-discriminant-analysis
+- file: contents/lecture8-unsupervised-learning
+- file: contents/lecture9-density-estimation
+- file: contents/lecture10-clustering
+- file: contents/lecture12-suppor-vector-machines
+- file: contents/lecture13-svm-dual
+- file: contents/lecture14-kernels
+- file: contents/lecture15-decision-trees
+- file: contents/lecture16-boosting

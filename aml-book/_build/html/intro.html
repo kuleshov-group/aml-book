@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Welcome to your Jupyter Book &#8212; Applied Machine Learning</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
@@ -28,8 +29,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
@@ -44,17 +44,17 @@
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
     <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Lecture 2: Supervised Machine Learning" href="lecture2-supervised-learning.html" />
+    <link rel="next" title="Lecture 2: Supervised Machine Learning" href="contents/lecture2-supervised-learning.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -100,43 +100,73 @@
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture2-supervised-learning.html">
+  <a class="reference internal" href="contents/lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture3-linear-regression.html">
+  <a class="reference internal" href="contents/lecture3-linear-regression.html">
    Lecture 3: Linear Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture4-classification.html">
+  <a class="reference internal" href="contents/lecture4-classification.html">
    Lecture 4: Classification and Logistic Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture5-regularization.html">
+  <a class="reference internal" href="contents/lecture5-regularization.html">
    Lecture 5: Regularization
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture6-naive-bayes.html">
+  <a class="reference internal" href="contents/lecture6-naive-bayes.html">
    Lecture 6: Generative Models and Naive Bayes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+  <a class="reference internal" href="contents/lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture9-density-estimation.html">
+  <a class="reference internal" href="contents/lecture9-density-estimation.html">
    Lecture 9: Density Estimation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture10-clustering.html">
+  <a class="reference internal" href="contents/lecture10-clustering.html">
    Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture16-boosting.html">
+   Lecture 16: Boosting
   </a>
  </li>
 </ul>
@@ -239,7 +269,7 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="welcome-to-your-jupyter-book">
+  <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-your-jupyter-book">
 <h1>Welcome to your Jupyter Book<a class="headerlink" href="#welcome-to-your-jupyter-book" title="Permalink to this headline">¶</a></h1>
 <p>This is a small sample book to give you a feel for how book content is
 structured.
@@ -248,49 +278,80 @@ It does not go in-depth into any particular topic - check out <a class="referenc
 <p>Check out the content pages bundled with this sample book to see more.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="lecture2-supervised-learning.html">Lecture 2: Supervised Machine Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture2-supervised-learning.html#elements-of-a-supervised-machine-learning-problem">2.1. Elements of A Supervised Machine Learning Problem</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture2-supervised-learning.html#anatomy-of-a-supervised-learning-problem-the-dataset">2.2. Anatomy of a Supervised Learning Problem: The Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture2-supervised-learning.html#anatomy-of-a-supervised-learning-problem-the-learning-algorithm">2.3. Anatomy of a Supervised Learning Problem: The Learning Algorithm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture3-linear-regression.html">Lecture 3: Linear Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture3-linear-regression.html#calculus-review">3.1. Calculus Review</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture3-linear-regression.html#gradient-descent-in-linear-models">3.2. Gradient Descent in Linear Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture3-linear-regression.html#ordinary-least-squares">3.3. Ordinary Least Squares</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture3-linear-regression.html#non-linear-least-squares">3.4. Non-Linear Least Squares</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture4-classification.html">Lecture 4: Classification and Logistic Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture4-classification.html#classification">4.1. Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture4-classification.html#logistic-regression">4.2. Logistic Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture4-classification.html#maximum-likelihood">4.3. Maximum Likelihood</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture4-classification.html#learning-a-logistic-regression-model">4.4. Learning a Logistic Regression Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture4-classification.html#softmax-regression-for-multi-class-classification">4.5. Softmax Regression for Multi-Class Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture5-regularization.html">Lecture 5: Regularization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture5-regularization.html#two-failure-cases-of-supervised-learning">5.1. Two Failure Cases of Supervised Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture5-regularization.html#evaluating-supervised-learning-models">5.2. Evaluating Supervised Learning Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture5-regularization.html#a-framework-for-applying-supervised-learning">5.3. A Framework for Applying Supervised Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture5-regularization.html#l2-regularization">5.4. L2 Regularization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture5-regularization.html#l1-regularization-and-sparsity">5.5. L1 Regularization and Sparsity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture5-regularization.html#why-does-supervised-learning-work">5.6. Why Does Supervised Learning Work?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture6-naive-bayes.html">Lecture 6: Generative Models and Naive Bayes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture6-naive-bayes.html#text-classification">6.1. Text Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture6-naive-bayes.html#generative-models">6.2. Generative Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture6-naive-bayes.html#naive-bayes">6.3. Naive Bayes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture6-naive-bayes.html#learning-a-naive-bayes-model">6.4. Learning a Naive Bayes Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture8-unsupervised-learning.html">Lecture 8: Unsupervised Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture8-unsupervised-learning.html#introduction-to-unsupervised-learning">8.1. Introduction to Unsupervised Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture8-unsupervised-learning.html#the-language-of-unsupervised-learning">8.2. The Language of Unsupervised Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture8-unsupervised-learning.html#unsupervised-learning-in-practice">8.3. Unsupervised Learning in Practice</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture9-density-estimation.html">Lecture 9: Density Estimation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture9-density-estimation.html#outlier-detection-using-probabilistic-models">9.1. Outlier Detection Using Probabilistic Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture9-density-estimation.html#kernel-density-estimation">9.2. Kernel Density Estimation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture9-density-estimation.html#nearest-neighbors">9.3. Nearest Neighbors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture10-clustering.html">Lecture 10: Clustering</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture10-clustering.html#gaussian-mixture-models-for-clustering">10.1. Gaussian Mixture Models for Clustering</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture10-clustering.html#expectation-maximization">10.2. Expectation Maximization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture10-clustering.html#expectation-maximization-in-gaussian-mixture-models">10.3. Expectation Maximization in Gaussian Mixture Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lecture10-clustering.html#generalization-in-probabilistic-models">10.4. Generalization in Probabilistic Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture2-supervised-learning.html">Lecture 2: Supervised Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture2-supervised-learning.html#elements-of-a-supervised-machine-learning-problem">2.1. Elements of A Supervised Machine Learning Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture2-supervised-learning.html#anatomy-of-a-supervised-learning-problem-the-dataset">2.2. Anatomy of a Supervised Learning Problem: The Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture2-supervised-learning.html#anatomy-of-a-supervised-learning-problem-the-learning-algorithm">2.3. Anatomy of a Supervised Learning Problem: The Learning Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture3-linear-regression.html">Lecture 3: Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture3-linear-regression.html#calculus-review">3.1. Calculus Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture3-linear-regression.html#gradient-descent-in-linear-models">3.2. Gradient Descent in Linear Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture3-linear-regression.html#ordinary-least-squares">3.3. Ordinary Least Squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture3-linear-regression.html#non-linear-least-squares">3.4. Non-Linear Least Squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture4-classification.html">Lecture 4: Classification and Logistic Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture4-classification.html#classification">4.1. Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture4-classification.html#logistic-regression">4.2. Logistic Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture4-classification.html#maximum-likelihood">4.3. Maximum Likelihood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture4-classification.html#learning-a-logistic-regression-model">4.4. Learning a Logistic Regression Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture4-classification.html#softmax-regression-for-multi-class-classification">4.5. Softmax Regression for Multi-Class Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture5-regularization.html">Lecture 5: Regularization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture5-regularization.html#two-failure-cases-of-supervised-learning">5.1. Two Failure Cases of Supervised Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture5-regularization.html#evaluating-supervised-learning-models">5.2. Evaluating Supervised Learning Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture5-regularization.html#a-framework-for-applying-supervised-learning">5.3. A Framework for Applying Supervised Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture5-regularization.html#l2-regularization">5.4. L2 Regularization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture5-regularization.html#l1-regularization-and-sparsity">5.5. L1 Regularization and Sparsity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture5-regularization.html#why-does-supervised-learning-work">5.6. Why Does Supervised Learning Work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture6-naive-bayes.html">Lecture 6: Generative Models and Naive Bayes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture6-naive-bayes.html#text-classification">6.1. Text Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture6-naive-bayes.html#generative-models">6.2. Generative Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture6-naive-bayes.html#naive-bayes">6.3. Naive Bayes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture6-naive-bayes.html#learning-a-naive-bayes-model">6.4. Learning a Naive Bayes Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture7-gaussian-discriminant-analysis.html">Lecture 7: Gaussian Discriminant Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture7-gaussian-discriminant-analysis.html#revisiting-generative-models">7.1. Revisiting Generative Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture7-gaussian-discriminant-analysis.html#gaussian-mixture-models">7.2. Gaussian Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture7-gaussian-discriminant-analysis.html#gaussian-discriminant-analysis">7.3. Gaussian Discriminant Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture7-gaussian-discriminant-analysis.html#discriminative-vs-generative-algorithms">7.4. Discriminative vs. Generative Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture8-unsupervised-learning.html">Lecture 8: Unsupervised Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture8-unsupervised-learning.html#introduction-to-unsupervised-learning">8.1. Introduction to Unsupervised Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture8-unsupervised-learning.html#the-language-of-unsupervised-learning">8.2. The Language of Unsupervised Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture8-unsupervised-learning.html#unsupervised-learning-in-practice">8.3. Unsupervised Learning in Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture9-density-estimation.html">Lecture 9: Density Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture9-density-estimation.html#outlier-detection-using-probabilistic-models">9.1. Outlier Detection Using Probabilistic Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture9-density-estimation.html#kernel-density-estimation">9.2. Kernel Density Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture9-density-estimation.html#nearest-neighbors">9.3. Nearest Neighbors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture10-clustering.html">Lecture 10: Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture10-clustering.html#gaussian-mixture-models-for-clustering">10.1. Gaussian Mixture Models for Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture10-clustering.html#expectation-maximization">10.2. Expectation Maximization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture10-clustering.html#expectation-maximization-in-gaussian-mixture-models">10.3. Expectation Maximization in Gaussian Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture10-clustering.html#generalization-in-probabilistic-models">10.4. Generalization in Probabilistic Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture12-suppor-vector-machines.html">Lecture 12: Support Vector Machines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture12-suppor-vector-machines.html#classification-margins">12.1. Classification Margins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture12-suppor-vector-machines.html#the-max-margin-classifier">12.2. The Max-Margin Classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture12-suppor-vector-machines.html#algorithm-linear-support-vector-machine-classification">12.2.2. Algorithm: Linear Support Vector Machine Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture12-suppor-vector-machines.html#soft-margins-and-the-hinge-loss">12.3. Soft Margins and the Hinge Loss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture12-suppor-vector-machines.html#optimization-for-svms">12.4. Optimization for SVMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture13-svm-dual.html">Lecture 13: Dual Formulation of Support Vector Machines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture13-svm-dual.html#lagrange-duality">13.1. Lagrange Duality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture13-svm-dual.html#dual-formulation-of-svms">13.2. Dual Formulation of SVMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture13-svm-dual.html#practical-considerations-for-svm-duals">13.3. Practical Considerations for SVM Duals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture14-kernels.html">Lecture 14: Kernels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture14-kernels.html#the-kernel-trick-in-svms">14.1. The Kernel Trick in SVMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture14-kernels.html#kernelized-ridge-regression">14.2. Kernelized Ridge Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture14-kernels.html#more-on-kernels">14.3. More on Kernels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture15-decision-trees.html">Lecture 15: Tree-Based Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture15-decision-trees.html#decision-trees">15.1. Decision Trees</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture15-decision-trees.html#learning-decision-trees">15.2. Learning Decision Trees</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture15-decision-trees.html#bagging">15.3. Bagging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture15-decision-trees.html#random-forests">15.4. Random Forests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture16-boosting.html">Lecture 16: Boosting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture16-boosting.html#defining-boosting">16.1. Defining Boosting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture16-boosting.html#structure-of-a-boosting-algorithm">16.2. Structure of a Boosting Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture16-boosting.html#adaboost">16.3. Adaboost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture16-boosting.html#ensembling">16.4. Ensembling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture16-boosting.html#additive-models">16.5. Additive Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/lecture16-boosting.html#gradient-boosting">16.6. Gradient Boosting</a></li>
 </ul>
 </div>
-</div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -304,7 +365,7 @@ It does not go in-depth into any particular topic - check out <a class="referenc
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./."
         },
         predefinedOutput: true
@@ -317,7 +378,7 @@ It does not go in-depth into any particular topic - check out <a class="referenc
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='right-next' id="next-link" href="lecture2-supervised-learning.html" title="next page">
+    <a class='right-next' id="next-link" href="contents/lecture2-supervised-learning.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Lecture 2: Supervised Machine Learning</p>
@@ -333,7 +394,7 @@ It does not go in-depth into any particular topic - check out <a class="referenc
     
       By Cornell University<br/>
     
-        &copy; Copyright 2021.<br/>
+        &copy; Copyright 2022.<br/>
   </p>
 </footer>
 </main>

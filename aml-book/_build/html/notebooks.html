@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Content with notebooks &#8212; Applied Machine Learning</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
@@ -28,8 +29,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
@@ -44,16 +44,16 @@
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
     <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -101,43 +101,48 @@
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture2-supervised-learning.html">
+  <a class="reference internal" href="contents/lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture3-linear-regression.html">
+  <a class="reference internal" href="contents/lecture3-linear-regression.html">
    Lecture 3: Linear Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture4-classification.html">
+  <a class="reference internal" href="contents/lecture4-classification.html">
    Lecture 4: Classification and Logistic Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture5-regularization.html">
+  <a class="reference internal" href="contents/lecture5-regularization.html">
    Lecture 5: Regularization
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture6-naive-bayes.html">
+  <a class="reference internal" href="contents/lecture6-naive-bayes.html">
    Lecture 6: Generative Models and Naive Bayes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+  <a class="reference internal" href="contents/lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture9-density-estimation.html">
+  <a class="reference internal" href="contents/lecture9-density-estimation.html">
    Lecture 9: Density Estimation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture10-clustering.html">
+  <a class="reference internal" href="contents/lecture10-clustering.html">
    Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
   </a>
  </li>
 </ul>
@@ -303,11 +308,11 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="content-with-notebooks">
+  <section class="tex2jax_ignore mathjax_ignore" id="content-with-notebooks">
 <h1>Content with notebooks<a class="headerlink" href="#content-with-notebooks" title="Permalink to this headline">¶</a></h1>
 <p>You can also create content with Jupyter Notebooks. This means that you can include
 code blocks and their outputs in your book.</p>
-<div class="section" id="markdown-notebooks">
+<section id="markdown-notebooks">
 <h2>Markdown + notebooks<a class="headerlink" href="#markdown-notebooks" title="Permalink to this headline">¶</a></h2>
 <p>As it is markdown, you can embed images, HTML, etc into your posts!</p>
 <p><img alt="" src="https://myst-parser.readthedocs.io/en/latest/_static/logo-wide.svg" /></p>
@@ -325,14 +330,14 @@ math blocks
 \end{aligned}
 \end{split}\]</div>
 <p>But make sure you $Escape $your $dollar signs $you want to keep!</p>
-</div>
-<div class="section" id="myst-markdown">
+</section>
+<section id="myst-markdown">
 <h2>MyST markdown<a class="headerlink" href="#myst-markdown" title="Permalink to this headline">¶</a></h2>
 <p>MyST markdown works in Jupyter Notebooks as well. For more information about MyST markdown, check
 out <a class="reference external" href="https://jupyterbook.org/content/myst.html">the MyST guide in Jupyter Book</a>,
 or see <a class="reference external" href="https://myst-parser.readthedocs.io/en/latest/">the MyST markdown documentation</a>.</p>
-</div>
-<div class="section" id="code-blocks-and-outputs">
+</section>
+<section id="code-blocks-and-outputs">
 <h2>Code blocks and outputs<a class="headerlink" href="#code-blocks-and-outputs" title="Permalink to this headline">¶</a></h2>
 <p>Jupyter Book will also embed your code blocks and output in your book.
 For example, here’s some sample Matplotlib code:</p>
@@ -372,8 +377,8 @@ For example, here’s some sample Matplotlib code:</p>
 </div>
 <p>There is a lot more that you can do with outputs (such as including interactive outputs)
 with your book. For more information about this, see <a class="reference external" href="https://jupyterbook.org">the Jupyter Book documentation</a></p>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -387,7 +392,7 @@ with your book. For more information about this, see <a class="reference externa
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./."
         },
         predefinedOutput: true
@@ -409,7 +414,7 @@ with your book. For more information about this, see <a class="reference externa
     
       By Cornell University<br/>
     
-        &copy; Copyright 2021.<br/>
+        &copy; Copyright 2022.<br/>
   </p>
 </footer>
 </main>

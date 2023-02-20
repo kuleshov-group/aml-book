@@ -1,0 +1,1047 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 14: Kernels &#8212; Applied Machine Learning</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 15: Tree-Based Algorithms" href="lecture15-decision-trees.html" />
+    <link rel="prev" title="Lecture 13: Dual Formulation of Support Vector Machines" href="lecture13-svm-dual.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Applied Machine Learning</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture2-supervised-learning.html">
+   Lecture 2: Supervised Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture3-linear-regression.html">
+   Lecture 3: Linear Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture4-classification.html">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture5-regularization.html">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture6-naive-bayes.html">
+   Lecture 6: Generative Models and Naive Bayes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+   Lecture 8: Unsupervised Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture9-density-estimation.html">
+   Lecture 9: Density Estimation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture10-clustering.html">
+   Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture16-boosting.html">
+   Lecture 16: Boosting
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/lecture14-kernels.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontents/lecture14-kernels.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/contents/lecture14-kernels.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-kernel-trick-in-svms">
+   14.1. The Kernel Trick in SVMs
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-support-vector-machines">
+     14.1.1. Review: Support Vector Machines.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     14.1.2. The Kernel Trick in SVMs
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-polynomial-regression">
+       14.1.2.1. Review: Polynomial Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-kernel-trick-a-first-example">
+       14.1.2.2. The Kernel Trick: A First Example
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-general-kernel-trick-in-svms">
+       14.1.2.3. The General Kernel Trick in SVMs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-kernel-trick-general-idea">
+     14.1.3. The Kernel Trick: General Idea
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#kernelized-ridge-regression">
+   14.2. Kernelized Ridge Regression
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-ridge-regression">
+     14.2.1. Review: Ridge Regression
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-dual-formulation-for-ridge-regression">
+     14.2.2. A Dual Formulation for Ridge Regression
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     14.2.3. Kernelized Ridge Regression
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#more-on-kernels">
+   14.3. More on Kernels
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#definition-kernels">
+     14.3.1. Definition: Kernels
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examples-of-kernels">
+     14.3.2. Examples of Kernels
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#linear-kernel">
+       14.3.2.1. Linear Kernel
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#polynomial-kernel">
+       14.3.2.2. Polynomial Kernel
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#radial-basis-function-kernel">
+       14.3.2.3. Radial Basis Function Kernel
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#when-is-k-a-kernel">
+     14.3.3. When is
+     <span class="math notranslate nohighlight">
+      \(K\)
+     </span>
+     A Kernel?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#mercer-s-theorem">
+       14.3.3.1. Mercer’s Theorem
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-kernels">
+     14.3.4. Pros and Cons of Kernels
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Lecture 14: Kernels</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-kernel-trick-in-svms">
+   14.1. The Kernel Trick in SVMs
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-support-vector-machines">
+     14.1.1. Review: Support Vector Machines.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     14.1.2. The Kernel Trick in SVMs
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-polynomial-regression">
+       14.1.2.1. Review: Polynomial Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-kernel-trick-a-first-example">
+       14.1.2.2. The Kernel Trick: A First Example
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-general-kernel-trick-in-svms">
+       14.1.2.3. The General Kernel Trick in SVMs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-kernel-trick-general-idea">
+     14.1.3. The Kernel Trick: General Idea
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#kernelized-ridge-regression">
+   14.2. Kernelized Ridge Regression
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-ridge-regression">
+     14.2.1. Review: Ridge Regression
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-dual-formulation-for-ridge-regression">
+     14.2.2. A Dual Formulation for Ridge Regression
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     14.2.3. Kernelized Ridge Regression
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#more-on-kernels">
+   14.3. More on Kernels
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#definition-kernels">
+     14.3.1. Definition: Kernels
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examples-of-kernels">
+     14.3.2. Examples of Kernels
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#linear-kernel">
+       14.3.2.1. Linear Kernel
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#polynomial-kernel">
+       14.3.2.2. Polynomial Kernel
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#radial-basis-function-kernel">
+       14.3.2.3. Radial Basis Function Kernel
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#when-is-k-a-kernel">
+     14.3.3. When is
+     <span class="math notranslate nohighlight">
+      \(K\)
+     </span>
+     A Kernel?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#mercer-s-theorem">
+       14.3.3.1. Mercer’s Theorem
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-kernels">
+     14.3.4. Pros and Cons of Kernels
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-14-kernels">
+<h1>Lecture 14: Kernels<a class="headerlink" href="#lecture-14-kernels" title="Permalink to this headline">¶</a></h1>
+<p>In this lecture, we will introduce a new and important concept in machine learning: the kernel. So far, the majority of the machine learning models we have seen have been <em>linear</em>. Kernels are a general way to make many of these models <em>non-linear</em>.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-kernel-trick-in-svms">
+<h1>14.1. The Kernel Trick in SVMs<a class="headerlink" href="#the-kernel-trick-in-svms" title="Permalink to this headline">¶</a></h1>
+<p>In the previous two lectures, we introduced linear SVMs. Kernels will be a way to make the SVM algorithm suitable for dealing with non-linear data.</p>
+<section id="review-support-vector-machines">
+<h2>14.1.1. Review: Support Vector Machines.<a class="headerlink" href="#review-support-vector-machines" title="Permalink to this headline">¶</a></h2>
+<p>We are given a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.
+We are interested in binary classification, in which the target variable <span class="math notranslate nohighlight">\(y\)</span> is discrete and takes on one of <span class="math notranslate nohighlight">\(K=2\)</span> possible values. In this lecture, we assume that <span class="math notranslate nohighlight">\(\mathcal{Y} = \{-1, +1\}\)</span>.</p>
+<p>Linear models for this binary classification can take the form
+\begin{align*}
+f_\theta(x) = \theta^\top \phi(x) + \theta_0,
+\end{align*}
+where <span class="math notranslate nohighlight">\(x\)</span> is the input and <span class="math notranslate nohighlight">\(y \in \{-1, 1\}\)</span> is the target. Support vector machines are a machine learning algorithm that fits a linear model by finding the maximum margin separating hyperplane between the two classes.</p>
+<p>Recall that the the max-margin hyperplane can be formualted as the solution to the following <em>primal</em> optimization problem.
+\begin{align*}
+\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
+\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>} \
+&amp; \xi_i \geq 0
+\end{align*}</p>
+<p>The solution to this problem also happens to be given by the following <em>dual</em> problem:
+\begin{align*}
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \
+\text{subject to } ; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \
+&amp; C \geq \lambda_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>We can obtain a primal solution from the dual via the following equation:
+$<span class="math notranslate nohighlight">\(
+\theta^* = \sum_{i=1}^n \lambda_i^* y^{(i)} x^{(i)}.
+\)</span>$</p>
+<p>Ignoring the <span class="math notranslate nohighlight">\(\theta_0\)</span> term for now, the score at a new point <span class="math notranslate nohighlight">\(x'\)</span> will equal
+$<span class="math notranslate nohighlight">\(
+(\theta^*)^\top x' = \sum_{i=1}^n \lambda_i^* y^{(i)}(x^{(i)})^\top x'.
+\)</span>$</p>
+</section>
+<section id="id1">
+<h2>14.1.2. The Kernel Trick in SVMs<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The kernel trick is a way of extending the SVM algorithm to non-linear models. We are going to introduce this trick via a concrete example.</p>
+<section id="review-polynomial-regression">
+<h3>14.1.2.1. Review: Polynomial Regression<a class="headerlink" href="#review-polynomial-regression" title="Permalink to this headline">¶</a></h3>
+<p>In an earlier lecture, we have seen one important example of a non-linear algorithm: polynomial regression.
+Let’s start with a quick recap of this algorthim. Recall that a <span class="math notranslate nohighlight">\(p\)</span>-th degree polynomial is a function of the form
+$<span class="math notranslate nohighlight">\(
+a_p x^p + a_{p-1} x^{p-1} + ... + a_{1} x + a_0.
+\)</span>$</p>
+<p>A polynomial is a non-linear function in <span class="math notranslate nohighlight">\(x\)</span>. Nonetheless, we can use techniques we developed earlier for linear regression to fit polynomial models to data.</p>
+<p>Specifically, given a one-dimensional continuous variable <span class="math notranslate nohighlight">\(x\)</span>, we can define a feature function <span class="math notranslate nohighlight">\(\phi : \mathbb{R} \to \mathbb{R}^p\)</span> as
+$<span class="math notranslate nohighlight">\(\phi(x) = \begin{bmatrix}
+1 \\
+x \\
+x^2 \\
+\vdots \\
+x^p
+\end{bmatrix}.
+\)</span>$</p>
+<p>Then the class of models of the form
+$<span class="math notranslate nohighlight">\( f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x) \)</span><span class="math notranslate nohighlight">\(
+with parameters \)</span>\theta<span class="math notranslate nohighlight">\( encompasses the set of \)</span>p$-degree polynomials.</p>
+<p>Crucially, observe that <span class="math notranslate nohighlight">\(f_\theta\)</span> is a linear model with input features <span class="math notranslate nohighlight">\(\phi(x)\)</span> and parameters <span class="math notranslate nohighlight">\(\theta\)</span>. The parameters <span class="math notranslate nohighlight">\(\theta\)</span> are the coefficients of the polynomial.
+Thus, we can use our algorithms for linear regression to learn <span class="math notranslate nohighlight">\(\theta\)</span>. This yields a polynomial model for <span class="math notranslate nohighlight">\(y\)</span> given <span class="math notranslate nohighlight">\(x\)</span> that is non-linear in <span class="math notranslate nohighlight">\(x\)</span> (because <span class="math notranslate nohighlight">\(\phi(x)\)</span> is non-linear in <span class="math notranslate nohighlight">\(x\)</span>).</p>
+<p>The disadvantage of the above approach is that it requires more features and more computation. When <span class="math notranslate nohighlight">\(x\)</span> is a scalar, we need <span class="math notranslate nohighlight">\(O(p)\)</span> features. When applying the normal equations to compute <span class="math notranslate nohighlight">\(\theta\)</span>, we need <span class="math notranslate nohighlight">\(O(p^3)\)</span> time.
+More generally, when <span class="math notranslate nohighlight">\(x\)</span> is a <span class="math notranslate nohighlight">\(d\)</span>-dimensional vector, we will need <span class="math notranslate nohighlight">\(O(d^p)\)</span> features to represent a full polynomial, and time complexity of applying the normal equations will be even greater.</p>
+</section>
+<section id="the-kernel-trick-a-first-example">
+<h3>14.1.2.2. The Kernel Trick: A First Example<a class="headerlink" href="#the-kernel-trick-a-first-example" title="Permalink to this headline">¶</a></h3>
+<p>Our approach for making SVMs non-linear will be analagous to the idea we used in polynomial regression. We will apply the SVM algorithm not over <span class="math notranslate nohighlight">\(x\)</span>, but over non-linear (e.g., polynomial) features <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>When <span class="math notranslate nohighlight">\(x\)</span> is replaced by features <span class="math notranslate nohighlight">\(\phi(x)\)</span>, the SVM algorithm is defined as follows:
+\begin{align*}
+J(\lambda) &amp;= \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} \phi(x^{(i)})^\top \phi(x^{(k)})  \
+(\theta^<em>)^\top \phi(x’) &amp; = \sum_{i=1}^n \lambda_i^</em> y^{(i)}\phi(x^{(i)})^\top \phi(x’).
+\end{align*}
+Notice that in both equations, the features <span class="math notranslate nohighlight">\(\phi(x)\)</span> are never used directly. Only their <em>dot product</em> is used.
+If we can compute the dot product efficiently, we can potentially use very complex features.</p>
+<p>Can we compute the dot product <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(x')\)</span> of polynomial features <span class="math notranslate nohighlight">\(\phi(x)\)</span> more efficiently than using the standard definition of a dot product? It turns out that we can.
+Let’s look at an example.</p>
+<p>To start, consider pairwise polynomial features <span class="math notranslate nohighlight">\(\phi : \mathbb{R}^d \to \mathbb{R}^{d^2}\)</span> of the form
+$<span class="math notranslate nohighlight">\( \phi(x)_{ij} = x_i x_j \;\text{ for \)</span>i,j \in {1,2,\ldots,d}<span class="math notranslate nohighlight">\(}. \)</span>$</p>
+<p>These features consist of all the pairwise products among all the entries of <span class="math notranslate nohighlight">\(x\)</span>. For <span class="math notranslate nohighlight">\(d=3\)</span> this looks like
+$<span class="math notranslate nohighlight">\( \small \phi(x) = \begin{bmatrix}
+x_1 x_1 \\
+x_1 x_2 \\
+x_1 x_3 \\
+x_2 x_1 \\
+x_2 x_1 \\
+x_2 x_2 \\
+x_3 x_3 \\
+x_3 x_1 \\
+x_3 x_2 \\
+x_3 x_3 \\
+\end{bmatrix}.
+\)</span>$</p>
+<p>The product of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span> in feature space equals:
+$<span class="math notranslate nohighlight">\( \phi(x)^\top \phi(z) = \sum_{i=1}^d \sum_{j=1}^d x_i x_j z_i z_j \)</span><span class="math notranslate nohighlight">\(
+Normally, computing this dot product involves a sum over \)</span>d^2<span class="math notranslate nohighlight">\( terms and takes \)</span>O(d^2)$ time.</p>
+<p>An altenative way of computing the dot product <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(z)\)</span> is to instead compute <span class="math notranslate nohighlight">\((x^\top z)^2\)</span>. One can check that this has the same result:
+\begin{align*}
+(x^\top z)^2 &amp; = (\sum_{i=1}^d x_i z_i)^2 \
+&amp; = (\sum_{i=1}^d x_i z_i) \cdot (\sum_{j=1}^d x_j z_j) \
+&amp; = \sum_{i=1}^d \sum_{j=1}^d x_i z_i x_j z_j \
+&amp; = \phi(x)^\top \phi(z)
+\end{align*}
+But computing <span class="math notranslate nohighlight">\((x^\top z)^2\)</span> can be done in only <span class="math notranslate nohighlight">\(O(d)\)</span> time: we simply compute the dot product <span class="math notranslate nohighlight">\(x^\top z\)</span> in <span class="math notranslate nohighlight">\(O(d)\)</span> time, and then square the resulting scalar. This is much faster than the naive <span class="math notranslate nohighlight">\(O(d^2)\)</span> procedure.</p>
+<p>More generally, polynomial features <span class="math notranslate nohighlight">\(\phi_p\)</span> of degree <span class="math notranslate nohighlight">\(p\)</span> when <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span> are defined as follows:
+$<span class="math notranslate nohighlight">\( \phi_p(x)_{i_1, i_2, \ldots, i_p} = x_{i_1} x_{i_2} \cdots x_{i_p} \;\text{ for \)</span>i_1, i_2,  \ldots, i_p \in {1,2,\ldots,d}<span class="math notranslate nohighlight">\(} \)</span><span class="math notranslate nohighlight">\(
+The number of these features scales as \)</span>O(d^p)<span class="math notranslate nohighlight">\(. The straightforward way of computing their dot product also takes \)</span>O(d^p)$ time.</p>
+<p>However, using a version of the above argument, we can compute the dot product <span class="math notranslate nohighlight">\(\phi_p(x)^\top \phi_p(z)\)</span> in this feature space in only <span class="math notranslate nohighlight">\(O(d)\)</span> time for any <span class="math notranslate nohighlight">\(p\)</span> as follows:
+$<span class="math notranslate nohighlight">\(\phi_p(x)^\top \phi_p(z) = (x^\top z)^p.\)</span>$</p>
+<p>This is a very powerful idea:</p>
+<ul class="simple">
+<li><p>We can compute the dot product between <span class="math notranslate nohighlight">\(O(d^p)\)</span> features in only <span class="math notranslate nohighlight">\(O(d)\)</span> time.</p></li>
+<li><p>We can use high-dimensional features within ML algorithms that only rely on dot products without incurring extra costs.</p></li>
+</ul>
+</section>
+<section id="the-general-kernel-trick-in-svms">
+<h3>14.1.2.3. The General Kernel Trick in SVMs<a class="headerlink" href="#the-general-kernel-trick-in-svms" title="Permalink to this headline">¶</a></h3>
+<p>More generally, given features <span class="math notranslate nohighlight">\(\phi(x)\)</span>, suppose that we have a function <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> that outputs dot products between vectors in <span class="math notranslate nohighlight">\(\mathcal{X}\)</span></p>
+<div class="math notranslate nohighlight">
+\[ K(x, z) = \phi(x)^\top \phi(z). \]</div>
+<p>We will call <span class="math notranslate nohighlight">\(K\)</span> the <em>kernel function</em>. Recall that an example of a useful kernel function is
+$<span class="math notranslate nohighlight">\(K(x,z) = (x \cdot z)^p\)</span><span class="math notranslate nohighlight">\(
+because it computes the dot product of polynomial features of degree \)</span>p$.</p>
+<p>Notice that we can rewrite the dual of the SVM as
+\begin{align*}
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} K(x^{(i)}, x^{(k)})  \
+\text{subject to } ; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \
+&amp; C \geq \lambda_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>Also, the predictions at a new point <span class="math notranslate nohighlight">\(x'\)</span> are given by $<span class="math notranslate nohighlight">\(\sum_{i=1}^n \lambda_i^* y^{(i)} K(x^{(i)}, x').\)</span>$</p>
+<p>We can efficiently use any features <span class="math notranslate nohighlight">\(\phi(x)\)</span> (e.g., polynomial features of any degree <span class="math notranslate nohighlight">\(p\)</span>) as long as the kernel functions computes the dot products of the <span class="math notranslate nohighlight">\(\phi(x)\)</span> efficiently. We will see several examples of kernel functions below.</p>
+</section>
+</section>
+<section id="the-kernel-trick-general-idea">
+<h2>14.1.3. The Kernel Trick: General Idea<a class="headerlink" href="#the-kernel-trick-general-idea" title="Permalink to this headline">¶</a></h2>
+<p>Many types of features <span class="math notranslate nohighlight">\(\phi(x)\)</span> have the property that their dot product <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(z)\)</span> can be computed more efficiently than if we had to form these features explicitly. Also, we will see that many algorithms in machine learning can be written down as optimization problems in which the features <span class="math notranslate nohighlight">\(\phi(x)\)</span> only appear as dot products <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(z)\)</span>.</p>
+<p>The <em>Kernel Trick</em> means that we can use complex non-linear features within  these algorithms with little additional computational cost.</p>
+<p>Examples of algorithms in which we can use the Kernel trick:</p>
+<ul class="simple">
+<li><p>Supervised learning algorithms: linear regression, logistic regression, support vector machines, etc.</p></li>
+<li><p>Unsupervised learning algorithms: PCA, density estimation.</p></li>
+</ul>
+<p>We will look at more examples shortly.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="kernelized-ridge-regression">
+<h1>14.2. Kernelized Ridge Regression<a class="headerlink" href="#kernelized-ridge-regression" title="Permalink to this headline">¶</a></h1>
+<p>Support vector machines are far from being the only algorithm that benefits from kernels.
+Another algorithm that supports kernels is Ridge regression.</p>
+<section id="review-ridge-regression">
+<h2>14.2.1. Review: Ridge Regression<a class="headerlink" href="#review-ridge-regression" title="Permalink to this headline">¶</a></h2>
+<p>Recall that a linear model has the form
+$<span class="math notranslate nohighlight">\( f_\theta(x) = \theta^\top \phi(x). \)</span><span class="math notranslate nohighlight">\(
+where \)</span>\phi(x)<span class="math notranslate nohighlight">\( is a vector of features. We pick \)</span>\theta<span class="math notranslate nohighlight">\( to minimize the (L2-regularized) mean squared error (MSE):
+\)</span><span class="math notranslate nohighlight">\(J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)} - \theta^\top \phi(x^{(i)}))^2 + \frac{\lambda}{2}\sum_{j=1}^d \theta_j^2\)</span>$</p>
+<p>It is useful to represent the featurized dataset as a matrix <span class="math notranslate nohighlight">\(\Phi \in \mathbb{R}^{n \times p}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \Phi = \begin{bmatrix}
+\phi(x^{(1)})_1 &amp; \phi(x^{(1)})_2 &amp; \ldots &amp; \phi(x^{(1)})_p \\
+\phi(x^{(2)})_1 &amp; \phi(x^{(2)})_2 &amp; \ldots &amp; \phi(x^{(2)})_p \\
+\vdots \\
+\phi(x^{(n)})_1 &amp; \phi(x^{(n)})_2 &amp; \ldots &amp; \phi(x^{(n)})_p
+\end{bmatrix}
+=
+\begin{bmatrix}
+- &amp; \phi(x^{(1)})^\top &amp; - \\
+- &amp; \phi(x^{(2)})^\top &amp; - \\
+&amp; \vdots &amp; \\
+- &amp; \phi(x^{(n)})^\top &amp; - \\
+\end{bmatrix}
+.\end{split}\]</div>
+<p>The normal equations provide a closed-form solution for <span class="math notranslate nohighlight">\(\theta\)</span>:
+$<span class="math notranslate nohighlight">\( \theta = (X^\top X  + \lambda I)^{-1} X^\top y.\)</span>$</p>
+<p>When the vectors of attributes <span class="math notranslate nohighlight">\(x^{(i)}\)</span> are featurized, we can write this as
+$<span class="math notranslate nohighlight">\( \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y.\)</span>$</p>
+</section>
+<section id="a-dual-formulation-for-ridge-regression">
+<h2>14.2.2. A Dual Formulation for Ridge Regression<a class="headerlink" href="#a-dual-formulation-for-ridge-regression" title="Permalink to this headline">¶</a></h2>
+<p>We can modify this expression by using a version of the <a class="reference external" href="https://en.wikipedia.org/wiki/Woodbury_matrix_identity#Discussion">push-through matrix identity</a>:</p>
+<div class="math notranslate nohighlight">
+\[ (\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1} \]</div>
+<p>where <span class="math notranslate nohighlight">\(U \in \mathbb{R}^{n \times m}\)</span> and <span class="math notranslate nohighlight">\(V \in \mathbb{R}^{m \times n}\)</span> and <span class="math notranslate nohighlight">\(\lambda \neq 0\)</span></p>
+<p>The proof sketch is: Start with <span class="math notranslate nohighlight">\(U (\lambda I + V U) = (\lambda I + U V) U\)</span> and multiply both sides by <span class="math notranslate nohighlight">\((\lambda I + V U)^{-1}\)</span> on the right and <span class="math notranslate nohighlight">\((\lambda I + U V)^{-1}\)</span> on the left. If you are interested, you can try to derive in detail by yourself.</p>
+<p>We can apply the identity <span class="math notranslate nohighlight">\((\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1}\)</span> to the normal equations with <span class="math notranslate nohighlight">\(U=\Phi^\top\)</span> and <span class="math notranslate nohighlight">\(V=\Phi\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[ \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y\]</div>
+<p>to obtain the <em>dual</em> form:</p>
+<div class="math notranslate nohighlight">
+\[ \theta = \Phi^\top (\Phi \Phi^\top + \lambda I)^{-1} y.\]</div>
+<p>The first approach takes <span class="math notranslate nohighlight">\(O(p^3)\)</span> time; the second is <span class="math notranslate nohighlight">\(O(n^3)\)</span> and is faster when <span class="math notranslate nohighlight">\(p &gt; n\)</span>.</p>
+</section>
+<section id="id2">
+<h2>14.2.3. Kernelized Ridge Regression<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>An interesting corollary of the dual form
+$<span class="math notranslate nohighlight">\( \theta = \Phi^\top \underbrace{(\Phi \Phi^\top + \lambda I)^{-1} y}_\text{call this vector \)</span>\alpha<span class="math notranslate nohighlight">\(} = \Phi^T \alpha\)</span><span class="math notranslate nohighlight">\(
+is that the optimal \)</span>\theta<span class="math notranslate nohighlight">\( is a linear combination of the \)</span>n<span class="math notranslate nohighlight">\( training set features:
+\)</span><span class="math notranslate nohighlight">\( \theta = \sum_{i=1}^n \alpha_i \phi(x^{(i)}). \)</span>$</p>
+<p>Here, the weights <span class="math notranslate nohighlight">\(\alpha_i\)</span> are derived from <span class="math notranslate nohighlight">\((\Phi \Phi^\top + \lambda I)^{-1} y\)</span> and equal
+$<span class="math notranslate nohighlight">\(\alpha_i = \sum_{j=1}^n L_{ij} y_j\)</span><span class="math notranslate nohighlight">\(
+where \)</span>L = (\Phi \Phi^\top + \lambda I)^{-1}.$</p>
+<p>Consider now a prediction <span class="math notranslate nohighlight">\(\phi(x')^\top \theta\)</span> at a new input <span class="math notranslate nohighlight">\(x'\)</span>:
+$<span class="math notranslate nohighlight">\(\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).\)</span>$</p>
+<p>The crucial observation is that the features <span class="math notranslate nohighlight">\(\phi(x)\)</span> are never used directly in this equation. Only their dot product is used!</p>
+<p>We also don’t need features <span class="math notranslate nohighlight">\(\phi\)</span> for learning <span class="math notranslate nohighlight">\(\theta\)</span>, just their dot product!
+First, recall that each row <span class="math notranslate nohighlight">\(i\)</span> of <span class="math notranslate nohighlight">\(\Phi\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>-th featurized input <span class="math notranslate nohighlight">\(\phi(x^{(i)})^\top\)</span>.
+Thus <span class="math notranslate nohighlight">\(K = \Phi \Phi^\top\)</span> is a matrix of all dot products between all the <span class="math notranslate nohighlight">\(\phi(x^{(i)})\)</span>
+$<span class="math notranslate nohighlight">\(K_{ij} = \phi(x^{(i)})^\top \phi(x^{(j)}).\)</span>$</p>
+<p>We can compute <span class="math notranslate nohighlight">\(\alpha = (K+\lambda I)^{-1}y\)</span> and use it for predictions
+$<span class="math notranslate nohighlight">\(\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).\)</span><span class="math notranslate nohighlight">\(
+and all this only requires dot products, not features \)</span>\phi$!</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="more-on-kernels">
+<h1>14.3. More on Kernels<a class="headerlink" href="#more-on-kernels" title="Permalink to this headline">¶</a></h1>
+<p>We have seen two examples of kernelized algorithms: SVM and ridge regression. Let’s now look at some additional examples of kernels.</p>
+<section id="definition-kernels">
+<h2>14.3.1. Definition: Kernels<a class="headerlink" href="#definition-kernels" title="Permalink to this headline">¶</a></h2>
+<p>The <em>kernel</em> corresponding to features <span class="math notranslate nohighlight">\(\phi(x)\)</span> is a function <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> that outputs dot products between vectors in <span class="math notranslate nohighlight">\(\mathcal{X}\)</span>
+$<span class="math notranslate nohighlight">\( K(x, z) = \phi(x)^\top \phi(z). \)</span>$</p>
+<p>We will also consider general functions <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> and call these <em>kernel functions</em>.
+Kernels have multiple intepreations:</p>
+<ul class="simple">
+<li><p>The dot product or geometrical angle between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span></p></li>
+<li><p>A notion of similarity between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span></p></li>
+</ul>
+<p>We will look at a few examples of kernels using the following dataset. The following code visualizes the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/svm/plot_svm_kernels.html</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span>
+
+<span class="c1"># Our dataset and targets</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[(</span><span class="mf">.4</span><span class="p">,</span> <span class="o">-</span><span class="mf">.7</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.4</span><span class="p">,</span> <span class="o">-</span><span class="mf">.9</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">.2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">.4</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+          <span class="p">(</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">.2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mf">.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.4</span><span class="p">),</span> <span class="p">(</span><span class="mf">.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.3</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">)]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span>
+
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-3.0, 3.0)
+</pre></div>
+</div>
+<img alt="../_images/lecture14-kernels_42_1.png" src="../_images/lecture14-kernels_42_1.png" />
+</div>
+</div>
+<p>The above figure is a visualization of the 2D dataset we have created. We will then use it to illustrate the difference between various kernels.</p>
+</section>
+<section id="examples-of-kernels">
+<h2>14.3.2. Examples of Kernels<a class="headerlink" href="#examples-of-kernels" title="Permalink to this headline">¶</a></h2>
+<section id="linear-kernel">
+<h3>14.3.2.1. Linear Kernel<a class="headerlink" href="#linear-kernel" title="Permalink to this headline">¶</a></h3>
+<p>The simplest kind of kernel that exists is called the linear kernel.
+This simply corresponds to dot product multiplication of the features:
+$<span class="math notranslate nohighlight">\(K(x,z) = x^\top z\)</span>$</p>
+<p>Applied to an SVM, this corresponds to a linear decision boundary.</p>
+<p>Below is an example of how we can use the SVM implementation in <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> with a linear kernel.
+Internally, this solves the dual SVM optimization problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/svm/plot_svm_kernels.html</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span> <span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+<span class="c1"># plot the line, the points, and the nearest vectors to the plane</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">XX</span><span class="p">,</span> <span class="n">YY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="n">x_min</span><span class="p">:</span><span class="n">x_max</span><span class="p">:</span><span class="mi">200</span><span class="n">j</span><span class="p">,</span> <span class="n">y_min</span><span class="p">:</span><span class="n">y_max</span><span class="p">:</span><span class="mi">200</span><span class="n">j</span><span class="p">]</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">XX</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">YY</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">XX</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span><span class="p">,</span> <span class="n">Z</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">],</span> <span class="n">linestyles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">],</span><span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-3.0, 3.0)
+</pre></div>
+</div>
+<img alt="../_images/lecture14-kernels_47_1.png" src="../_images/lecture14-kernels_47_1.png" />
+</div>
+</div>
+<p>The above figure shows that a linear kernel provides linear decision boundaries to separate the data.</p>
+</section>
+<section id="polynomial-kernel">
+<h3>14.3.2.2. Polynomial Kernel<a class="headerlink" href="#polynomial-kernel" title="Permalink to this headline">¶</a></h3>
+<p>A more interesting example is the polynomial kernel of degree <span class="math notranslate nohighlight">\(p\)</span>, of which we have already seen a simple example:
+$<span class="math notranslate nohighlight">\(K(x,z) = (x^\top z + c)^p.\)</span>$</p>
+<p>This corresponds to a mapping to a feature space of dimension <span class="math notranslate nohighlight">\(d+p \choose p\)</span> that has all monomials <span class="math notranslate nohighlight">\(x_{i_1}x_{i_2}\cdots x_{i_p}\)</span> of degree at most <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>For <span class="math notranslate nohighlight">\(d=3\)</span> this feature map looks like
+$<span class="math notranslate nohighlight">\( \small \phi(x) = \begin{bmatrix}
+x_1 x_1 \\
+x_1 x_2 \\
+x_1 x_3 \\
+x_2 x_1 \\
+x_2 x_1 \\
+x_2 x_2 \\
+x_3 x_3 \\
+x_3 x_1 \\
+x_3 x_2 \\
+x_3 x_3 \\
+\sqrt{2}c x_1 \\
+\sqrt{2}c x_2 \\
+\sqrt{2}c x_3 \\
+c
+\end{bmatrix}.
+\)</span>$</p>
+<p>The polynomial kernel allows us to compute dot products in a <span class="math notranslate nohighlight">\(O(d^p)\)</span>-dimensional space in time <span class="math notranslate nohighlight">\(O(d)\)</span>.
+The following code shows how it would be implemented in <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/svm/plot_svm_kernels.html</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+<span class="c1"># plot the line, the points, and the nearest vectors to the plane</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">XX</span><span class="p">,</span> <span class="n">YY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="n">x_min</span><span class="p">:</span><span class="n">x_max</span><span class="p">:</span><span class="mi">200</span><span class="n">j</span><span class="p">,</span> <span class="n">y_min</span><span class="p">:</span><span class="n">y_max</span><span class="p">:</span><span class="mi">200</span><span class="n">j</span><span class="p">]</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">XX</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">YY</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">XX</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span><span class="p">,</span> <span class="n">Z</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">],</span> <span class="n">linestyles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">],</span><span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-3.0, 3.0)
+</pre></div>
+</div>
+<img alt="../_images/lecture14-kernels_52_1.png" src="../_images/lecture14-kernels_52_1.png" />
+</div>
+</div>
+<p>The above figure is a visualization of the polynomial kernel with degree of 3 and gamma of 2. The decision boundary is non-linear, in contrast to that of linear kernels.</p>
+</section>
+<section id="radial-basis-function-kernel">
+<h3>14.3.2.3. Radial Basis Function Kernel<a class="headerlink" href="#radial-basis-function-kernel" title="Permalink to this headline">¶</a></h3>
+<p>Another example is the Radial Basis Function (RBF; sometimes called Gaussian) kernel
+$<span class="math notranslate nohighlight">\(K(x,z) = \exp \left(-\frac{||x - z||^2}{2\sigma^2}\right),\)</span><span class="math notranslate nohighlight">\(
+where \)</span>\sigma$ is a hyper-parameter. It’s easiest to understand this kernel by viewing it as a similarity measure.</p>
+<p>We can show that this kernel corresponds to an <em>infinite-dimensional</em> feature map and the limit of the polynomial kernel as <span class="math notranslate nohighlight">\(p \to \infty\)</span>.</p>
+<p>To see why that’s intuitively the case, consider the Taylor expansion</p>
+<div class="math notranslate nohighlight">
+\[
+\exp \left(-\frac{||x - z||^2}{2\sigma^2}\right) \approx 1 - \frac{||x - z||^2}{2\sigma^2} + \frac{||x - z||^4}{2! \cdot 4\sigma^4} - \frac{||x - z||^6}{3! \cdot 8\sigma^6} + \ldots
+\]</div>
+<p>Each term on the right-hand side can be expanded into a polynomial. Thus, the above infinite series contains an infinite number of polynimal terms, and consequently an infinite number of polynomial features.</p>
+<p>We can look at the <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> implementation again.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/svm/plot_svm_kernels.html</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+<span class="c1"># plot the line, the points, and the nearest vectors to the plane</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">XX</span><span class="p">,</span> <span class="n">YY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="n">x_min</span><span class="p">:</span><span class="n">x_max</span><span class="p">:</span><span class="mi">200</span><span class="n">j</span><span class="p">,</span> <span class="n">y_min</span><span class="p">:</span><span class="n">y_max</span><span class="p">:</span><span class="mi">200</span><span class="n">j</span><span class="p">]</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">XX</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">YY</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">XX</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span><span class="p">,</span> <span class="n">Z</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">],</span> <span class="n">linestyles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">],</span><span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-3.0, 3.0)
+</pre></div>
+</div>
+<img alt="../_images/lecture14-kernels_57_1.png" src="../_images/lecture14-kernels_57_1.png" />
+</div>
+</div>
+<p>When using an RBF kernel, we may see multiple decision boundaries around different sets of points (as well as larger number of support vectors). These unusual shapes can be viewed as the projection of a linear max-margin separating hyperplane from a higher-dimensional (or inifinite-dimensional) feature space into the original 2d space where <span class="math notranslate nohighlight">\(x\)</span> lives.</p>
+<p>There are even more kernel options in <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> and we encourage you to try more of them using the same data.</p>
+</section>
+</section>
+<section id="when-is-k-a-kernel">
+<h2>14.3.3. When is <span class="math notranslate nohighlight">\(K\)</span> A Kernel?<a class="headerlink" href="#when-is-k-a-kernel" title="Permalink to this headline">¶</a></h2>
+<p>We’ve seen that for many features <span class="math notranslate nohighlight">\(\phi\)</span> we can define a kernel function <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> that efficiently computes <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(x)\)</span>.
+Suppose now that we use some kernel function <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> in an ML algorithm. Is there an implicit feature mapping <span class="math notranslate nohighlight">\(\phi\)</span> that corresponds to using K?</p>
+<p>Let’s start by defining a necessary condition for <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> to be associated with a feature map.
+Suppose that <span class="math notranslate nohighlight">\(K\)</span> is a kernel for some feature map <span class="math notranslate nohighlight">\(\phi\)</span>, and consider an arbitrary set of <span class="math notranslate nohighlight">\(n\)</span> points <span class="math notranslate nohighlight">\(\{x^{(1)}, x^{(2)}, \ldots, x^{(n)}\}\)</span>.</p>
+<p>Consider the matrix <span class="math notranslate nohighlight">\(L \in \mathbb{R}^{n\times n}\)</span> defined as <span class="math notranslate nohighlight">\(L_{ij} = K(x^{(i)}, x^{(j)}) = \phi(x^{(i)})^\top \phi(x^{(j)})\)</span>. We claim that <span class="math notranslate nohighlight">\(L\)</span> must be symmetric and positive semidefinite.
+Indeed, <span class="math notranslate nohighlight">\(L\)</span> is symmetric because the dot product <span class="math notranslate nohighlight">\(\phi(x^{(i)})^\top \phi(x^{(j)})\)</span> is symmetric. Moreover, for any <span class="math notranslate nohighlight">\(z\)</span>,</p>
+<p>\begin{align*}
+z^\top L z
+&amp; = \sum_{i=1}^n \sum_{j=1}^n z_i L_{ij} z_j
+= \sum_{i=1}^n \sum_{j=1}^n z_i \phi(x^{(i)})^\top \phi(x^{(j)}) z_j \
+&amp; = \sum_{i=1}^n \sum_{j=1}^n z_i (\sum_{k=1}^n \phi(x^{(i)})<em>k \phi(x^{(j)})<em>k ) z_j \
+&amp; = \sum</em>{k=1}^n \sum</em>{i=1}^n \sum_{j=1}^n z_i \phi(x^{(i)})<em>k \phi(x^{(j)})<em>k z_j \
+&amp; = \sum</em>{k=1}^n \sum</em>{i=1}^n \left( z_i \phi(x^{(i)})_k \right)^2 \geq 0
+\end{align*}</p>
+<p>Thus if <span class="math notranslate nohighlight">\(K\)</span> is a kernel, <span class="math notranslate nohighlight">\(L\)</span> must be positive semidefinite for any <span class="math notranslate nohighlight">\(n\)</span> points <span class="math notranslate nohighlight">\(x^{(i)}\)</span>.</p>
+<section id="mercer-s-theorem">
+<h3>14.3.3.1. Mercer’s Theorem<a class="headerlink" href="#mercer-s-theorem" title="Permalink to this headline">¶</a></h3>
+<p>The general idea of the theorem is that: if <span class="math notranslate nohighlight">\(K\)</span> is a kernel, <span class="math notranslate nohighlight">\(L\)</span> must be positive semidefinite for any set of <span class="math notranslate nohighlight">\(n\)</span> points <span class="math notranslate nohighlight">\(x^{(i)}\)</span>.
+It turns out that it is is also a sufficent condition.</p>
+<p><strong>Theorem.</strong> (Mercer) Let <span class="math notranslate nohighlight">\(K: \mathcal{X} \times \mathcal{X} \to [0,\infty]\)</span> be a kernel function. There exists a mapping <span class="math notranslate nohighlight">\(\phi\)</span> associated with <span class="math notranslate nohighlight">\(K\)</span> if for any <span class="math notranslate nohighlight">\(n\)</span> and any dataset <span class="math notranslate nohighlight">\(\{x^{(1)}, x^{(2)}, \ldots, x^{(n)}\}\)</span> of size <span class="math notranslate nohighlight">\(n \geq 1\)</span>, if and only if the matrix <span class="math notranslate nohighlight">\(L\)</span> defined as <span class="math notranslate nohighlight">\(L_{ij} = K(x^{(i)}, x^{(j)})\)</span> is symmetric and positive semidefinite.</p>
+<p>This characterizes precisely which kernel functions correspond to some <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+</section>
+</section>
+<section id="pros-and-cons-of-kernels">
+<h2>14.3.4. Pros and Cons of Kernels<a class="headerlink" href="#pros-and-cons-of-kernels" title="Permalink to this headline">¶</a></h2>
+<p>We have introduce many good properties of kernels. However, are kernels a free lunch? Not quite.</p>
+<p>Kernels allow us to use features <span class="math notranslate nohighlight">\(\phi\)</span> of very large dimension <span class="math notranslate nohighlight">\(d\)</span>. However computation is at least <span class="math notranslate nohighlight">\(O(n^2)\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the dataset size. We need to compute distances <span class="math notranslate nohighlight">\(K(x^{(i)}, x^{(j)})\)</span>, for all <span class="math notranslate nohighlight">\(i,j\)</span>.</p>
+<ul class="simple">
+<li><p>Approximate solutions can be found more quickly, but in practice kernel methods are not used with today’s massive datasets.</p></li>
+<li><p>However, on small and medium-sized data, kernel methods will be at least as good as neural nets and probably much easier to train.</p></li>
+</ul>
+<p>Examples of other algorithms in which we can use kernels include:</p>
+<ul class="simple">
+<li><p>Supervised learning algorithms: linear regression, logistic regression, support vector machines, etc.</p></li>
+<li><p>Unsupervised learning algorithms: PCA, density estimation.</p></li>
+</ul>
+<p>Overall, kernels are very powerful because they can be used throughout machine learning.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="lecture13-svm-dual.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Lecture 13: Dual Formulation of Support Vector Machines</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="lecture15-decision-trees.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 15: Tree-Based Algorithms</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Cornell University<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

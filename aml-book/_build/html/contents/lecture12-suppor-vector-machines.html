@@ -1,0 +1,1430 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 12: Support Vector Machines &#8212; Applied Machine Learning</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Lecture 10: Clustering" href="lecture10-clustering.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Applied Machine Learning</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture2-supervised-learning.html">
+   Lecture 2: Supervised Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture3-linear-regression.html">
+   Lecture 3: Linear Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture4-classification.html">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture5-regularization.html">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture6-naive-bayes.html">
+   Lecture 6: Generative Models and Naive Bayes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+   Lecture 8: Unsupervised Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture9-density-estimation.html">
+   Lecture 9: Density Estimation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture10-clustering.html">
+   Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/lecture12-suppor-vector-machines.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontents/lecture12-suppor-vector-machines.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/contents/lecture12-suppor-vector-machines.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#classification-margins">
+   12.1. Classification Margins
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-and-motivation">
+     12.1.1. Review and Motivation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-of-binary-classification">
+       12.1.1.1. Review of Binary Classification
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#linear-model-family">
+         Linear Model Family
+        </a>
+       </li>
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#binary-classification-problem-and-the-iris-dataset">
+         12.1.1.2. Binary Classification Problem and The Iris Dataset
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparing-classification-algorithms">
+     12.1.2. Comparing Classification Algorithms
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#classification-scores">
+       12.1.2.1. Classification Scores
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-max-margin-principle">
+       12.1.2.2. The Max-Margin Principle
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-functional-classification-margin">
+     12.1.3. The Functional Classification Margin
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-geometric-classification-margin">
+     12.1.4. The Geometric Classification Margin
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#geometric-intuitions">
+       12.1.4.1. Geometric Intuitions
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-max-margin-classifier">
+   12.2. The Max-Margin Classifier
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#maximizing-the-margin">
+     12.2.1. Maximizing the Margin
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#algorithm-linear-support-vector-machine-classification">
+   12.2.2. Algorithm: Linear Support Vector Machine Classification
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#soft-margins-and-the-hinge-loss">
+   12.3. Soft Margins and the Hinge Loss
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-separable-problems">
+     12.3.1. Non-Separable Problems
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#towards-an-unconstrained-objective">
+     12.3.2. Towards an Unconstrained Objective
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-hinge-loss">
+     12.3.3. The Hinge Loss
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#properties-of-the-hinge-loss">
+       12.3.3.1. Properties of the Hinge Loss
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#optimization-for-svms">
+   12.4. Optimization for SVMs
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-svm-objective">
+     Review: SVM Objective
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-gradient-descent">
+     Review: Gradient Descent
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-gradient-for-the-hinge-loss">
+     12.4.1.  A Gradient for the Hinge Loss?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#a-steepest-descent-direction-for-the-hinge-loss">
+       12.4.1.1.  A Steepest Descent Direction for the Hinge Loss
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sub-gradient-descent-for-svm">
+     12.4.2. (Sub-)Gradient Descent for SVM
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     12.4.3. Algorithm: Linear Support Vector Machine Classification
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Lecture 12: Support Vector Machines</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#classification-margins">
+   12.1. Classification Margins
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-and-motivation">
+     12.1.1. Review and Motivation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-of-binary-classification">
+       12.1.1.1. Review of Binary Classification
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#linear-model-family">
+         Linear Model Family
+        </a>
+       </li>
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#binary-classification-problem-and-the-iris-dataset">
+         12.1.1.2. Binary Classification Problem and The Iris Dataset
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparing-classification-algorithms">
+     12.1.2. Comparing Classification Algorithms
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#classification-scores">
+       12.1.2.1. Classification Scores
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-max-margin-principle">
+       12.1.2.2. The Max-Margin Principle
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-functional-classification-margin">
+     12.1.3. The Functional Classification Margin
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-geometric-classification-margin">
+     12.1.4. The Geometric Classification Margin
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#geometric-intuitions">
+       12.1.4.1. Geometric Intuitions
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-max-margin-classifier">
+   12.2. The Max-Margin Classifier
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#maximizing-the-margin">
+     12.2.1. Maximizing the Margin
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#algorithm-linear-support-vector-machine-classification">
+   12.2.2. Algorithm: Linear Support Vector Machine Classification
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#soft-margins-and-the-hinge-loss">
+   12.3. Soft Margins and the Hinge Loss
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-separable-problems">
+     12.3.1. Non-Separable Problems
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#towards-an-unconstrained-objective">
+     12.3.2. Towards an Unconstrained Objective
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-hinge-loss">
+     12.3.3. The Hinge Loss
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#properties-of-the-hinge-loss">
+       12.3.3.1. Properties of the Hinge Loss
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#optimization-for-svms">
+   12.4. Optimization for SVMs
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-svm-objective">
+     Review: SVM Objective
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-gradient-descent">
+     Review: Gradient Descent
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-gradient-for-the-hinge-loss">
+     12.4.1.  A Gradient for the Hinge Loss?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#a-steepest-descent-direction-for-the-hinge-loss">
+       12.4.1.1.  A Steepest Descent Direction for the Hinge Loss
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sub-gradient-descent-for-svm">
+     12.4.2. (Sub-)Gradient Descent for SVM
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     12.4.3. Algorithm: Linear Support Vector Machine Classification
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-12-support-vector-machines">
+<h1>Lecture 12: Support Vector Machines<a class="headerlink" href="#lecture-12-support-vector-machines" title="Permalink to this headline">¶</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="classification-margins">
+<h1>12.1. Classification Margins<a class="headerlink" href="#classification-margins" title="Permalink to this headline">¶</a></h1>
+<p>In this lecture, we are going to cover Support Vector Machines (SVMs), one the most successful classification algorithms in machine learning.</p>
+<p>We start the presentation of SVMs by defining the classification <em>margin</em>.</p>
+<section id="review-and-motivation">
+<h2>12.1.1. Review and Motivation<a class="headerlink" href="#review-and-motivation" title="Permalink to this headline">¶</a></h2>
+<section id="review-of-binary-classification">
+<h3>12.1.1.1. Review of Binary Classification<a class="headerlink" href="#review-of-binary-classification" title="Permalink to this headline">¶</a></h3>
+<p>Consider a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
+<p>We distinguish between two types of supervised learning problems depnding on the targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
+<ol class="simple">
+<li><p><strong>Regression</strong>: The target variable <span class="math notranslate nohighlight">\(y \in \mathcal{Y}\)</span> is continuous:  <span class="math notranslate nohighlight">\(\mathcal{Y} \subseteq \mathbb{R}\)</span>.</p></li>
+<li><p><strong>Binary Classification</strong>: The target variable <span class="math notranslate nohighlight">\(y\)</span> is discrete and takes on one of <span class="math notranslate nohighlight">\(K=2\)</span> possible values.</p></li>
+</ol>
+<p>In this lecture, we assume <span class="math notranslate nohighlight">\(\mathcal{Y} = \{-1, +1\}\)</span>.</p>
+<section id="linear-model-family">
+<h4>Linear Model Family<a class="headerlink" href="#linear-model-family" title="Permalink to this headline">¶</a></h4>
+<p>In this lecture, we will work with linear models of the form:
+\begin{align*}
+f_\theta(x) &amp; = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + … + \theta_d \cdot x_d
+\end{align*}
+where <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span> is a vector of features and <span class="math notranslate nohighlight">\(y \in \{-1, 1\}\)</span> is the target. The <span class="math notranslate nohighlight">\(\theta_j\)</span> are the <em>parameters</em> of the model.</p>
+<p>We can represent the model in a vectorized form
+\begin{align*}
+f_\theta(x) = \theta^\top x + \theta_0.
+\end{align*}</p>
+</section>
+<section id="binary-classification-problem-and-the-iris-dataset">
+<h4>12.1.1.2. Binary Classification Problem and The Iris Dataset<a class="headerlink" href="#binary-classification-problem-and-the-iris-dataset" title="Permalink to this headline">¶</a></h4>
+<p>In this lecture, we will again use the Iris flower dataset. As we just mentioned, we make two additional assumptions:</p>
+<ul class="simple">
+<li><p>We will only consider binary classificaiton problems.</p></li>
+<li><p>We will use <span class="math notranslate nohighlight">\(\mathcal{Y} =\{-1,1\}\)</span> as the label space.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="c1"># Load the Iris dataset</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+
+<span class="c1"># subsample to a third of the data points</span>
+<span class="n">iris_X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">loc</span><span class="p">[::</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">iris_y</span> <span class="o">=</span> <span class="n">iris_y</span><span class="o">.</span><span class="n">loc</span><span class="p">[::</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># create a binary classification dataset with labels +/- 1</span>
+<span class="n">iris_y2</span> <span class="o">=</span> <span class="n">iris_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">iris_y2</span><span class="p">[</span><span class="n">iris_y2</span><span class="o">==</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">iris_y2</span><span class="p">[</span><span class="n">iris_y2</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="c1"># print part of the dataset</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal length (cm)</th>
+      <th>sepal width (cm)</th>
+      <th>petal length (cm)</th>
+      <th>petal width (cm)</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.1</td>
+      <td>3.5</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>3.6</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>4.4</td>
+      <td>2.9</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>4.8</td>
+      <td>3.0</td>
+      <td>1.4</td>
+      <td>0.1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>5.4</td>
+      <td>3.9</td>
+      <td>1.3</td>
+      <td>0.4</td>
+      <td>-1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/neighbors/plot_classification.html</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="c1"># create 2d version of dataset and subsample it</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">.5</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">.5</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">))</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Petal Length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Petal Width&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Not Setosa&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12b01cd30&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture12-suppor-vector-machines_5_1.png" src="../_images/lecture12-suppor-vector-machines_5_1.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="comparing-classification-algorithms">
+<h2>12.1.2. Comparing Classification Algorithms<a class="headerlink" href="#comparing-classification-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>We have seen different types approaches to classification. When fitting a model, there may be many valid decision boundaries. How do we select one of them?</p>
+<p>Consider the following three classification algorithms from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>. Each of them outputs a different classification boundary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">Perceptron</span><span class="p">,</span> <span class="n">RidgeClassifier</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">Perceptron</span><span class="p">(),</span> <span class="n">RidgeClassifier</span><span class="p">()]</span>
+
+<span class="k">def</span> <span class="nf">fit_and_create_boundary</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">iris_y2</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Z</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">models</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="s1">&#39;13</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">fit_and_create_boundary</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span> 
+
+    <span class="c1"># Plot also the training points</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Algorithm </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="classification-scores">
+<h3>12.1.2.1. Classification Scores<a class="headerlink" href="#classification-scores" title="Permalink to this headline">¶</a></h3>
+<p>Most classification algorithms output not just a class label but a score.</p>
+<ul class="simple">
+<li><p>For example, logistic regression returns the class probability
+$<span class="math notranslate nohighlight">\( p(y=1|\mid x) = \sigma(\theta^\top x) \in [0,1] \)</span><span class="math notranslate nohighlight">\(
+If the class probability is \)</span>&gt;0.5<span class="math notranslate nohighlight">\(, the model outputs class \)</span>1$.</p></li>
+</ul>
+<p>The score is an estimate of confidence; it also represents how far we are from the decision boundary.</p>
+</section>
+<section id="the-max-margin-principle">
+<h3>12.1.2.2. The Max-Margin Principle<a class="headerlink" href="#the-max-margin-principle" title="Permalink to this headline">¶</a></h3>
+<p>Intuitively, we want to select boundaries with high <em>margin</em>.</p>
+<p>This means that we are as confident as possible for every point and we are as far as possible from the decision boundary.</p>
+<p>Several of the separating boundaries in our previous example had low margin: they came too close to the boundary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Perceptron</span><span class="p">,</span> <span class="n">RidgeClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">10000</span><span class="p">),</span> <span class="n">Perceptron</span><span class="p">(),</span> <span class="n">RidgeClassifier</span><span class="p">()]</span>
+
+<span class="k">def</span> <span class="nf">fit_and_create_boundary</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">iris_y2</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Z</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">models</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="s1">&#39;13</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">fit_and_create_boundary</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span> 
+
+    <span class="c1"># Plot also the training points</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Good Margin&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Bad Margin&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture12-suppor-vector-machines_12_0.png" src="../_images/lecture12-suppor-vector-machines_12_0.png" />
+</div>
+</div>
+<p>Below, we plot a decision boundary between the two classes (solid line) that has a high margin. The two dashed lines that lie at the margin.</p>
+<p>Points that are the margin are highlighted in black. A good decision boundary is as far away as possible from the points at the margin.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#https://scikit-learn.org/stable/auto_examples/svm/plot_separating_hyperplane.html</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span>
+
+<span class="c1"># fit the model, don&#39;t regularize for illustration purposes</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span> <span class="c1"># we&#39;ll explain this algorithm shortly</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">iris_y2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># plot decision boundary and margins</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+           <span class="n">linestyles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+           <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">4.6</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">2.25</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2.25, 4.0)
+</pre></div>
+</div>
+<img alt="../_images/lecture12-suppor-vector-machines_14_1.png" src="../_images/lecture12-suppor-vector-machines_14_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="the-functional-classification-margin">
+<h2>12.1.3. The Functional Classification Margin<a class="headerlink" href="#the-functional-classification-margin" title="Permalink to this headline">¶</a></h2>
+<p>How can we define the concept of margin more formally?</p>
+<p>We can try to define the margin <span class="math notranslate nohighlight">\(\tilde \gamma^{(i)}\)</span> with respect to a training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as
+$<span class="math notranslate nohighlight">\( \tilde \gamma^{(i)} = y^{(i)} \cdot f(x^{(i)}) = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right). \)</span>$</p>
+<p>We call this the <em>functional</em> margin. Let’s analyze it.</p>
+<p>We defined the functional margin as
+$<span class="math notranslate nohighlight">\( \tilde\gamma^{(i)} = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right).\)</span>$</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(y^{(i)}=1\)</span>, then the margin <span class="math notranslate nohighlight">\(\tilde\gamma^{(i)}\)</span> is large when the model score <span class="math notranslate nohighlight">\(f(x^{(i)}) = \theta^\top x^{(i)} + \theta_0\)</span> is positive and large.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Thus, we are classifying <span class="math notranslate nohighlight">\(x^{(i)}\)</span> correctly and with high confidence.</p></li>
+</ul>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(y^{(i)}=-1\)</span>, then the margin <span class="math notranslate nohighlight">\(\tilde\gamma^{(i)}\)</span> is large when the model score <span class="math notranslate nohighlight">\(f(x^{(i)}) = \theta^\top x^{(i)} + \theta_0\)</span> is negative and large in absolute value.</p></li>
+</ul>
+<ul class="simple">
+<li><p>We are again classifying <span class="math notranslate nohighlight">\(x^{(i)}\)</span> correctly and with high confidence.</p></li>
+</ul>
+<p>Thus higher margin means higher confidence at each input point. However, we have a problem.</p>
+<ul class="simple">
+<li><p>If we rescale the parameters <span class="math notranslate nohighlight">\(\theta, \theta_0\)</span> by a scalar <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span>, we get new parameters <span class="math notranslate nohighlight">\(\alpha \theta, \alpha \theta_0\)</span> .</p></li>
+<li><p>The <span class="math notranslate nohighlight">\(\alpha \theta, \alpha \theta_0\)</span> doesn’t change the classification of points.</p></li>
+<li><p>However, the margin <span class="math notranslate nohighlight">\(\left( \alpha \theta^\top x^{(i)} + \alpha \theta_0 \right) = \alpha \left( \theta^\top x^{(i)} + \theta_0 \right)\)</span> is now scaled by <span class="math notranslate nohighlight">\(\alpha\)</span>!</p></li>
+</ul>
+<p>It doesn’t make sense that the same classification boundary can have different margins when we rescale it.</p>
+</section>
+<section id="the-geometric-classification-margin">
+<h2>12.1.4. The Geometric Classification Margin<a class="headerlink" href="#the-geometric-classification-margin" title="Permalink to this headline">¶</a></h2>
+<p>We define the <em>geometric</em> margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> with respect to a training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as
+$<span class="math notranslate nohighlight">\( \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). \)</span><span class="math notranslate nohighlight">\(
+We call it geomtric because \)</span>\gamma^{(i)}<span class="math notranslate nohighlight">\( equals the distance between \)</span>x^{(i)}$ and the hyperplane.</p>
+<ul class="simple">
+<li><p>We normalize the functional margin by <span class="math notranslate nohighlight">\(||\theta||\)</span></p></li>
+<li><p>Rescaling the weights does not make the margin arbitrarily large.</p></li>
+</ul>
+<p>Let’s make sure our intuition about the margin holds.
+$<span class="math notranslate nohighlight">\( \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). \)</span>$</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(y^{(i)}=1\)</span>, then the margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> is large when the model score <span class="math notranslate nohighlight">\(f(x^{(i)}) = \theta^\top x^{(i)} + \theta_0\)</span> is positive and large.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Thus, we are classifying <span class="math notranslate nohighlight">\(x^{(i)}\)</span> correctly and with high confidence.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The same holds when <span class="math notranslate nohighlight">\(y^{(i)}=-1\)</span>. We again capture our intuition that increasing margin means increasing the confidence of each input point.</p></li>
+</ul>
+<section id="geometric-intuitions">
+<h3>12.1.4.1. Geometric Intuitions<a class="headerlink" href="#geometric-intuitions" title="Permalink to this headline">¶</a></h3>
+<p>The margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> is called geometric because it corresponds to the distance from <span class="math notranslate nohighlight">\(x^{(i)}\)</span> to the separating hyperplane <span class="math notranslate nohighlight">\(\theta^\top x + \theta_0 = 0\)</span> (dashed line below).</p>
+<center><img width=40% src="img/margin.png"></center><p>Suppose that <span class="math notranslate nohighlight">\(y^{(i)}=1\)</span> (<span class="math notranslate nohighlight">\(x^{(i)}\)</span> lies on positive side of boundary). Then:</p>
+<ol class="simple">
+<li><p>The points <span class="math notranslate nohighlight">\(x\)</span> that lie on the deicision boundary are those for which <span class="math notranslate nohighlight">\(\theta^\top x + \theta_0 = 0\)</span> (score is precisely zero, and between 1 and -1).</p></li>
+</ol>
+<ol class="simple">
+<li><p>The vector <span class="math notranslate nohighlight">\(\frac{\theta}{||\theta||}\)</span> is perpedicular to the hyperplane <span class="math notranslate nohighlight">\(\theta^\top x + \theta_0\)</span> and has unit norm (fact from calculus).</p></li>
+</ol>
+<center><img width=40% src="img/margin.png"></center>
+<ol class="simple">
+<li><p>Let <span class="math notranslate nohighlight">\(x_0\)</span> be the point on the boundary closest to <span class="math notranslate nohighlight">\(x^{(i)}\)</span>. Then by definition of the margin
+<span class="math notranslate nohighlight">\(x^{(i)} = x_0 + \gamma^{(i)} \frac{\theta}{||\theta||}\)</span> or
+$<span class="math notranslate nohighlight">\( x_0 = x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||}. \)</span>$</p></li>
+</ol>
+<ol class="simple">
+<li><p>Since <span class="math notranslate nohighlight">\(x_0\)</span> is on the hyperplane, <span class="math notranslate nohighlight">\(\theta^\top x_0 + \theta_0 = 0\)</span>, or
+$<span class="math notranslate nohighlight">\(\theta^\top \left(x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||} \right) + \theta_0 = 0.\)</span>$</p></li>
+</ol>
+<ol class="simple">
+<li><p>Solving for <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> and using the fact that <span class="math notranslate nohighlight">\(\theta^\top \theta = ||\theta||^2\)</span>, we obtain
+$<span class="math notranslate nohighlight">\( \gamma^{(i)} =  \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||}. \)</span>$</p></li>
+</ol>
+<p>Which is our geometric margin. The case of <span class="math notranslate nohighlight">\(y^{(i)}=-1\)</span> can also be proven in a similar way.</p>
+<p>We can use our formula for <span class="math notranslate nohighlight">\(\gamma\)</span> to precisely plot the margins on our earlier plot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot decision boundary and margins</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+           <span class="n">linestyles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+           <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">4.6</span><span class="p">,</span> <span class="mf">6.1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">2.25</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+
+<span class="c1"># plot margin vectors</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">theta0</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">intercept_</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">clf</span><span class="o">.</span><span class="n">support_</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">y0</span> <span class="o">=</span> <span class="n">iris_y2</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">margin_x0</span> <span class="o">=</span> <span class="p">(</span><span class="n">theta</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">+</span> <span class="n">theta0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">margin_x0</span><span class="p">],</span> <span class="p">[</span><span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">margin_x0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">margin_x0</span><span class="p">],</span> <span class="p">[</span><span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">margin_x0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture12-suppor-vector-machines_35_0.png" src="../_images/lecture12-suppor-vector-machines_35_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-max-margin-classifier">
+<h1>12.2. The Max-Margin Classifier<a class="headerlink" href="#the-max-margin-classifier" title="Permalink to this headline">¶</a></h1>
+<p>We have seen a way to measure the confidence level of a classifier at a data point using the notion of a <em>margin</em>.
+Next, we are going to see how to maximize the margin of linear classifiers.</p>
+<section id="maximizing-the-margin">
+<h2>12.2.1. Maximizing the Margin<a class="headerlink" href="#maximizing-the-margin" title="Permalink to this headline">¶</a></h2>
+<p>We want to define an objective that will result in maximizing the margin. As a first attempt, consider the following optimization problem.
+\begin{align*}
+\max_{\theta,\theta_0,\gamma} \gamma ; &amp;  \
+\text{subject to } ; &amp; y^{(i)}\frac{(x^{(i)})^\top\theta+\theta_0}{||\theta||}\geq \gamma ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>This is maximies the smallest margin over the <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span>. It guarantees each point has margin at least <span class="math notranslate nohighlight">\(\gamma\)</span>.</p>
+<p>This problem is difficult to optimize because of the division by <span class="math notranslate nohighlight">\(||\theta||\)</span> and we would like to simplify it. First, consider the equivalent problem:
+\begin{align*}
+\max_{\theta,\theta_0,\gamma} \gamma ; &amp;  \
+\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq \gamma ||\theta|| ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>Note that this problem has an extra degree of freedom:</p>
+<ul class="simple">
+<li><p>Suppose we multiply <span class="math notranslate nohighlight">\(\theta, \theta_0\)</span> by some constant <span class="math notranslate nohighlight">\(c &gt;0\)</span>.</p></li>
+<li><p>This yields another valid solution!</p></li>
+</ul>
+<p>To enforce uniqueness, we add another constraint that doesn’t change the minimizer:
+$<span class="math notranslate nohighlight">\( ||\theta|| \cdot \gamma = 1. \)</span>$</p>
+<p>This ensures we cannot rescale <span class="math notranslate nohighlight">\(\theta\)</span> and also asks our linear model to assign each <span class="math notranslate nohighlight">\(x^{(i)}\)</span> a score of at least <span class="math notranslate nohighlight">\(\pm 1\)</span>:
+$<span class="math notranslate nohighlight">\( y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all \)</span>i<span class="math notranslate nohighlight">\(} \)</span>$</p>
+<p>If we constraint <span class="math notranslate nohighlight">\(||\theta|| \cdot \gamma = 1\)</span> holds, then we know that <span class="math notranslate nohighlight">\(\gamma = 1/||\theta||\)</span> and we can replace <span class="math notranslate nohighlight">\(\gamma\)</span> in the optimization problem to obtain:
+\begin{align*}
+\max_{\theta,\theta_0} \frac{1}{||\theta||} ; &amp;  \
+\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>The solution of this problem is still the same.</p>
+<p>Finally, instead of maximizing <span class="math notranslate nohighlight">\(1/||\theta||\)</span>, we can minimize <span class="math notranslate nohighlight">\(||\theta||\)</span>, or equvalently we can minimize <span class="math notranslate nohighlight">\(\frac{1}{2}||\theta||^2\)</span>.
+\begin{align*}
+\min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 ; &amp;  \
+\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>This is now a quadratic program that can be solved using off-the-shelf optimization algorithms!</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="algorithm-linear-support-vector-machine-classification">
+<h1>12.2.2. Algorithm: Linear Support Vector Machine Classification<a class="headerlink" href="#algorithm-linear-support-vector-machine-classification" title="Permalink to this headline">¶</a></h1>
+<p>The above procedure describes the closed solution for Support Vector Machine. We can succinctly define the algorithm components.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (binary classification).</p></li>
+<li><p><strong>Model family</strong>: Linear decision boundaries.</p></li>
+<li><p><strong>Objective function</strong>: Max-margin optimization.</p></li>
+<li><p><strong>Optimizer</strong>: Quadratic optimization algorithms.</p></li>
+<li><p><strong>Probabilistic interpretation</strong>: No simple interpretation!</p></li>
+</ul>
+<p>Later, we will see several other versions of this algorithm.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="soft-margins-and-the-hinge-loss">
+<h1>12.3. Soft Margins and the Hinge Loss<a class="headerlink" href="#soft-margins-and-the-hinge-loss" title="Permalink to this headline">¶</a></h1>
+<p>Let’s continue looking at how we can maximize the margin.</p>
+<section id="non-separable-problems">
+<h2>12.3.1. Non-Separable Problems<a class="headerlink" href="#non-separable-problems" title="Permalink to this headline">¶</a></h2>
+<p>So far, we have assume that a linear hyperplane exists. However, what if the classes are non-separable? Then our optimization problem does not have a solution and we need to modify it.</p>
+<p>Our solution is going to be to make each constraint “soft”, by introducing “slack” variables, which allow the constraint to be violated.
+$<span class="math notranslate nohighlight">\(
+y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i.
+\)</span>$</p>
+<ul class="simple">
+<li><p>If we can classify each point with a perfect score of <span class="math notranslate nohighlight">\(\geq 1\)</span>, the <span class="math notranslate nohighlight">\(\xi_i=0\)</span>.</p></li>
+<li><p>If we cannot assign a perfect score, we assign a score of <span class="math notranslate nohighlight">\(1-\xi_i\)</span>.</p></li>
+<li><p>We define optimization such that the <span class="math notranslate nohighlight">\(\xi_i\)</span> are chosen to be as small as possible.</p></li>
+</ul>
+<p>In the optimization problem, we assign a penalty <span class="math notranslate nohighlight">\(C\)</span> to these slack variables to obtain:
+\begin{align*}
+\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
+\text{subject to } ; &amp; y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\geq 1 - \xi_i ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>} \
+&amp; \xi_i \geq 0
+\end{align*}</p>
+</section>
+<section id="towards-an-unconstrained-objective">
+<h2>12.3.2. Towards an Unconstrained Objective<a class="headerlink" href="#towards-an-unconstrained-objective" title="Permalink to this headline">¶</a></h2>
+<p>Let’s further modify things. Moving around terms in the inequality we get:
+\begin{align*}
+\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
+\text{subject to } ; &amp; \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) ; \xi_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>If <span class="math notranslate nohighlight">\(0 \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\)</span>, we classified <span class="math notranslate nohighlight">\(x^{(i)}\)</span> perfectly and <span class="math notranslate nohighlight">\(\xi_i = 0\)</span></p>
+<p>If <span class="math notranslate nohighlight">\(0 &lt; 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\)</span>, then <span class="math notranslate nohighlight">\(\xi_i = 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\)</span></p>
+<p>Thus, <span class="math notranslate nohighlight">\(\xi_i = \max\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right), 0 \right)\)</span>.</p>
+<p>We simplify notation a bit by using the notation <span class="math notranslate nohighlight">\((x)^+ = \max(x,0)\)</span>.</p>
+<p>This yields:
+$<span class="math notranslate nohighlight">\(\xi_i = \max\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right), 0 \right) := \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+\)</span>$</p>
+<p>Since <span class="math notranslate nohighlight">\(\xi_i = \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+\)</span>, we can take
+\begin{align*}
+\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
+\text{subject to } ; &amp; \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) ; \xi_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
+\end{align*}</p>
+<p>And we turn it into the following by plugging in the definition of <span class="math notranslate nohighlight">\(\xi_i\)</span>:
+$<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0}\; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ \)</span>$</p>
+<p>Since it doesn’t matter which term we multiply by <span class="math notranslate nohighlight">\(C&gt;0\)</span>, this is equivalent to
+$<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ + \frac{\lambda}{2}||\theta||^2 \)</span><span class="math notranslate nohighlight">\(
+for some \)</span>\lambda &gt; 0$.</p>
+<p>We have now turned our optimizatin problem into an unconstrained form:
+$<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} \)</span>$</p>
+<ul class="simple">
+<li><p>The hinge loss penalizes incorrect predictions.</p></li>
+<li><p>The L2 regularizer ensures the weights are small and well-behaved.</p></li>
+</ul>
+</section>
+<section id="the-hinge-loss">
+<h2>12.3.3. The Hinge Loss<a class="headerlink" href="#the-hinge-loss" title="Permalink to this headline">¶</a></h2>
+<p>Consider again our new loss term for a label <span class="math notranslate nohighlight">\(y\)</span> and a prediction <span class="math notranslate nohighlight">\(f\)</span>:
+$<span class="math notranslate nohighlight">\( L(y, f) = \max\left(1 - y \cdot f, 0\right). \)</span>$</p>
+<ul class="simple">
+<li><p>If prediction <span class="math notranslate nohighlight">\(f\)</span> has same class as <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(|f| \geq 1\)</span>, the loss is zero.</p>
+<ul>
+<li><p>If class correct, no penalty if score <span class="math notranslate nohighlight">\(f\)</span> is larger than target <span class="math notranslate nohighlight">\(y\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+<li><p>If the prediction <span class="math notranslate nohighlight">\(f\)</span> is of the wrong class, or <span class="math notranslate nohighlight">\(|f| \leq 1\)</span>, loss is <span class="math notranslate nohighlight">\(|y - f|\)</span>.</p></li>
+</ul>
+<p>Let’s visualize a few losses <span class="math notranslate nohighlight">\(L(y=1,f)\)</span>, as a function of <span class="math notranslate nohighlight">\(f\)</span>, including hinge.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define the losses for a target of y=1</span>
+<span class="n">hinge_loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">l2_loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">f</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">l1_loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">f</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># plot them</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">l1_loss</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">l2_loss</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">hinge_loss</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;L1 Loss&#39;</span><span class="p">,</span> <span class="s1">&#39;L2 Loss&#39;</span><span class="p">,</span> <span class="s1">&#39;Hinge Loss&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Prediction f&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;L(y=1,f)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;L(y=1,f)&#39;)
+</pre></div>
+</div>
+<img alt="../_images/lecture12-suppor-vector-machines_62_1.png" src="../_images/lecture12-suppor-vector-machines_62_1.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>The hinge loss is linear like the L1 loss.</p></li>
+<li><p>But it only penalizes errors that are on the “wrong” side:</p>
+<ul>
+<li><p>We have an error of <span class="math notranslate nohighlight">\(|f-y|\)</span> if true class is <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(f &lt; 1\)</span></p></li>
+<li><p>We don’t penalize for predicting <span class="math notranslate nohighlight">\(f&gt;1\)</span> if true class is <span class="math notranslate nohighlight">\(1\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">hinge_loss</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Hinge Loss&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12e750a58&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture12-suppor-vector-machines_64_1.png" src="../_images/lecture12-suppor-vector-machines_64_1.png" />
+</div>
+</div>
+<section id="properties-of-the-hinge-loss">
+<h3>12.3.3.1. Properties of the Hinge Loss<a class="headerlink" href="#properties-of-the-hinge-loss" title="Permalink to this headline">¶</a></h3>
+<p>The hinge loss is one of the best losses in machine learning. We summarize here several important properties of the hinge loss.</p>
+<ul class="simple">
+<li><p>It penalizes errors “that matter,” hence is less sensitive to outliers.</p></li>
+<li><p>Minimizing a regularized hinge loss optimizes for a high margin.</p></li>
+<li><p>The loss is non-differentiable at point, which may make it more challenging to optimize.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="optimization-for-svms">
+<h1>12.4. Optimization for SVMs<a class="headerlink" href="#optimization-for-svms" title="Permalink to this headline">¶</a></h1>
+<p>We have seen a new way to formulate the SVM objective. Let’s now see how to optimize it.</p>
+<section id="review-svm-objective">
+<h2>Review: SVM Objective<a class="headerlink" href="#review-svm-objective" title="Permalink to this headline">¶</a></h2>
+<p>Maximizing the margin can be done in the following form:
+$<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} \)</span>$</p>
+<ul class="simple">
+<li><p>The hinge loss penalizes incorrect predictions.</p></li>
+<li><p>The L2 regularizer ensures the weights are small and well-behaved.</p></li>
+</ul>
+<p>We can easily implement this objective in <code class="docutils literal notranslate"><span class="pre">numpy</span></code>.</p>
+<p>First we define the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The linear model we are trying to fit.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    theta (np.array): d-dimensional vector of parameters</span>
+<span class="sd">    X (np.array): (n,d)-dimensional data matrix</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    y_pred (np.array): n-dimensional vector of predicted targets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And then we define the objective.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">svm_objective</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">.1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The cost function, J, describing the goodness of fit.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    theta (np.array): d-dimensional vector of parameters</span>
+<span class="sd">    X (np.array): (n,d)-dimensional design matrix</span>
+<span class="sd">    y (np.array): n-dimensional vector of targets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">f</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">C</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">theta</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="review-gradient-descent">
+<h2>Review: Gradient Descent<a class="headerlink" href="#review-gradient-descent" title="Permalink to this headline">¶</a></h2>
+<p>If we want to optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span>, we start with an initial guess <span class="math notranslate nohighlight">\(\theta_0\)</span> for the parameters and repeat the following update:
+$<span class="math notranslate nohighlight">\( \theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). \)</span>$</p>
+<p>As code, this method may look as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span><span class="p">,</span> <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">random_initialization</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">norm</span><span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">theta_prev</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">convergence_threshold</span><span class="p">:</span>
+    <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">theta</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_prev</span> <span class="o">-</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">gradient</span><span class="p">(</span><span class="n">theta_prev</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="a-gradient-for-the-hinge-loss">
+<h2>12.4.1.  A Gradient for the Hinge Loss?<a class="headerlink" href="#a-gradient-for-the-hinge-loss" title="Permalink to this headline">¶</a></h2>
+<p>What is the gradient for the hinge loss with a linear <span class="math notranslate nohighlight">\(f\)</span>?
+$<span class="math notranslate nohighlight">\( J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). \)</span>$</p>
+<p>Here, you see the linear part of <span class="math notranslate nohighlight">\(J\)</span> that behaves like <span class="math notranslate nohighlight">\(1 - y \cdot f_\theta(x)\)</span> (when <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &lt; 1\)</span>) in orange:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">hinge_loss</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span><span class="n">fs</span><span class="p">[:</span><span class="mi">25</span><span class="p">],</span> <span class="n">hinge_loss</span><span class="p">(</span><span class="n">fs</span><span class="p">[:</span><span class="mi">25</span><span class="p">]),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Hinge Loss&#39;</span><span class="p">,</span> <span class="s1">&#39;Hinge Loss when $y \cdot f &lt; 1$&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12ea6f940&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture12-suppor-vector-machines_75_1.png" src="../_images/lecture12-suppor-vector-machines_75_1.png" />
+</div>
+</div>
+<p>When <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &lt; 1\)</span>, we are in the “orange line” part and <span class="math notranslate nohighlight">\(J(\theta)\)</span> behaves like <span class="math notranslate nohighlight">\(1 - y \cdot f_\theta(x)\)</span>.</p>
+<!-- Our objective is
+$$ J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). $$ -->
+<p>Hence the gradient in this regime is:
+$<span class="math notranslate nohighlight">\(\nabla_\theta J(\theta) = -y \cdot \nabla f_\theta(x) = -y \cdot x\)</span><span class="math notranslate nohighlight">\(
+where we used \)</span>\nabla_\theta \theta^\top x = x$.</p>
+<p>When <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) \geq 1\)</span>, we are in the “flat” part and <span class="math notranslate nohighlight">\(J(\theta) = 0\)</span>.
+Hence the gradient is also just zero!</p>
+<p>What is the gradient for the hinge loss with a linear <span class="math notranslate nohighlight">\(f\)</span>?
+$<span class="math notranslate nohighlight">\( J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). \)</span>$</p>
+<p>When <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) = 1\)</span>, we are in the “kink”, and the gradient is not defined!</p>
+<ul class="simple">
+<li><p>In practice, we can either take the gradient when <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &gt; 1\)</span> or the gradient when <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &lt; 1\)</span> or anything in between. This is called the <em>subgradient</em>.</p></li>
+</ul>
+<section id="a-steepest-descent-direction-for-the-hinge-loss">
+<h3>12.4.1.1.  A Steepest Descent Direction for the Hinge Loss<a class="headerlink" href="#a-steepest-descent-direction-for-the-hinge-loss" title="Permalink to this headline">¶</a></h3>
+<p>We can define a “gradient” like function <span class="math notranslate nohighlight">\(\tilde \nabla_\theta J(\theta)\)</span> for the hinge loss
+$<span class="math notranslate nohighlight">\( J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). \)</span><span class="math notranslate nohighlight">\(
+It equals:
+\)</span><span class="math notranslate nohighlight">\(\tilde \nabla_\theta J(\theta) = \begin{cases} -y \cdot x &amp; \text{ if \)</span>y \cdot f_\theta(x) &lt; 1<span class="math notranslate nohighlight">\(} \\ 0 &amp; \text{ otherwise} \end{cases} \)</span>$</p>
+</section>
+</section>
+<section id="sub-gradient-descent-for-svm">
+<h2>12.4.2. (Sub-)Gradient Descent for SVM<a class="headerlink" href="#sub-gradient-descent-for-svm" title="Permalink to this headline">¶</a></h2>
+<p>Putting this together, we obtain a gradient descent algorithm (technically, it’s called subgradient descent).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span><span class="p">,</span> <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">random_initialization</span><span class="p">()</span>
+<span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">J</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="n">J</span><span class="p">(</span><span class="n">theta_prev</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">conv_threshold</span><span class="p">:</span>
+    <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">theta</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_prev</span> <span class="o">-</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">approximate_gradient</span>
+</pre></div>
+</div>
+<p>Let’s implement this algorithm.</p>
+<p>First we implement the approximate gradient.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">svm_gradient</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">.1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The (approximate) gradient of the cost function.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    theta (np.array): d-dimensional vector of parameters</span>
+<span class="sd">    X (np.array): (n,d)-dimensional design matrix</span>
+<span class="sd">    y (np.array): n-dimensional vector of targets</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    subgradient (np.array): d-dimensional subgradient</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">yy</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">yy</span><span class="p">[</span><span class="n">y</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">subgradient</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="n">yy</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">subgradient</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">C</span> <span class="o">*</span> <span class="n">theta</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">subgradient</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And then we implement subgradient descent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">5e-4</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="n">theta</span><span class="p">,</span> <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,)),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+<span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">iris_X</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">iris_y2</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">theta_prev</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">iter</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration </span><span class="si">%d</span><span class="s1">. J: </span><span class="si">%.6f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">svm_objective</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)))</span>
+    <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">theta</span>
+    <span class="n">gradient</span> <span class="o">=</span> <span class="n">svm_gradient</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_prev</span> <span class="o">-</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">gradient</span>
+    <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iteration 0. J: 3.728947
+Iteration 1000. J: 0.376952
+Iteration 2000. J: 0.359075
+Iteration 3000. J: 0.351587
+Iteration 4000. J: 0.344411
+Iteration 5000. J: 0.337912
+Iteration 6000. J: 0.331617
+Iteration 7000. J: 0.326604
+Iteration 8000. J: 0.322224
+Iteration 9000. J: 0.319250
+Iteration 10000. J: 0.316727
+Iteration 11000. J: 0.314800
+Iteration 12000. J: 0.313181
+Iteration 13000. J: 0.311843
+Iteration 14000. J: 0.310667
+Iteration 15000. J: 0.309561
+Iteration 16000. J: 0.308496
+Iteration 17000. J: 0.307523
+Iteration 18000. J: 0.306614
+Iteration 19000. J: 0.305768
+Iteration 20000. J: 0.305068
+Iteration 21000. J: 0.304293
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize the results to convince ourselves we found a good boundary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)],</span> <span class="n">theta</span><span class="p">)</span>
+<span class="n">Z</span><span class="p">[</span><span class="n">Z</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Z</span><span class="p">[</span><span class="n">Z</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture12-suppor-vector-machines_86_0.png" src="../_images/lecture12-suppor-vector-machines_86_0.png" />
+</div>
+</div>
+</section>
+<section id="id1">
+<h2>12.4.3. Algorithm: Linear Support Vector Machine Classification<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The above procedure describes the gradient descent optimization for Support Vector Machine. We can define the algorithm components below.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (binary classification)</p></li>
+<li><p><strong>Model family</strong>: Linear decision boundaries.</p></li>
+<li><p><strong>Objective function</strong>: L2-regularized hinge loss.</p></li>
+<li><p><strong>Optimizer</strong>: Subgradient descent.</p></li>
+<li><p><strong>Probabilistic interpretation</strong>: No simple interpretation!</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="lecture10-clustering.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Lecture 10: Clustering</p>
+        </div>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Cornell University<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

@@ -58,7 +58,7 @@
 
 # We are going to load a real diabetes dataset from `scikit-learn`, a popular machine learning libraries that we will use throughout the course.
 
-# In[1]:
+# In[2]:
 
 
 import numpy as np
@@ -85,7 +85,7 @@ pd.concat([diabetes_X_train, diabetes_y_train], axis=1).head()
 
 # We can also visualize this two-dimensional dataset.
 
-# In[2]:
+# In[3]:
 
 
 get_ipython().run_line_magic('matplotlib', 'inline')
@@ -110,14 +110,18 @@ plt.ylabel('Diabetes Risk')
 # Intuitively, the model class represents the set of possible relationships between BMI and risk that we believe to be true. In practice, we can't search the space of all possible mappings between BMI and risk (we will see later several reasons for why that's the case). Therefore, we have to choose a set of possible mappings, and then choose the one we think is the best in this class.
 # 
 # Let's assume for this example that risk is a linear function of BMI. In other words, for some unknown $\theta_0, \theta_1 \in \mathbb{R}$, we have
-# $$ y = \theta_1 \cdot x + \theta_0, $$
+# 
+# $$ 
+# y = \theta_1 \cdot x + \theta_0, 
+# $$
+# 
 # where $x$ is the BMI (also called the independent variable), and $y$ is the diabetes risk score (the dependent variable). 
 # 
 # The parameters $\theta_1, \theta_0$ are the slope and the intercept of the line relates $x$ to $y$.
 
 # We can visualize this for a few values of $\theta_1, \theta_0$.
 
-# In[3]:
+# In[4]:
 
 
 theta_list = [(1, 2), (2,1), (1,0), (0,1)]
@@ -137,7 +141,7 @@ for theta0, theta1 in theta_list:
 
 # We will soon dive deeper into optimization algorithms for machine learning, but for now, let's call the `sklearn.linear_model` library to find a $\theta_1, \theta_0$ that fit the data well.
 
-# In[4]:
+# In[6]:
 
 
 from sklearn import linear_model
@@ -162,12 +166,16 @@ print('Intercept (theta0): \t', regr.intercept_)
 # ## 2.1.3. A Supervised Learning Model
 # 
 # The supervised learning algorithm gave us a pair of parameters $\theta_1^*, \theta_0^*$. These define the *predictive model* $f^*$, defined as
-# $$ f(x) = \theta_1^* \cdot x + \theta_0^*, $$
+# 
+# $$ 
+# f(x) = \theta_1^* \cdot x + \theta_0^*, 
+# $$
+# 
 # where again $x$ is the BMI, and $y$ is the diabetes risk score.
 
 # We can visualize the linear model that best fits our data.
 
-# In[5]:
+# In[7]:
 
 
 plt.xlabel('Body Mass Index (BMI)')
@@ -185,13 +193,16 @@ plt.plot(diabetes_X_train, diabetes_y_train_pred, color='black', linewidth=2)
 # Given a new dataset of patients with a known BMI, we can use the model that we have just found to estimate their  risk.
 # 
 # Formally, given an $x_\text{new}$, we can output prediction $y_\text{new}$ as
-# $$ y_\text{new} = f(x_\text{new}) = \theta_1^* \cdot x_\text{new} + \theta_0. $$
+# 
+# $$ 
+# y_\text{new} = f(x_\text{new}) = \theta_1^* \cdot x_\text{new} + \theta_0. 
+# $$
 
 # Let's illustrate this equation with a specific example from our diabetes dataset. 
 # 
 # First, we start by loading more data. We will load three new patients (shown in red below) that we haven't seen before.
 
-# In[ ]:
+# In[8]:
 
 
 # Collect 3 data points
@@ -207,7 +218,7 @@ plt.legend(['Initial patients', 'New patients'])
 
 # Our linear model provides an estimate of the diabetes risk for these patients.
 
-# In[ ]:
+# In[9]:
 
 
 # generate predictions on the new patients
@@ -266,7 +277,7 @@ plt.legend(['Model', 'Prediction', 'Initial patients', 'New patients'])
 
 # The UCI dataset contains many additional data columns besides `bmi`, including age, sex, and blood pressure. We can ask `sklearn` to give us more information about this dataset.
 
-# In[6]:
+# In[10]:
 
 
 import numpy as np
@@ -283,7 +294,9 @@ print(diabetes.DESCR)
 # ## 2.2.2. A Supervised Learning Dataset: Notation
 # 
 # We say that a training dataset of size $n$ (e.g., $n$ patients) is a set
-# $$\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}$$
+# 
+# $$
+# \mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}$$
 # 
 # Each $x^{(i)}$ denotes an input (e.g., the measurements for patient $i$), and each $y^{(i)} \in \mathcal{Y}$ is a target (e.g., the diabetes risk). You may think of $x^{(i)}$ as a column vector containing numbers useful for predicting $y^{(i)}$.
 # 
@@ -291,7 +304,7 @@ print(diabetes.DESCR)
 
 # We can look at the diabetes dataset in this form.
 
-# In[7]:
+# In[11]:
 
 
 # Load the diabetes dataset
@@ -308,19 +321,22 @@ diabetes_X.head()
 # ## 2.2.3. Training Dataset: Inputs
 # 
 # More precisely, an input $x^{(i)} \in \mathcal{X}$ is a $d$-dimensional vector of the form
-# $$ x^{(i)} = \begin{bmatrix}
+# 
+# $$ 
+# x^{(i)} = \begin{bmatrix}
 # x^{(i)}_1 \\
 # x^{(i)}_2 \\
 # \vdots \\
 # x^{(i)}_d
 # \end{bmatrix}$$
+# 
 # For example, it could be the values of the $d$ features for patient $i$. One of these could be the BMI.
 # 
 # The set $\mathcal{X}$ is called the feature space. Often, we have, $\mathcal{X} = \mathbb{R}^d$.
 
 # Let's look at data for one patient. This indeed looks like a column vector.
 
-# In[8]:
+# In[12]:
 
 
 diabetes_X.iloc[0]
@@ -346,7 +362,7 @@ diabetes_X.iloc[0]
 
 # Let's create an "old man" feature.
 
-# In[9]:
+# In[13]:
 
 
 diabetes_X['old_man'] = (diabetes_X['sex'] > 0) & (diabetes_X['age'] > 0.05)
@@ -354,12 +370,15 @@ diabetes_X.head()
 
 
 # Formally, we may denote features via a function $\phi : \mathcal{X} \to \mathbb{R}^p$ that takes an input $x^{(i)} \in \mathcal{X}$ and outputs a $p$-dimensional vector
-# $$ \phi(x^{(i)}) = \left[\begin{array}{@{}c@{}}
+# 
+# $$ 
+# \phi(x^{(i)}) = \left[\begin{array}{@{}c@{}}
 # \phi(x^{(i)})_1 \\
 # \phi(x^{(i)})_2 \\
 # \vdots \\
 # \phi(x^{(i)})_p
 # \end{array} \right]$$
+# 
 # We say that $\phi(x^{(i)})$ is a *featurized* input, and each $\phi(x^{(i)})_j$ is a *feature*.
 
 # #### Features vs Attributes
@@ -376,7 +395,7 @@ diabetes_X.head()
 # 
 # We can visualize its distribution.
 
-# In[10]:
+# In[14]:
 
 
 diabetes_X.loc[:, 'bmi'].hist()
@@ -386,7 +405,7 @@ diabetes_X.loc[:, 'bmi'].hist()
 # 
 # In this example, the dataset has been pre-processed such that the two values happen to be `0.05068012` and `-0.04464164`.
 
-# In[11]:
+# In[15]:
 
 
 print(diabetes_X.loc[:, 'sex'].unique())
@@ -401,7 +420,7 @@ diabetes_X.loc[:, 'sex'].hist()
 
 # We plot the distirbution of risk scores below.
 
-# In[12]:
+# In[16]:
 
 
 plt.xlabel('Diabetes risk score')
@@ -418,7 +437,7 @@ diabetes_y.hist()
 
 # We can easily turn our earlier regression example into classification by discretizing the diabetes risk scores into high or low.
 
-# In[13]:
+# In[17]:
 
 
 # Discretize the targets
@@ -432,7 +451,7 @@ plt.legend(['Low-Risk Patients', 'High-Risk Patients'])
 
 # Here, red points have a high score and green points have a low score. Let's try to generate predictions for this dataset.
 
-# In[16]:
+# In[18]:
 
 
 # Create logistic regression object (note: this is actually a classification algorithm!)
@@ -442,7 +461,7 @@ clf = linear_model.LogisticRegression()
 clf.fit(diabetes_X_train, diabetes_y_train_discr)
 
 # Make predictions on the training set
-diabetes_y_train_pred = clf.predict(diabetes_X_train)
+diabetes_y_train_pred = clf.predict( )
 
 # Visualize it
 plt.scatter(diabetes_X_train[diabetes_y_train_discr==0], diabetes_y_train[diabetes_y_train_discr==0], marker='o', s=140, facecolors='none', edgecolors='g')
@@ -457,6 +476,7 @@ plt.legend(['Low-Risk Patients', 'High-Risk Patients', 'Low-Risk Predictions', '
 # ## 2.2.5. The Feature Matrix
 # 
 # Machine learning algorithms are most easily defined in the language of linear algebra. Therefore, it will be useful to represent the entire dataset as one matrix $X \in \mathbb{R}^{n \times d}$, of the form:
+# 
 # $$ X = \begin{bmatrix}
 # x^{(1)}_1 & x^{(2)}_1 & \ldots & x^{(n)}_1 \\
 # x^{(1)}_2 & x^{(2)}_2 & \ldots & x^{(n)}_2 \\
@@ -465,6 +485,7 @@ plt.legend(['Low-Risk Patients', 'High-Risk Patients', 'Low-Risk Predictions', '
 # \end{bmatrix}.$$
 # 
 # Similarly, we can vectorize the target variables into a vector $y \in \mathbb{R}^n$ of the form
+# 
 # $$ y = \begin{bmatrix}
 # x^{(1)} \\
 # x^{(2)} \\
@@ -493,7 +514,7 @@ plt.legend(['Low-Risk Patients', 'High-Risk Patients', 'Low-Risk Predictions', '
 
 # Let's look again at our diabetes dataset for an example.
 
-# In[17]:
+# In[19]:
 
 
 import numpy as np
@@ -515,28 +536,42 @@ diabetes_X.head()
 # #### Defining a Model
 # 
 # We'll say that a model is a function
-# $$ f : \mathcal{X} \to \mathcal{Y} $$
+# 
+# $$
+# f : \mathcal{X} \to \mathcal{Y} $$
+# 
 # that maps inputs $x \in \mathcal{X}$ to targets $y \in \mathcal{Y}$.
 
 # Often, models have *parameters* $\theta \in \Theta$ living in a set $\Theta$. We will then write the model as
+# 
 # $$ f_\theta : \mathcal{X} \to \mathcal{Y} $$
+# 
 # to denote that it's parametrized by $\theta$.
 
 # #### Defining a Model Class
 # 
 # Formally, the model class is a set 
-# $$\mathcal{M} \subseteq \{f \mid f : \mathcal{X} \to \mathcal{Y} \}$$
+# 
+# $$
+# \mathcal{M} \subseteq \{f \mid f : \mathcal{X} \to \mathcal{Y} \}$$
 # of possible models that map input features to targets.
 
 # When the models $f_\theta$ are paremetrized by *parameters* $\theta \in \Theta$ living in some set $\Theta$. Thus we can also write
-# $$\mathcal{M} = \{f_\theta \mid \theta \in \Theta \}.$$
+# 
+# $$
+# \mathcal{M} = \{f_\theta \mid \theta \in \Theta \}.$$
 
 # #### An Example
 # 
 # One simple approach is to assume that $x$ and $y$ are related by a linear model of the form
+# <!-- 
 # \begin{align*}
 # y & = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d
-# \end{align*}
+# \end{align*} -->
+# $$
+# y=\theta_0+\theta_1 \cdot x_1+\theta_2 \cdot x_2+\ldots+\theta_d \cdot x_d
+# $$
+# 
 # where $x$ is a featurized input and $y$ is the target.
 # 
 # The $\theta_j$ are the *parameters* of the model, $\Theta = \mathbb{R}^{d+1}$, and $\mathcal{M} = \{ \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d \mid \theta \in \mathbb{R}^{d+1} \}$
@@ -551,7 +586,9 @@ diabetes_X.head()
 # ####  Notation
 # 
 # To capture this intuition, we define an *objective function* (also called a *loss function*)
-# $$J(f) : \mathcal{M} \to [0, \infty), $$
+# 
+# $$
+# J(f) : \mathcal{M} \to [0, \infty), $$
 # which describes the extent to which $f$ "fits" the data $\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}$.
 
 # When $f$ is parametrized by $\theta \in \Theta$, the objective becomes a function $J(\theta) : \Theta \to [0, \infty).$
@@ -559,12 +596,20 @@ diabetes_X.head()
 # #### Examples
 # 
 # What would are some possible objective functions? We will see many, but here are a few examples:
-# * Mean squared error: $$J(\theta) = \frac{1}{2n} \sum_{i=1}^n \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2$$
-# * Absolute (L1) error: $$J(\theta) = \frac{1}{n} \sum_{i=1}^n \left| f_\theta(x^{(i)}) - y^{(i)} \right|$$
+# * Mean squared error: 
+#   
+# $$
+# J(\theta) = \frac{1}{2n} \sum_{i=1}^n \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2
+# $$
+# * Absolute (L1) error: 
+#   
+# $$
+# J(\theta) = \frac{1}{n} \sum_{i=1}^n \left| f_\theta(x^{(i)}) - y^{(i)} \right|
+# $$
 # 
 # These are defined for a dataset $\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}$.
 
-# In[18]:
+# In[60]:
 
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -584,9 +629,13 @@ print('Mean absolute error: %.2f' % mean_absolute_error(y1, y2))
 # 
 # At a high-level an optimizer takes an objective $J$ and a model class $\mathcal{M}$ and finds a model $f \in \mathcal{M}$ with the smallest value of the objective $J$.
 # 
-# \begin{align*}
+# <!-- \begin{align*}
 # \min_{f \in \mathcal{M}} J(f)
-# \end{align*}
+# \end{align*} -->
+# 
+# $$
+# \min _{f \in \mathcal{M}} J(f)
+# $$
 # 
 # Intuitively, this is the function that bests "fits" the data on the training dataset.
 
@@ -596,15 +645,19 @@ print('Mean absolute error: %.2f' % mean_absolute_error(y1, y2))
 # 
 # We will see that behind the scenes, the `sklearn.linear_models.LinearRegression` algorithm optimizes the MSE loss.
 # 
-# \begin{align*}
+# <!-- \begin{align*}
 # \min_{\theta \in \mathbb{R}} \frac{1}{2n} \sum_{i=1}^n \left( f_\theta(x^{(i)}) - y^{(i)} \right)^2
-# \end{align*}
+# \end{align*} -->
+# 
+# $$
+# \min _{\theta \in \mathbb{R}} \frac{1}{2 n} \sum_{i=1}^n\left(f_\theta\left(x^{(i)}\right)-y^{(i)}\right)^2
+# $$
 # 
 # We can easily measure the quality of the fit on the training set and the test set.
 
 # Let's run the above algorithm on our diabetes dataset.
 
-# In[19]:
+# In[54]:
 
 
 # Collect 20 data points for training
@@ -630,7 +683,7 @@ diabetes_y_test_pred = regr.predict(diabetes_X_test)
 
 # The algorithm returns a predictive model. We can visualize its predictions below.
 
-# In[21]:
+# In[55]:
 
 
 # visualize the results
@@ -638,7 +691,7 @@ plt.xlabel('Body Mass Index (BMI)')
 plt.ylabel('Diabetes Risk')
 plt.scatter(diabetes_X_train.loc[:, ['bmi']], diabetes_y_train)
 plt.scatter(diabetes_X_test.loc[:, ['bmi']], diabetes_y_test, color='red', marker='o')
-#plt.scatter(diabetes_X_train.loc[:, ['bmi']], diabetes_y_train_pred, color='black', linewidth=1)
+# plt.scatter(diabetes_X_train.loc[:, ['bmi']], diabetes_y_train_pred, color='black', linewidth=1)
 plt.plot(diabetes_X_test.loc[:, ['bmi']], diabetes_y_test_pred, 'x', color='red', mew=3, markersize=8)
 plt.legend(['Model', 'Prediction', 'Initial patients', 'New patients'])
 

@@ -1,0 +1,2240 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 4: Classification and Logistic Regression &#8212; Applied Machine Learning</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 5: Regularization" href="lecture5-regularization.html" />
+    <link rel="prev" title="Lecture 3: Linear Regression" href="lecture3-linear-regression.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Applied Machine Learning</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture2-supervised-learning.html">
+   Lecture 2: Supervised Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture3-linear-regression.html">
+   Lecture 3: Linear Regression
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture5-regularization.html">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture6-naive-bayes.html">
+   Lecture 6: Generative Models and Naive Bayes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+   Lecture 8: Unsupervised Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture9-density-estimation.html">
+   Lecture 9: Density Estimation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture10-clustering.html">
+   Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/lecture4-classification.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontents/lecture4-classification.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/contents/lecture4-classification.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#classification">
+   4.1. Classification
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-components-of-a-supervised-machine-learning-problem">
+     Review: Components of a Supervised Machine Learning Problem
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-regression-vs-classification">
+     4.1.1. Review: Regression vs. Classification
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-classification-dataset-iris-flowers">
+     4.1.2. A Classification Dataset: Iris Flowers
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#understanding-classification">
+     4.1.3. Understanding Classification
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#logistic-regression">
+   4.2. Logistic Regression
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#binary-classification-and-the-iris-dataset">
+     4.2.1. Binary Classification and the Iris Dataset
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-first-attempt-at-classification-using-least-squares">
+     4.2.2. A First Attempt At Classification Using Least Squares
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-logistic-function">
+     4.2.3. The Logistic Function
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-logistic-function-properties">
+       4.2.3.1. The Logistic Function: Properties
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-model-family-for-logistic-regression">
+     4.2.4. A Model Family for Logistic Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#a-model-class">
+       4.2.4.1. A Model Class
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#probabilistic-interpretations">
+       4.2.4.2. Probabilistic Interpretations
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maximum-likelihood">
+   4.3. Maximum Likelihood
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#probabilistic-models">
+     4.3.1. Probabilistic Models
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#recall-supervised-learning-models">
+       4.3.1.1. Recall: Supervised Learning Models
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#probabilistic-machine-learning-models">
+       4.3.1.2. Probabilistic Machine Learning Models
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#more-examples">
+       4.3.1.2. More Examples
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     4.3.2. Maximum Likelihood
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#conditional-maximum-likelihood">
+       4.3.2.1. Conditional Maximum Likelihood
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#from-likelihood-to-log-likelihood">
+         From Likelihood to Log-Likelihood
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#intuitions-for-maximum-likelihood">
+       4.3.2.2. Intuitions for Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id2">
+       4.3.2.3. Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-flipping-a-random-coin">
+       4.3.2.2. Example: Flipping a Random Coin
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#finding-theta-using-maximum-likelihood">
+       4.3.2.3. Finding
+       <span class="math notranslate nohighlight">
+        \(\theta\)
+       </span>
+       Using Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#a-formula-for-coin-flips-using-maximum-likelihood">
+       4.3.2.4. A Formula For Coin Flips Using Maximum Likelihood
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#why-does-maximum-likelihood-work">
+     4.3.3. Why Does Maximum Likelihood Work?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-data-distribution">
+       4.3.3.1. The Data Distribution
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#iid-sampling">
+         IID Sampling
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-distribution-an-example">
+       4.3.3.2. Data Distribution: An Example
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-distribution-motivation">
+       4.3.3.3. Data Distribution: Motivation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#kl-divergences-and-maximum-likelihood">
+       4.3.3.4. KL Divergences and Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#maximum-likelihood-interpretation-of-ols">
+       4.3.4. Maximum Likelihood Interpretation of OLS
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#recall-ordinary-least-squares">
+         Recall: Ordinary Least Squares
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id3">
+       4.3.4.1. Maximum Likelihood Interpretation of OLS
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#learning-a-logistic-regression-model">
+   4.4. Learning a Logistic Regression Model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-logistic-regression-model-family">
+     Review: Logistic Regression Model Family
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#defining-an-objective-for-logistic-regression-using-maximum-lilkelihood">
+     4.4.1. Defining an Objective for Logistic Regression Using Maximum Lilkelihood
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#optimizing-the-logistic-regression-objective-using-gradient-descent">
+     4.4.2. Optimizing the Logistic Regression Objective Using Gradient Descent
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#gradient-of-the-log-likelihood">
+       4.4.2.1. Gradient of the Log-Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#gradient-descent">
+       4.4.2.2. Gradient Descent
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-logistic-regression">
+     4.4.3. Algorithm: Logistic Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#additional-observations-about-logistic-regression">
+       4.3.3.1. Additional Observations About Logistic Regression
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#softmax-regression-for-multi-class-classification">
+   4.5. Softmax Regression for Multi-Class Classification
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#multi-class-classification">
+     4.5.1. Multi-Class Classification
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-softmax-function">
+     4.5.2. The Softmax Function
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#softmax-regression">
+     4.5.3. Softmax Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#recall-logistic-regression">
+       Recall: Logistic Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#softmax-regression-model-class">
+       4.5.3.1. Softmax Regression: Model Class
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#softmax-regression-probabilistic-interpretation">
+       4.5.4.2. Softmax Regression: Probabilistic Interpretation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#softmax-regression-learning-objective-and-optimizer">
+       4.5.4.3. Softmax Regression: Learning Objective and Optimizer
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#algorithm-softmax-regression">
+       4.5.4.4. Algorithm: Softmax Regression
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Lecture 4: Classification and Logistic Regression</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#classification">
+   4.1. Classification
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-components-of-a-supervised-machine-learning-problem">
+     Review: Components of a Supervised Machine Learning Problem
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-regression-vs-classification">
+     4.1.1. Review: Regression vs. Classification
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-classification-dataset-iris-flowers">
+     4.1.2. A Classification Dataset: Iris Flowers
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#understanding-classification">
+     4.1.3. Understanding Classification
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#logistic-regression">
+   4.2. Logistic Regression
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#binary-classification-and-the-iris-dataset">
+     4.2.1. Binary Classification and the Iris Dataset
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-first-attempt-at-classification-using-least-squares">
+     4.2.2. A First Attempt At Classification Using Least Squares
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-logistic-function">
+     4.2.3. The Logistic Function
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-logistic-function-properties">
+       4.2.3.1. The Logistic Function: Properties
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-model-family-for-logistic-regression">
+     4.2.4. A Model Family for Logistic Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#a-model-class">
+       4.2.4.1. A Model Class
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#probabilistic-interpretations">
+       4.2.4.2. Probabilistic Interpretations
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maximum-likelihood">
+   4.3. Maximum Likelihood
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#probabilistic-models">
+     4.3.1. Probabilistic Models
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#recall-supervised-learning-models">
+       4.3.1.1. Recall: Supervised Learning Models
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#probabilistic-machine-learning-models">
+       4.3.1.2. Probabilistic Machine Learning Models
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#more-examples">
+       4.3.1.2. More Examples
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     4.3.2. Maximum Likelihood
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#conditional-maximum-likelihood">
+       4.3.2.1. Conditional Maximum Likelihood
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#from-likelihood-to-log-likelihood">
+         From Likelihood to Log-Likelihood
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#intuitions-for-maximum-likelihood">
+       4.3.2.2. Intuitions for Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id2">
+       4.3.2.3. Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-flipping-a-random-coin">
+       4.3.2.2. Example: Flipping a Random Coin
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#finding-theta-using-maximum-likelihood">
+       4.3.2.3. Finding
+       <span class="math notranslate nohighlight">
+        \(\theta\)
+       </span>
+       Using Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#a-formula-for-coin-flips-using-maximum-likelihood">
+       4.3.2.4. A Formula For Coin Flips Using Maximum Likelihood
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#why-does-maximum-likelihood-work">
+     4.3.3. Why Does Maximum Likelihood Work?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-data-distribution">
+       4.3.3.1. The Data Distribution
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#iid-sampling">
+         IID Sampling
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-distribution-an-example">
+       4.3.3.2. Data Distribution: An Example
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-distribution-motivation">
+       4.3.3.3. Data Distribution: Motivation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#kl-divergences-and-maximum-likelihood">
+       4.3.3.4. KL Divergences and Maximum Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#maximum-likelihood-interpretation-of-ols">
+       4.3.4. Maximum Likelihood Interpretation of OLS
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#recall-ordinary-least-squares">
+         Recall: Ordinary Least Squares
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id3">
+       4.3.4.1. Maximum Likelihood Interpretation of OLS
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#learning-a-logistic-regression-model">
+   4.4. Learning a Logistic Regression Model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-logistic-regression-model-family">
+     Review: Logistic Regression Model Family
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#defining-an-objective-for-logistic-regression-using-maximum-lilkelihood">
+     4.4.1. Defining an Objective for Logistic Regression Using Maximum Lilkelihood
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#optimizing-the-logistic-regression-objective-using-gradient-descent">
+     4.4.2. Optimizing the Logistic Regression Objective Using Gradient Descent
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#gradient-of-the-log-likelihood">
+       4.4.2.1. Gradient of the Log-Likelihood
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#gradient-descent">
+       4.4.2.2. Gradient Descent
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-logistic-regression">
+     4.4.3. Algorithm: Logistic Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#additional-observations-about-logistic-regression">
+       4.3.3.1. Additional Observations About Logistic Regression
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#softmax-regression-for-multi-class-classification">
+   4.5. Softmax Regression for Multi-Class Classification
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#multi-class-classification">
+     4.5.1. Multi-Class Classification
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-softmax-function">
+     4.5.2. The Softmax Function
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#softmax-regression">
+     4.5.3. Softmax Regression
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#recall-logistic-regression">
+       Recall: Logistic Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#softmax-regression-model-class">
+       4.5.3.1. Softmax Regression: Model Class
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#softmax-regression-probabilistic-interpretation">
+       4.5.4.2. Softmax Regression: Probabilistic Interpretation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#softmax-regression-learning-objective-and-optimizer">
+       4.5.4.3. Softmax Regression: Learning Objective and Optimizer
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#algorithm-softmax-regression">
+       4.5.4.4. Algorithm: Softmax Regression
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-4-classification-and-logistic-regression">
+<h1>Lecture 4: Classification and Logistic Regression<a class="headerlink" href="#lecture-4-classification-and-logistic-regression" title="Permalink to this headline">¶</a></h1>
+<p>Next, we turn our attention to another important task in supervised learning—classificaiton. We define this problem and introduce a first set of algorithms.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="classification">
+<h1>4.1. Classification<a class="headerlink" href="#classification" title="Permalink to this headline">¶</a></h1>
+<p>So far, every supervised learning algorithm that we’ve seen has been an instance of regression.</p>
+<p>We will next look at classification. First, let’s define what classification is.</p>
+<section id="review-components-of-a-supervised-machine-learning-problem">
+<h2>Review: Components of a Supervised Machine Learning Problem<a class="headerlink" href="#review-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h2>
+<p>Recall that in order to apply supervised learning, we define a dataset and a learning algorithm.</p>
+<div class="math notranslate nohighlight">
+\[ \underbrace{\text{Dataset}}_\text{Features, Attributes, Targets} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} \]</div>
+<p>The output is a predictive model that maps inputs to targets. For instance, it can predict targets on new inputs.</p>
+</section>
+<section id="review-regression-vs-classification">
+<h2>4.1.1. Review: Regression vs. Classification<a class="headerlink" href="#review-regression-vs-classification" title="Permalink to this headline">¶</a></h2>
+<p>Consider a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
+<p>We distinguish between two types of supervised learning problems depnding on the targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
+<ol class="simple">
+<li><p><strong>Regression</strong>: The target variable <span class="math notranslate nohighlight">\(y \in \mathcal{Y}\)</span> is continuous:  <span class="math notranslate nohighlight">\(\mathcal{Y} \subseteq \mathbb{R}\)</span>.</p></li>
+</ol>
+<ol class="simple">
+<li><p><strong>Classification</strong>: The target variable <span class="math notranslate nohighlight">\(y\)</span> is discrete and takes on one of <span class="math notranslate nohighlight">\(K\)</span> possible values:  <span class="math notranslate nohighlight">\(\mathcal{Y} = \{y_1, y_2, \ldots y_K\}\)</span>. Each discrete value corresponds to a <em>class</em> that we want to predict.</p></li>
+</ol>
+<p>An important special case of classification is when the number of classes <span class="math notranslate nohighlight">\(K=2\)</span>.</p>
+<p>In this case, we have an instance of a <em>binary classification</em> problem.</p>
+</section>
+<section id="a-classification-dataset-iris-flowers">
+<h2>4.1.2. A Classification Dataset: Iris Flowers<a class="headerlink" href="#a-classification-dataset-iris-flowers" title="Permalink to this headline">¶</a></h2>
+<p>To demonstrate classification algorithms, we are going to use the Iris flower dataset.</p>
+<p>It’s a classical dataset originally published by <a class="reference external" href="https://en.wikipedia.org/wiki/Ronald_Fisher">R. A. Fisher</a> in 1936. Nowadays, it’s widely used for demonstrating machine learning algorithms.</p>
+<p>We may again load this algorithm from <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. It comes with a useful description, which we print out.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="c1"># Load the Iris dataset</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.. _iris_dataset:
+
+Iris plants dataset
+--------------------
+
+**Data Set Characteristics:**
+
+    :Number of Instances: 150 (50 in each of three classes)
+    :Number of Attributes: 4 numeric, predictive attributes and the class
+    :Attribute Information:
+        - sepal length in cm
+        - sepal width in cm
+        - petal length in cm
+        - petal width in cm
+        - class:
+                - Iris-Setosa
+                - Iris-Versicolour
+                - Iris-Virginica
+                
+    :Summary Statistics:
+
+    ============== ==== ==== ======= ===== ====================
+                    Min  Max   Mean    SD   Class Correlation
+    ============== ==== ==== ======= ===== ====================
+    sepal length:   4.3  7.9   5.84   0.83    0.7826
+    sepal width:    2.0  4.4   3.05   0.43   -0.4194
+    petal length:   1.0  6.9   3.76   1.76    0.9490  (high!)
+    petal width:    0.1  2.5   1.20   0.76    0.9565  (high!)
+    ============== ==== ==== ======= ===== ====================
+
+    :Missing Attribute Values: None
+    :Class Distribution: 33.3% for each of 3 classes.
+    :Creator: R.A. Fisher
+    :Donor: Michael Marshall (MARSHALL%PLU@io.arc.nasa.gov)
+    :Date: July, 1988
+
+The famous Iris database, first used by Sir R.A. Fisher. The dataset is taken
+from Fisher&#39;s paper. Note that it&#39;s the same as in R, but not as in the UCI
+Machine Learning Repository, which has two wrong data points.
+
+This is perhaps the best known database to be found in the
+pattern recognition literature.  Fisher&#39;s paper is a classic in the field and
+is referenced frequently to this day.  (See Duda &amp; Hart, for example.)  The
+data set contains 3 classes of 50 instances each, where each class refers to a
+type of iris plant.  One class is linearly separable from the other 2; the
+latter are NOT linearly separable from each other.
+
+.. topic:: References
+
+   - Fisher, R.A. &quot;The use of multiple measurements in taxonomic problems&quot;
+     Annual Eugenics, 7, Part II, 179-188 (1936); also in &quot;Contributions to
+     Mathematical Statistics&quot; (John Wiley, NY, 1950).
+   - Duda, R.O., &amp; Hart, P.E. (1973) Pattern Classification and Scene Analysis.
+     (Q327.D83) John Wiley &amp; Sons.  ISBN 0-471-22361-1.  See page 218.
+   - Dasarathy, B.V. (1980) &quot;Nosing Around the Neighborhood: A New System
+     Structure and Classification Rule for Recognition in Partially Exposed
+     Environments&quot;.  IEEE Transactions on Pattern Analysis and Machine
+     Intelligence, Vol. PAMI-2, No. 1, 67-71.
+   - Gates, G.W. (1972) &quot;The Reduced Nearest Neighbor Rule&quot;.  IEEE Transactions
+     on Information Theory, May 1972, 431-433.
+   - See also: 1988 MLC Proceedings, 54-64.  Cheeseman et al&quot;s AUTOCLASS II
+     conceptual clustering system finds 3 classes in the data.
+   - Many, many more ...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print part of the dataset</span>
+<span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal length (cm)</th>
+      <th>sepal width (cm)</th>
+      <th>petal length (cm)</th>
+      <th>petal width (cm)</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.1</td>
+      <td>3.5</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4.9</td>
+      <td>3.0</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.7</td>
+      <td>3.2</td>
+      <td>1.3</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.6</td>
+      <td>3.1</td>
+      <td>1.5</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>3.6</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Let’s visualize this dataset. We first import <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> and other plotting tools.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Code from: https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here is a visualization of this dataset in 3D. Note that we are using the first 3 features (out of 4) in this dateset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># let&#39;s visualize this dataset</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">Axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">elev</span><span class="o">=-</span><span class="mi">150</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">110</span><span class="p">)</span>
+<span class="n">X_reduced</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;3D Projection of the Iris Dataset&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">w_xaxis</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">w_yaxis</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Sepal length&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Sepal width&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;Petal length&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">w_zaxis</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">([])</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y</span><span class="p">,</span>
+           <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Set1</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Iris Setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Iris Versicolour&#39;</span><span class="p">,</span> <span class="s1">&#39;Iris Virginica&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1236419e8&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_14_1.png" src="../_images/lecture4-classification_14_1.png" />
+</div>
+</div>
+</section>
+<section id="understanding-classification">
+<h2>4.1.3. Understanding Classification<a class="headerlink" href="#understanding-classification" title="Permalink to this headline">¶</a></h2>
+<p>How is clasification different from regression?</p>
+<ul class="simple">
+<li><p>In regression, we try to fit a curve through the set of targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>In classification, classes define a partition of the feature space, and our goal is to find the boundaries that separate these regions.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Outputs of classification models often have a simple probabilistic interpretation: they are probabilities that a data point belongs to a given class.</p></li>
+</ul>
+<p>Let’s look at our Iris dataset again. Note that we are now only using the first 2 attributes in this dateset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y</span><span class="p">,</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal Length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal Width&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Versicolour&#39;</span><span class="p">,</span> <span class="s1">&#39;Virginica&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12376d8d0&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_19_1.png" src="../_images/lecture4-classification_19_1.png" />
+</div>
+</div>
+<p>Let’s train a classification algorithm on this data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="n">logreg</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
+
+<span class="c1"># Create an instance of Logistic Regression Classifier and fit the data.</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,:</span><span class="mi">2</span><span class="p">]</span>
+<span class="c1"># rename class two to class one</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">iris_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">logreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LogisticRegression(C=100000.0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Below, we see the regions predicted to be associated with the blue, brown, and yellow classes and the lines between them are the decision boundaries.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">8.2</span><span class="p">,</span> <span class="mf">.02</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">.02</span><span class="p">))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture4-classification_23_0.png" src="../_images/lecture4-classification_23_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="logistic-regression">
+<h1>4.2. Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h1>
+<p>Next, we are going to see our first classification algorithm: logistic regression.</p>
+<section id="binary-classification-and-the-iris-dataset">
+<h2>4.2.1. Binary Classification and the Iris Dataset<a class="headerlink" href="#binary-classification-and-the-iris-dataset" title="Permalink to this headline">¶</a></h2>
+<p>We will to start by looking at binary (two-class) classification.</p>
+<p>To keep things simple, we will use the Iris dataset. We will attempt to distinguish class 0 (Iris Setosa) from the other two classes.</p>
+<p>We only use the first two features in the dataset. Our task is to tell apart Setosa flowers from non-Setosa flowers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># rename class two to class one</span>
+<span class="n">iris_y2</span> <span class="o">=</span> <span class="n">iris_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">iris_y2</span><span class="p">[</span><span class="n">iris_y2</span><span class="o">==</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal Length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal Width&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Non-Setosa&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x123b7add8&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_27_1.png" src="../_images/lecture4-classification_27_1.png" />
+</div>
+</div>
+</section>
+<section id="a-first-attempt-at-classification-using-least-squares">
+<h2>4.2.2. A First Attempt At Classification Using Least Squares<a class="headerlink" href="#a-first-attempt-at-classification-using-least-squares" title="Permalink to this headline">¶</a></h2>
+<p>Recall that the linear regression algorithm fits a linear model of the form</p>
+<div class="math notranslate nohighlight">
+\[ 
+f(x) = \sum_{j=0}^d \theta_j \cdot x_j = \theta^\top x. 
+\]</div>
+<p>It minimizes the mean squared error (MSE)</p>
+<div class="math notranslate nohighlight">
+\[
+J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)}-\theta^\top x^{(i)})^2
+\]</div>
+<p>on a dataset <span class="math notranslate nohighlight">\(\{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
+<p>We could use least squares to solve our classification problem, setting <span class="math notranslate nohighlight">\(\mathcal{Y} = \{0, 1\}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/linear_model/plot_iris_logistic.html   </span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="n">linreg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+
+<span class="c1"># Fit the data.</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">iris_y2</span>
+<span class="n">linreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LinearRegression()
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ordinary least squares returns a decision boundary that is not unreasonable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the decision boundary. For that, we will assign a color to each</span>
+<span class="c1"># point in the mesh [x_min, x_max]x[y_min, y_max].</span>
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">.5</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">.5</span>
+<span class="n">h</span> <span class="o">=</span> <span class="mf">.02</span>  <span class="c1"># step size in the mesh</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">linreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+<span class="n">Z</span><span class="p">[</span><span class="n">Z</span><span class="o">&gt;</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Z</span><span class="p">[</span><span class="n">Z</span><span class="o">&lt;</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture4-classification_33_0.png" src="../_images/lecture4-classification_33_0.png" />
+</div>
+</div>
+<p>However, applying ordinary least squares is problematic for a few reasons.</p>
+<ul class="simple">
+<li><p>There is nothing to prevent outputs larger than one or smaller than zero, which is conceptually wrong</p></li>
+<li><p>We also don’t have optimal performance: at least one point is misclassified, and others are too close to the decision boundary.</p></li>
+</ul>
+</section>
+<section id="the-logistic-function">
+<h2>4.2.3. The Logistic Function<a class="headerlink" href="#the-logistic-function" title="Permalink to this headline">¶</a></h2>
+<p>To address the fact that the output of linear regression is not in <span class="math notranslate nohighlight">\([0,1]\)</span>, we will instead attempt to <em>squeeze</em> it into that range using</p>
+<div class="math notranslate nohighlight">
+\[ 
+\sigma(z) = \frac{1}{1 + \exp(-z)}. 
+\]</div>
+<p>This is known as the <em>sigmoid</em> or <em>logistic</em> function.</p>
+<p>The logistic function <span class="math notranslate nohighlight">\(\sigma : \mathbb{R} \to [0,1]\)</span> “squeezes” points from the real line into <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x12c456cc0&gt;]
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_37_1.png" src="../_images/lecture4-classification_37_1.png" />
+</div>
+</div>
+<section id="the-logistic-function-properties">
+<h3>4.2.3.1. The Logistic Function: Properties<a class="headerlink" href="#the-logistic-function-properties" title="Permalink to this headline">¶</a></h3>
+<p>The sigmoid function is defined as</p>
+<div class="math notranslate nohighlight">
+\[ 
+\sigma(z) = \frac{1}{1 + \exp(-z)}. 
+\]</div>
+<p>A few observations:</p>
+<ul class="simple">
+<li><p>The function tends to 1 as <span class="math notranslate nohighlight">\(z \to \infty\)</span> and tends to 0 as <span class="math notranslate nohighlight">\(z \to -\infty\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Thus, models of the form <span class="math notranslate nohighlight">\(\sigma(\theta^\top x)\)</span> output values between 0 and 1, which is suitable for binary classification.</p></li>
+</ul>
+<ul class="simple">
+<li><p>It is easy to show that the derivative of <span class="math notranslate nohighlight">\(\sigma(z)\)</span> has a simple form:
+<span class="math notranslate nohighlight">\(\frac{d\sigma}{dz} = \sigma(z)(1-\sigma(z)).\)</span></p></li>
+</ul>
+</section>
+</section>
+<section id="a-model-family-for-logistic-regression">
+<h2>4.2.4. A Model Family for Logistic Regression<a class="headerlink" href="#a-model-family-for-logistic-regression" title="Permalink to this headline">¶</a></h2>
+<p>Next, we will use the logistic function to define our first classification algorithm—logistic regression.</p>
+<p>We will start by defining the model class for this algorithm. Later on we will also define the objective and the optimizer.</p>
+<section id="a-model-class">
+<h3>4.2.4.1. A Model Class<a class="headerlink" href="#a-model-class" title="Permalink to this headline">¶</a></h3>
+<p>Logistic regression is a classification algorithm which uses a model <span class="math notranslate nohighlight">\(f_\theta\)</span> of the form</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta(x) = \sigma(\theta^\top x) = \frac{1}{1 + \exp(-\theta^\top x)}, 
+\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[ 
+\sigma(z) = \frac{1}{1 + \exp(-z)} 
+\]</div>
+<p>is the <em>sigmoid</em> or <em>logistic</em> function.</p>
+<p>Note that we effectively start with a linear model like in ordinary least squares and then “squeeze” its output to be in <span class="math notranslate nohighlight">\([0,1]\)</span> using the logistic function.</p>
+<p>Note also that logistic regression is actually a binary <strong>classification</strong> algorithm.
+The term <em>regression</em> is an unfortunate historical misnomer.</p>
+<p>Let’s implement a logistic regression model in <code class="docutils literal notranslate"><span class="pre">numpy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The sigmoid model we are trying to fit.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    theta (np.array): d-dimensional vector of parameters</span>
+<span class="sd">    X (np.array): (n,d)-dimensional data matrix</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    y_pred (np.array): n-dimensional vector of predicted targets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Currently, this model is not very useful—we need to use it with a good set of weights <code class="docutils literal notranslate"><span class="pre">theta</span></code>. We will shortly explain how to find good <code class="docutils literal notranslate"><span class="pre">theta</span></code>.</p>
+</section>
+<section id="probabilistic-interpretations">
+<h3>4.2.4.2. Probabilistic Interpretations<a class="headerlink" href="#probabilistic-interpretations" title="Permalink to this headline">¶</a></h3>
+<p>The logistic model can be interpreted to output a probability, and defines a conditional probability distribution as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+P_\theta(y=1 | x) &amp; = \sigma(\theta^\top x) \\
+P_\theta(y=0 | x) &amp; = 1-\sigma(\theta^\top x).
+\end{align*}
+\end{split}\]</div>
+<p>Recall that a probability over <span class="math notranslate nohighlight">\(y\in \{0,1\}\)</span> is called Bernoulli.</p>
+<p>We will next use this probabilistic interpretation to define an objective for logistic regression.</p>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood">
+<h1>4.3. Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Permalink to this headline">¶</a></h1>
+<p>In order to train a logistic regression model, we need to define an objective.</p>
+<p>We derive this objective by first introducing a general principle for training machine learning models—the principle of maximum likelihood.</p>
+<section id="probabilistic-models">
+<h2>4.3.1. Probabilistic Models<a class="headerlink" href="#probabilistic-models" title="Permalink to this headline">¶</a></h2>
+<section id="recall-supervised-learning-models">
+<h3>4.3.1.1. Recall: Supervised Learning Models<a class="headerlink" href="#recall-supervised-learning-models" title="Permalink to this headline">¶</a></h3>
+<p>A supervised learning model is a function</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta : \mathcal{X} \to \mathcal{Y} 
+\]</div>
+<p>that maps inputs <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span> to targets <span class="math notranslate nohighlight">\(y \in \mathcal{Y}\)</span>.</p>
+<p>Models have <em>parameters</em> <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span> living in a set <span class="math notranslate nohighlight">\(\Theta\)</span>.</p>
+</section>
+<section id="probabilistic-machine-learning-models">
+<h3>4.3.1.2. Probabilistic Machine Learning Models<a class="headerlink" href="#probabilistic-machine-learning-models" title="Permalink to this headline">¶</a></h3>
+<p>Many supervised learning models have a probabilistic interpretation.
+Often a model <span class="math notranslate nohighlight">\(f_\theta\)</span> defines a probability distribution of the form</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+P_\theta(y|x) : \mathcal{X} \times \mathcal{Y} \to [0,1] &amp;&amp; \text{or} &amp;&amp; P_\theta(x,y) : \mathcal{X} \times \mathcal{Y} \to [0,1].
+\end{align*}
+\]</div>
+<p>We refer to these as <em>probabilistic models</em>.</p>
+<p>Let’s dissect what it means to have a probabilistic model <span class="math notranslate nohighlight">\(P_\theta(y|x) : \mathcal{X} \times \mathcal{Y} \to [0,1]\)</span>.</p>
+<ul class="simple">
+<li><p>For each <span class="math notranslate nohighlight">\(\theta\)</span>, this is a mapping that takes <span class="math notranslate nohighlight">\(x, y\)</span> as input and outputs a number <span class="math notranslate nohighlight">\(P_\theta(y|x)\)</span> in <span class="math notranslate nohighlight">\([0,1]\)</span>.</p></li>
+<li><p>Summing this <span class="math notranslate nohighlight">\(P_\theta(y|x)\)</span> over <span class="math notranslate nohighlight">\(y\)</span> for any <span class="math notranslate nohighlight">\(x\)</span> gives one.</p></li>
+<li><p>Hence <span class="math notranslate nohighlight">\(P_\theta(y|x)\)</span> can be interpreted as a probability distribution over <span class="math notranslate nohighlight">\(y\)</span> at each <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+</ul>
+<p>For example, our logistic model defines (“parameterizes”) a probability distribution <span class="math notranslate nohighlight">\(P_\theta(y|x) : \mathcal{X} \times \mathcal{Y} \to [0,1]\)</span> as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+P_\theta(y=1 | x) &amp; = \sigma(\theta^\top x) \\
+P_\theta(y=0 | x) &amp; = 1-\sigma(\theta^\top x).
+\end{align*}
+\end{split}\]</div>
+<p>Clearly this sums to one over <span class="math notranslate nohighlight">\(y\)</span> for all <span class="math notranslate nohighlight">\(x\)</span>.</p>
+</section>
+<section id="more-examples">
+<h3>4.3.1.2. More Examples<a class="headerlink" href="#more-examples" title="Permalink to this headline">¶</a></h3>
+<p>What are some other ways to define a distribution <span class="math notranslate nohighlight">\(P_\theta(y|x) : \mathcal{X} \times \mathcal{Y} \to [0,1]\)</span>?</p>
+<ul class="simple">
+<li><p>We start with an input <span class="math notranslate nohighlight">\(x\)</span>, and we pass it to a function <span class="math notranslate nohighlight">\(f\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f(x)\)</span> outputs the parameters <span class="math notranslate nohighlight">\(\mu(x), \Sigma(x)\)</span> of a Gaussian distribution over <span class="math notranslate nohighlight">\(y\)</span>.</p></li>
+<li><p>The distribution <span class="math notranslate nohighlight">\(P(y; \psi(x))\)</span> is Gaussian with mean and variance <span class="math notranslate nohighlight">\(\mu(x), \Sigma(x)\)</span>.</p></li>
+</ul>
+<p>Interestingly, the ordinary least squares algorithm can be interepreted as doing precisely this (with a fixed <span class="math notranslate nohighlight">\(\Sigma(x)=1\)</span>). See below for details.</p>
+<p>More generally, the following recipe is common:</p>
+<ul class="simple">
+<li><p>We start with an input <span class="math notranslate nohighlight">\(x\)</span>, and we pass it to a function <span class="math notranslate nohighlight">\(f\)</span>.</p></li>
+<li><p>Normally <span class="math notranslate nohighlight">\(f(x)\)</span> returns <span class="math notranslate nohighlight">\(y'\)</span>, an estimate for the target.</p></li>
+<li><p>Alternatively, <span class="math notranslate nohighlight">\(f\)</span> could output a parameter <span class="math notranslate nohighlight">\(\psi(x)\)</span> for a distribution over <span class="math notranslate nohighlight">\(y\)</span> (Gaussian, Bernoulli, Poisson, etc.)</p></li>
+<li><p>The distribution <span class="math notranslate nohighlight">\(P(y; \psi(x))\)</span> is a probability over <span class="math notranslate nohighlight">\(y\)</span> parameterized by <span class="math notranslate nohighlight">\(\psi(x)\)</span>.</p></li>
+</ul>
+<p>The above is an example of how for each <span class="math notranslate nohighlight">\(x\)</span> a model outputs a distribution over <span class="math notranslate nohighlight">\(y\)</span>. We will later see generative models that define a joint distribution <span class="math notranslate nohighlight">\(P(x,y)\)</span> over <span class="math notranslate nohighlight">\(x,y\)</span>.</p>
+</section>
+</section>
+<section id="id1">
+<h2>4.3.2. Maximum Likelihood<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Maximum likelihood is a general principle for deriving a training objective for any model that has a probabilistic interpretation.</p>
+<section id="conditional-maximum-likelihood">
+<h3>4.3.2.1. Conditional Maximum Likelihood<a class="headerlink" href="#conditional-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
+<p>We can train any model that defines a probability distribution <span class="math notranslate nohighlight">\(P_\theta(y|x)\)</span> by optimizing
+the <em>conditional maximum likelihood</em> objective</p>
+<div class="math notranslate nohighlight">
+\[
+L(\theta) = \prod_{i=1}^n P_\theta(y^{(i)}|{x}^{(i)})
+\]</div>
+<p>defined over a dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
+<p>This asks that for each input <span class="math notranslate nohighlight">\(x^{(i)}\)</span> in the dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>, <span class="math notranslate nohighlight">\(P_\theta\)</span> should assign a high probability to the correct target <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
+<section id="from-likelihood-to-log-likelihood">
+<h4>From Likelihood to Log-Likelihood<a class="headerlink" href="#from-likelihood-to-log-likelihood" title="Permalink to this headline">¶</a></h4>
+<p>A lot of mathematical derivations and numerical calculations become simpler if we instead maximize the log of the likelihood:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\ell(\theta) = \log L(\theta) &amp; = \log \prod_{i=1}^n P_\theta(y^{(i)} | {x}^{(i)}) = \sum_{i=1}^n \log P_\theta(y^{(i)} | {x}^{(i)}).
+\end{align*}
+\]</div>
+<p>Note that since the log is a monotonically increasing function, it doesn’t change the optimal <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>Finally, it’s often simpler to take the average, instead of the sum. This gives us the following learning principle, known as <em>maximum log-likelihood</em>:</p>
+<div class="math notranslate nohighlight">
+\[
+\max_\theta \ell(\theta) = \max_{\theta} \frac{1}{n}\sum_{i=1}^n \log P_\theta(y^{(i)} | {x}^{(i)}).
+\]</div>
+</section>
+</section>
+<section id="intuitions-for-maximum-likelihood">
+<h3>4.3.2.2. Intuitions for Maximum Likelihood<a class="headerlink" href="#intuitions-for-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
+<p>Why is maximum likelihood a good objective? We can provide some initial intuitions.</p>
+<ul class="simple">
+<li><p>Given <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, our model defines a distribution <span class="math notranslate nohighlight">\(P_\theta(y|x^{(i)})\)</span> over <span class="math notranslate nohighlight">\(y\)</span></p></li>
+<li><p>We want to choose the weights such that the true label <span class="math notranslate nohighlight">\(y^{(i)}\)</span> has the highest possible probability at each known <span class="math notranslate nohighlight">\(x^{(i)}\)</span></p></li>
+</ul>
+<p>Recall our earlier example with logistic regression.</p>
+<ul class="simple">
+<li><p>The model defines a probability <span class="math notranslate nohighlight">\(P_\theta(y=1 | x^{(i)})  = \sigma(\theta^\top x)\)</span> for each <span class="math notranslate nohighlight">\(x^{(i)}\)</span>.</p></li>
+<li><p>The principle of maximum likelihood says that we should maximize this value, i.e. <span class="math notranslate nohighlight">\(\sigma(\theta^\top x^{(i)})\)</span> should be large when <span class="math notranslate nohighlight">\(y^{(i)}=1\)</span></p></li>
+<li><p>But <span class="math notranslate nohighlight">\(\sigma(\theta^\top x^{(i)})\)</span> is the output of <span class="math notranslate nohighlight">\(f_\theta(x^{(i)})\)</span>—hence maximum likelihood asks the model <span class="math notranslate nohighlight">\(f_\theta = \sigma(\theta^\top x)\)</span> to output values close to one when the true label is one.</p></li>
+<li><p>Similarly, when <span class="math notranslate nohighlight">\(y^{(i)}=0\)</span>, maximum likelihood asks <span class="math notranslate nohighlight">\(1-\sigma(\theta^\top x^{(i)})\)</span> to be large, hence <span class="math notranslate nohighlight">\(\sigma(\theta^\top x^{(i)})\)</span> will be small, and thus <span class="math notranslate nohighlight">\(f_\theta(x^{(i)})\)</span> will be close to zero when the true label is zero.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3>4.3.2.3. Maximum Likelihood<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>More generally, we can train any model that defines a probability distribution <span class="math notranslate nohighlight">\(P_\theta(x,y)\)</span> by optimizing
+the <em>maximum likelihood</em> objective</p>
+<div class="math notranslate nohighlight">
+\[
+L(\theta) = \prod_{i=1}^n P_\theta({x}^{(i)}, y^{(i)})
+\]</div>
+<p>defined over a dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
+<p>The principle of maximum likelihood says that we should find model parameters <span class="math notranslate nohighlight">\(\theta\)</span> that yield high likelihood.</p>
+<p>In other words, this means that we want to find <span class="math notranslate nohighlight">\(\theta\)</span> such that the training dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> has a high probability under the probability distribution <span class="math notranslate nohighlight">\(P_\theta\)</span> induced by the model. To put it differently, the model <span class="math notranslate nohighlight">\(P_\theta\)</span> is likely to have generated the data.</p>
+<p>As before, it is often simpler to work with log-probabilites. Taking the logs and performing the same analysis as earlier, we obtain the following learning principle, known as <em>maximum log-likelihood</em>:</p>
+<div class="math notranslate nohighlight">
+\[
+\max_\theta \ell(\theta) = \max_{\theta} \frac{1}{n}\sum_{i=1}^n \log P_\theta({x}^{(i)}, y^{(i)}).
+\]</div>
+</section>
+<section id="example-flipping-a-random-coin">
+<h3>4.3.2.2. Example: Flipping a Random Coin<a class="headerlink" href="#example-flipping-a-random-coin" title="Permalink to this headline">¶</a></h3>
+<p>Consider a simple example in which we repeatedly toss a biased coin and record the outcomes.</p>
+<ul class="simple">
+<li><p>There are two possible outcomes: heads (<span class="math notranslate nohighlight">\(H\)</span>) and tails (<span class="math notranslate nohighlight">\(T\)</span>). A training dataset consists of tosses of the biased coin, e.g., <span class="math notranslate nohighlight">\(\mathcal{D}=\{H,H,T,H,T\}\)</span></p></li>
+</ul>
+<ul class="simple">
+<li><p>Assumption: true probability distribution is <span class="math notranslate nohighlight">\(P_{\textrm{data}}(x)\)</span>, <span class="math notranslate nohighlight">\(x \in \{H,T\}\)</span></p></li>
+</ul>
+<ul class="simple">
+<li><p>Our task is to determine the probability <span class="math notranslate nohighlight">\(\theta\)</span> of seeing heads.</p></li>
+</ul>
+</section>
+<section id="finding-theta-using-maximum-likelihood">
+<h3>4.3.2.3. Finding <span class="math notranslate nohighlight">\(\theta\)</span> Using Maximum Likelihood<a class="headerlink" href="#finding-theta-using-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
+<p>How should we choose <span class="math notranslate nohighlight">\(\theta\)</span> if 3 out of 5 tosses are heads? Let’s apply maximum likelihood learning.</p>
+<ul class="simple">
+<li><p>Our dataset is <span class="math notranslate nohighlight">\(\mathcal{D}=\{x^{(1)},x^{(2)},x^{(3)},x^{(4)},x^{(5)}\}=\{H,H,T,H,T\}\)</span></p></li>
+<li><p>Our model is <span class="math notranslate nohighlight">\(P_\theta(x)=\theta\)</span> if <span class="math notranslate nohighlight">\(x=H\)</span> and <span class="math notranslate nohighlight">\(P_\theta(x)=1-\theta\)</span> if <span class="math notranslate nohighlight">\(x=T\)</span>, and there is a single parameter <span class="math notranslate nohighlight">\(\theta \in [0,1]\)</span></p></li>
+<li><p>The likelihood of the data is <span class="math notranslate nohighlight">\(L(\theta) = \prod_{i=1}^n P_\theta(x^{(i)})=\theta \cdot \theta \cdot (1-\theta) \cdot \theta \cdot (1-\theta)\)</span>.</p></li>
+</ul>
+<p>We optimize for <span class="math notranslate nohighlight">\(\theta\)</span> which makes <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> most likely. What is the solution in this case?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="c1"># our dataset is {H, H, T, H, T}; if theta = P(x=H), we get:</span>
+<span class="n">coin_likelihood</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">theta</span><span class="p">:</span> <span class="n">theta</span><span class="o">*</span><span class="n">theta</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">theta</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">theta</span><span class="p">)</span>
+
+<span class="n">theta_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Likelihood of the Data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Parameter Theta&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="mf">0.6</span><span class="p">],</span> <span class="p">[</span><span class="n">coin_likelihood</span><span class="p">(</span><span class="mf">0.6</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta_vals</span><span class="p">,</span> <span class="n">coin_likelihood</span><span class="p">(</span><span class="n">theta_vals</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x11ae41208&gt;]
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_71_1.png" src="../_images/lecture4-classification_71_1.png" />
+</div>
+</div>
+<p>The likelihood <span class="math notranslate nohighlight">\(L(\theta)\)</span> is maximized by <span class="math notranslate nohighlight">\(\theta=0.6\)</span>, which is also what we expect intuitively since 3/5 tosses are heads.</p>
+</section>
+<section id="a-formula-for-coin-flips-using-maximum-likelihood">
+<h3>4.3.2.4. A Formula For Coin Flips Using Maximum Likelihood<a class="headerlink" href="#a-formula-for-coin-flips-using-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
+<p>Our log-likelihood function is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{eqnarray}
+\nonumber
+L(\theta) &amp;=&amp; \theta^{\#\,\text{heads}} \cdot (1-\theta)^{\#\,\text{tails}}\\
+\nonumber
+\log L(\theta) &amp;=&amp; \log(\theta^{\#\,\text{heads}} \cdot (1-\theta)^{\#\,\text{tails}}) \\
+\nonumber
+&amp;=&amp; \#\,\text{heads} \cdot \log(\theta) + \#\,\text{tails} \cdot \log(1-\theta)
+\end{eqnarray}
+\end{split}\]</div>
+<p>The maximum likelihood estimate is the <span class="math notranslate nohighlight">\(\theta^* \in [0,1]\)</span> such that <span class="math notranslate nohighlight">\(\log L(\theta^*)\)</span> is maximized.</p>
+<p>Differentiating the log-likelihood function with respect to <span class="math notranslate nohighlight">\(\theta\)</span> and setting the derivative to zero, we obtain</p>
+<div class="math notranslate nohighlight">
+\[
+\theta^*= \frac{\#\,\text{heads}}{\#\,\text{heads}+\#\,\text{tails}}
+\]</div>
+<p>When exact solutions are not available, we can optimize the log likelihood numerically, e.g. using gradient descent.</p>
+<p>We will see examples of this later.</p>
+</section>
+</section>
+<section id="why-does-maximum-likelihood-work">
+<h2>4.3.3. Why Does Maximum Likelihood Work?<a class="headerlink" href="#why-does-maximum-likelihood-work" title="Permalink to this headline">¶</a></h2>
+<p>Next, we want to provide some more precise mathematical arguments for why maximum likelihood is a good objective. This section is not essential for understanding the key ideas of the course and is aimed at advanced readers who wish to gain a deeper understanding of the material.</p>
+<section id="the-data-distribution">
+<h3>4.3.3.1. The Data Distribution<a class="headerlink" href="#the-data-distribution" title="Permalink to this headline">¶</a></h3>
+<p>In machine learning, it is common to assume that our dataset is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as</p>
+<div class="math notranslate nohighlight">
+\[ 
+x, y \sim P_\text{data}. 
+\]</div>
+<p>The training set <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}) \mid i = 1,2,...,n\}\)</span> consists of <em>independent and identicaly distributed</em> (IID) samples from <span class="math notranslate nohighlight">\(P_\text{data}\)</span>.</p>
+<section id="iid-sampling">
+<h4>IID Sampling<a class="headerlink" href="#iid-sampling" title="Permalink to this headline">¶</a></h4>
+<p>The key assumption is that the training examples are <em>independent and identicaly distributed</em> (IID).</p>
+<ul class="simple">
+<li><p>Each training example is from the same distribution.</p></li>
+<li><p>This distribution doesn’t depend on previous training examples.</p></li>
+</ul>
+<p><strong>Example</strong>: Flipping a coin. Each flip has same probability of heads &amp; tails and doesn’t depend on previous flips.</p>
+<p><strong>Counter-Example</strong>: Yearly census data. The population in each year will be close to that of the previous year.</p>
+</section>
+</section>
+<section id="data-distribution-an-example">
+<h3>4.3.3.2. Data Distribution: An Example<a class="headerlink" href="#data-distribution-an-example" title="Permalink to this headline">¶</a></h3>
+<p>Let’s implement an example of a data distribution in numpy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s visualize it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11bb46b70&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_83_1.png" src="../_images/lecture4-classification_83_1.png" />
+</div>
+</div>
+<p>Let’s now draw samples from a data distribution. We will generate random <span class="math notranslate nohighlight">\(x\)</span>, and then generate random <span class="math notranslate nohighlight">\(y\)</span> using</p>
+<div class="math notranslate nohighlight">
+\[ 
+y = f(x) + \epsilon 
+\]</div>
+<p>for a random noise variable <span class="math notranslate nohighlight">\(\epsilon\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize the samples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11bd52438&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_87_1.png" src="../_images/lecture4-classification_87_1.png" />
+</div>
+</div>
+</section>
+<section id="data-distribution-motivation">
+<h3>4.3.3.3. Data Distribution: Motivation<a class="headerlink" href="#data-distribution-motivation" title="Permalink to this headline">¶</a></h3>
+<p>Why assume that the dataset is sampled from a distribution?</p>
+<ul class="simple">
+<li><p>The process we model may be effectively random. If <span class="math notranslate nohighlight">\(y\)</span> is a stock price, there is randomness in the market that cannot be captured by a deterministic model.</p></li>
+</ul>
+<ul class="simple">
+<li><p>There may be noise and randomness in the data collection process itself (e.g., collecting readings from an imperfect thermometer).</p></li>
+</ul>
+<ul class="simple">
+<li><p>We can use probability and statistics to analyze supervised learning algorithms and prove that they work.</p></li>
+</ul>
+</section>
+<section id="kl-divergences-and-maximum-likelihood">
+<h3>4.3.3.4. KL Divergences and Maximum Likelihood<a class="headerlink" href="#kl-divergences-and-maximum-likelihood" title="Permalink to this headline">¶</a></h3>
+<p>Maximizing likelihood is closely related to minimizing the Kullback-Leibler (KL) divergence <span class="math notranslate nohighlight">\(D(\cdot\|\cdot)\)</span> between the model distribution and the data distribution.</p>
+<div class="math notranslate nohighlight">
+\[
+D(p \| q) = \sum_{{\bf x}} p({\bf x}) \log \frac{p({\bf x})}{q({\bf x})}.
+\]</div>
+<p>The KL divergence is always non-negative, and equals zero when <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span> are identical. This makes it a natural measure of similarity that’s useful for comparing distributions.</p>
+<p>Let <span class="math notranslate nohighlight">\(\hat{P}(x, y)\)</span> denote the <em>empirical</em> distribution of the data:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\hat{P}(x, y) = \begin{cases}
+\frac{1}{n} &amp; \text{if } (x,y) \in \mathcal{D} \\
+0 &amp; \text{otherwise.}
+\end{cases}
+\end{split}\]</div>
+<p>This distribution assigns a probability of <span class="math notranslate nohighlight">\(1/n\)</span> to each of the data points in <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> (and zero to all the other possible <span class="math notranslate nohighlight">\((x,y)\)</span>); it can be seen as a guess of the true data distribution from which the dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> was obtained.</p>
+<p>Selecting parameters <span class="math notranslate nohighlight">\(\theta\)</span> by maximizing the likelihood is equivalent to selecting <span class="math notranslate nohighlight">\(\theta\)</span> that minimizes the KL divergence between the empirical data distribution and the model distribution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\max_{\theta} \frac{1}{n} \sum_{i=1}^n \log P_\theta({x}^{(i)}, y^{(i)})
+&amp; = \max_{\theta} \mathbb{E}_{\hat{P}(x, y)} \left[ \log P_\theta(x,y) \right] \\
+&amp; = \min_{\theta} KL(\hat{P}(x,y) || P_\theta(x,y) ).
+\end{align*}
+\end{split}\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(\mathbb{E}_{p(x)} f(x)\)</span> denotes <span class="math notranslate nohighlight">\(\sum_{x \in \mathcal{X}} f(x) p(x)\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is discrete and <span class="math notranslate nohighlight">\(\int_{x \in \mathcal{X}} f(x) p(x) dx\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is continuous.</p>
+<p>The same is true for conditional log-likelihood (homework problem!):</p>
+<div class="math notranslate nohighlight">
+\[
+\max_{\theta} \mathbb{E}_{\hat{P}(x, y)} \left[ \log P_\theta(y|x) \right] = \min_{\theta} \mathbb{E}_{\hat{P}(x)} \left[ KL(\hat{P}(y|x) || P_\theta(y|x) )\right].
+\]</div>
+</section>
+<section id="maximum-likelihood-interpretation-of-ols">
+<h3>4.3.4. Maximum Likelihood Interpretation of OLS<a class="headerlink" href="#maximum-likelihood-interpretation-of-ols" title="Permalink to this headline">¶</a></h3>
+<p>Finally, we want to conclude with another example of the principle of maximum likelihood. We will show that the ordinary least squares algorithm from the previous lecture is also an instance of maximum likelihood learning underneath the hood.</p>
+<section id="recall-ordinary-least-squares">
+<h4>Recall: Ordinary Least Squares<a class="headerlink" href="#recall-ordinary-least-squares" title="Permalink to this headline">¶</a></h4>
+<p>Recall that in ordinary least squares (OLS), we have a linear model of the form</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = \sum_{j=0}^d \theta_j \cdot x_j = \theta^\top x.
+\]</div>
+<p>At each training instance <span class="math notranslate nohighlight">\((x,y)\)</span>, we seek to minimize the squared error</p>
+<div class="math notranslate nohighlight">
+\[
+(y - \theta^\top x)^2.
+\]</div>
+</section>
+</section>
+<section id="id3">
+<h3>4.3.4.1. Maximum Likelihood Interpretation of OLS<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Let’s make our usual linear regression model probabilistic: assume that the targets and the inputs are related by</p>
+<div class="math notranslate nohighlight">
+\[ y = \theta^\top x + \epsilon, \]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon \sim \mathcal{N}(0,\sigma^2)\)</span> is a random noise term that follows a Gaussian (or “Normal”) distribution.</p>
+<p>The density of <span class="math notranslate nohighlight">\(\epsilon \sim \mathcal{N}(0,\sigma^2)\)</span> is a Gaussian distribution:</p>
+<div class="math notranslate nohighlight">
+\[ 
+P(\epsilon; \sigma) = \frac{1}{\sqrt{2\pi}\sigma} \exp\left( -\frac{\epsilon^2}{2 \sigma^2} \right).
+\]</div>
+<p>This implies that</p>
+<div class="math notranslate nohighlight">
+\[ 
+P(y | x; \theta) = \frac{1}{\sqrt{2\pi}\sigma} \exp\left( -\frac{(y - \theta^\top x)^2}{2 \sigma^2} \right).
+\]</div>
+<p>This is a Gaussian distribution with mean <span class="math notranslate nohighlight">\(\mu_\theta(x) = \theta^\top x\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
+<p>Given an input of <span class="math notranslate nohighlight">\(x\)</span>, this model outputs a “mini Bell curve” with width <span class="math notranslate nohighlight">\(\sigma\)</span> around the mean <span class="math notranslate nohighlight">\(\mu(x) = \sigma^\top x\)</span>.</p>
+<p>Let’s now learn the parameters <span class="math notranslate nohighlight">\(\theta\)</span> of</p>
+<div class="math notranslate nohighlight">
+\[ 
+P(y | x; \theta) = \frac{1}{\sqrt{2\pi}\sigma} \exp\left( -\frac{(y - \theta^\top x)^2}{2 \sigma^2} \right)
+\]</div>
+<p>using maximum likelihood.</p>
+<p>The log-likelihood of this model at a point <span class="math notranslate nohighlight">\((x,y)\)</span> equals</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\log L(\theta) = \log p(y | x; \theta) = \text{const}_1 \cdot (y - \theta^\top x)^2 + \text{const}_2
+\end{align*}
+\]</div>
+<p>for some constants <span class="math notranslate nohighlight">\(\text{const}_1, \text{const}_2\)</span>. But that’s just the least squares objective!</p>
+<p>Least squares thus amounts to fitting a Gaussian  model <span class="math notranslate nohighlight">\(\mathcal{N}(y; \mu(x), \sigma)\)</span> with a standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> of one and a mean of <span class="math notranslate nohighlight">\(\mu(x) = \theta^\top x\)</span>.</p>
+<p>Note in particular that OLS implicitly makes the assumption that the noise is Gaussian around the mean.</p>
+<p>When that’s not the case, you may want to also experiment with other kinds of models.</p>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="learning-a-logistic-regression-model">
+<h1>4.4. Learning a Logistic Regression Model<a class="headerlink" href="#learning-a-logistic-regression-model" title="Permalink to this headline">¶</a></h1>
+<p>Next, we will use maximum likelihood to learn the parameters of a logistic regression model.</p>
+<section id="review-logistic-regression-model-family">
+<h2>Review: Logistic Regression Model Family<a class="headerlink" href="#review-logistic-regression-model-family" title="Permalink to this headline">¶</a></h2>
+<p>Recall that a logistic model defines (“parameterizes”) a probability distribution <span class="math notranslate nohighlight">\(P_\theta(y|x) : \mathcal{X} \times \mathcal{Y} \to [0,1]\)</span> as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+P_\theta(y=1 | x) &amp; = \sigma(\theta^\top x) \\
+P_\theta(y=0 | x) &amp; = 1-\sigma(\theta^\top x).
+\end{align*}
+\end{split}\]</div>
+<p>When <span class="math notranslate nohighlight">\(y \in \{0,1\}\)</span>, can write this more compactly as</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+P_\theta(y | x) = \sigma(\theta^\top x)^y \cdot (1-\sigma(\theta^\top x))^{1-y}
+\end{align*}
+\]</div>
+</section>
+<section id="defining-an-objective-for-logistic-regression-using-maximum-lilkelihood">
+<h2>4.4.1. Defining an Objective for Logistic Regression Using Maximum Lilkelihood<a class="headerlink" href="#defining-an-objective-for-logistic-regression-using-maximum-lilkelihood" title="Permalink to this headline">¶</a></h2>
+<p>Following the principle of maximum likelihood, we want to optimize the following objective defined over a binary classification dataset  <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\ell(\theta) &amp; = \frac{1}{n}\sum_{i=1}^n \log P_\theta (y^{(i)} \mid x^{(i)}) \\
+&amp; = \frac{1}{n}\sum_{i=1}^n \log \sigma(\theta^\top x^{(i)})^{y^{(i)}} \cdot (1-\sigma(\theta^\top x^{(i)}))^{1-y^{(i)}} \\
+&amp; = \frac{1}{n}\sum_{i=1}^n {y^{(i)}} \cdot \log \sigma(\theta^\top x^{(i)}) + (1-y^{(i)}) \cdot \log (1-\sigma(\theta^\top x^{(i)})).
+\end{align*}
+\end{split}\]</div>
+<p>This objective is also often called the log-loss, or cross-entropy.</p>
+<p>Observe that this objective asks the model to ouput a large score <span class="math notranslate nohighlight">\(\sigma(\theta^\top x^{(i)})\)</span> (a score that’s close to one) if <span class="math notranslate nohighlight">\(y^{(i)}=1\)</span>, and a score that’s small (close to zero) if <span class="math notranslate nohighlight">\(y^{(i)}=0\)</span>.</p>
+<p>Let’s implement the log-likelihood objective.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">log_likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The cost function, J(theta0, theta1) describing the goodness of fit.</span>
+<span class="sd">    </span>
+<span class="sd">    We added the 1e-6 term in order to avoid overflow (inf and -inf).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    theta (np.array): d-dimensional vector of parameters</span>
+<span class="sd">    X (np.array): (n,d)-dimensional design matrix</span>
+<span class="sd">    y (np.array): n-dimensional vector of targets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">f</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="optimizing-the-logistic-regression-objective-using-gradient-descent">
+<h2>4.4.2. Optimizing the Logistic Regression Objective Using Gradient Descent<a class="headerlink" href="#optimizing-the-logistic-regression-objective-using-gradient-descent" title="Permalink to this headline">¶</a></h2>
+<p>The missing piece for defining the logistic regression algorithm is an optimizer for the maximum likelihood of a logistic regression model.</p>
+<p>We will use for this task gradient descent, which we saw in the last lecture.</p>
+<section id="gradient-of-the-log-likelihood">
+<h3>4.4.2.1. Gradient of the Log-Likelihood<a class="headerlink" href="#gradient-of-the-log-likelihood" title="Permalink to this headline">¶</a></h3>
+<p>We want to use gradient descent to maximize the log-likelihood, hence our objective is
+<span class="math notranslate nohighlight">\(J(\theta) = - \ell(\theta).\)</span></p>
+<p>We can show that the gradient of the negative log-likelihood equals:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\nabla_\theta J (\theta) =  \nabla_\theta \left[-\ell (\theta) \right]= 
+\left( \sigma(\theta^\top x) - y \right) \cdot \bf{x}.
+\end{align*}
+\]</div>
+<p>Interestingly, this expression looks similar to the gradient of the mean squared error, which we derived in the previous lecture.</p>
+<p>Let’s implement the gradient.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">loglik_gradient</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The cost function, J(theta0, theta1) describing the goodness of fit.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    theta (np.array): d-dimensional vector of parameters</span>
+<span class="sd">    X (np.array): (n,d)-dimensional design matrix</span>
+<span class="sd">    y (np.array): n-dimensional vector of targets</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    grad (np.array): d-dimensional gradient of the MSE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span><span class="o">-</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gradient-descent">
+<h3>4.4.2.2. Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permalink to this headline">¶</a></h3>
+<p>Recall, that if we want to minimize an objective <span class="math notranslate nohighlight">\(J(\theta)\)</span>, we may start with an initial guess <span class="math notranslate nohighlight">\(\theta_0\)</span> for the parameters and repeat the following update:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). 
+\]</div>
+<p>Let’s now implement gradient descent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">5e-5</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">1e-1</span>
+
+<span class="n">theta</span><span class="p">,</span> <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,)),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+<span class="n">opt_pts</span> <span class="o">=</span> <span class="p">[</span><span class="n">theta</span><span class="p">]</span>
+<span class="n">opt_grads</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">iris_X</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">iris_y2</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">theta_prev</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">iter</span> <span class="o">%</span> <span class="mi">50000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration </span><span class="si">%d</span><span class="s1">. Log-likelihood: </span><span class="si">%.6f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">log_likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)))</span>
+    <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">theta</span>
+    <span class="n">gradient</span> <span class="o">=</span> <span class="n">loglik_gradient</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_prev</span> <span class="o">-</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">gradient</span>
+    <span class="n">opt_pts</span> <span class="o">+=</span> <span class="p">[</span><span class="n">theta</span><span class="p">]</span>
+    <span class="n">opt_grads</span> <span class="o">+=</span> <span class="p">[</span><span class="n">gradient</span><span class="p">]</span>
+    <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iteration 0. Log-likelihood: -0.693145
+Iteration 50000. Log-likelihood: -0.021506
+Iteration 100000. Log-likelihood: -0.015329
+Iteration 150000. Log-likelihood: -0.012062
+Iteration 200000. Log-likelihood: -0.010076
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now visualize the result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)],</span> <span class="n">theta</span><span class="p">)</span>
+<span class="n">Z</span><span class="p">[</span><span class="n">Z</span><span class="o">&lt;</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Z</span><span class="p">[</span><span class="n">Z</span><span class="o">&gt;=</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture4-classification_117_0.png" src="../_images/lecture4-classification_117_0.png" />
+</div>
+</div>
+<p>This is how we would use the algorithm via <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="n">logreg</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">,</span> <span class="n">fit_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Create an instance of Logistic Regression Classifier and fit the data.</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">iris_y2</span>
+<span class="n">logreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture4-classification_119_0.png" src="../_images/lecture4-classification_119_0.png" />
+</div>
+</div>
+<p>We see that both algorithms give us similar results!</p>
+</section>
+</section>
+<section id="algorithm-logistic-regression">
+<h2>4.4.3. Algorithm: Logistic Regression<a class="headerlink" href="#algorithm-logistic-regression" title="Permalink to this headline">¶</a></h2>
+<p>We have now fully defined our first classificaiton algorithm—logistic regression. We summarize its key components below.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (binary classification)</p></li>
+<li><p><strong>Model family</strong>: Linear decision boundaries.</p></li>
+<li><p><strong>Objective function</strong>: Cross-entropy, a special case of log-likelihood.</p></li>
+<li><p><strong>Optimizer</strong>: Gradient descent.</p></li>
+<li><p><strong>Probabilistic interpretation</strong>: Parametrized Bernoulli distribution.</p></li>
+</ul>
+<section id="additional-observations-about-logistic-regression">
+<h3>4.3.3.1. Additional Observations About Logistic Regression<a class="headerlink" href="#additional-observations-about-logistic-regression" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Logistic regression finds a linear decision boundary. This is the set of points for which <span class="math notranslate nohighlight">\(P(y=1|x)=P(y=0|x)\)</span>, or equivalently:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+0 = \log\frac{P(y=1|x)}{P(y=0|x)}
+= \log \frac{\frac{1}{1+\exp(-\theta^\top x)}}{1-\frac{1}{1+\exp(-\theta^\top x)}}
+= \theta^\top x
+\end{align*}
+\]</div>
+<p>The set of <span class="math notranslate nohighlight">\(x\)</span> for which <span class="math notranslate nohighlight">\(0=\theta^\top x\)</span> is a linear surface.</p>
+<ul class="simple">
+<li><p>Unlike least squares, we don’t have a closed form solution (a formula) for the optimal <span class="math notranslate nohighlight">\(\theta\)</span>. We can nonetheless find it numerically via gradient descent.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="softmax-regression-for-multi-class-classification">
+<h1>4.5. Softmax Regression for Multi-Class Classification<a class="headerlink" href="#softmax-regression-for-multi-class-classification" title="Permalink to this headline">¶</a></h1>
+<p>Finally, let’s look at an extension of logistic regression to an arbitrary number of classes.</p>
+<section id="multi-class-classification">
+<h2>4.5.1. Multi-Class Classification<a class="headerlink" href="#multi-class-classification" title="Permalink to this headline">¶</a></h2>
+<p>Logistic regression only applies to binary classification problems. What if we have an arbitrary number of classes <span class="math notranslate nohighlight">\(K\)</span>?</p>
+<ul class="simple">
+<li><p>The simplest approach that can be used with any machine learning algorithm is the “one vs. all” approach. We train one classifer for each class to distinguish that class from all the others.</p></li>
+</ul>
+<ul class="simple">
+<li><p>This works, but is not very elegant.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Alternatively, we may fit a probabilistic model that outputs multi-class probabilities.</p></li>
+</ul>
+<p>Let’s load a fully multiclass version of the Iris dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/neighbors/plot_classification.html</span>
+<span class="c1"># Plot also the training points</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y</span><span class="p">,</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal Length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal Width&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Versicolour&#39;</span><span class="p">,</span> <span class="s1">&#39;Virginica&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12fbd4f60&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture4-classification_129_1.png" src="../_images/lecture4-classification_129_1.png" />
+</div>
+</div>
+</section>
+<section id="the-softmax-function">
+<h2>4.5.2. The Softmax Function<a class="headerlink" href="#the-softmax-function" title="Permalink to this headline">¶</a></h2>
+<p>The logistic function <span class="math notranslate nohighlight">\(\sigma : \mathbb{R} \to [0,1]\)</span> “squeezes” the score <span class="math notranslate nohighlight">\(z\in\mathbb{R}\)</span> of a class into a probability in <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
+<p>The <em>softmax</em> function <span class="math notranslate nohighlight">\(\vec \sigma : \mathbb{R}^K \to [0,1]^K\)</span> is a multi-class version of <span class="math notranslate nohighlight">\(\sigma\)</span></p>
+<ul class="simple">
+<li><p>It takes in a <span class="math notranslate nohighlight">\(K\)</span>-dimensional <em>vector</em> of class scores <span class="math notranslate nohighlight">\(\vec z\in\mathbb{R}\)</span></p></li>
+<li><p>It “squeezes” <span class="math notranslate nohighlight">\(\vec z\)</span> into a length <span class="math notranslate nohighlight">\(K\)</span> <em>vector</em> of  probabilities in <span class="math notranslate nohighlight">\([0,1]^K\)</span></p></li>
+</ul>
+<p>The <span class="math notranslate nohighlight">\(k\)</span>-th component of the output of the softmax function <span class="math notranslate nohighlight">\(\vec \sigma\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[ 
+\sigma(\vec z)_k = \frac{\exp(z_k)}{\sum_{l=1}^K \exp(z_l)}. 
+\]</div>
+<p>Softmax takes a vector of scores <span class="math notranslate nohighlight">\(\vec z\)</span>, exponentiates each score <span class="math notranslate nohighlight">\(z_k\)</span>, and normalizes the exponentiated scores such that they sum to one.</p>
+<p>When <span class="math notranslate nohighlight">\(K=2\)</span>, this looks as follows:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\sigma(\vec z)_1 = \frac{\exp(z_1)}{\exp(z_1) + \exp(z_2)}. 
+\]</div>
+<p>Observe that adding a constant <span class="math notranslate nohighlight">\(c \in \mathbb{R}\)</span> to each score <span class="math notranslate nohighlight">\(z_k\)</span> doesn’t change the output of softmax, e.g.:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\frac{\exp(z_1)}{\exp(z_1) + \exp(z_2)} = \frac{\exp(z_1+c)}{\exp(z_1+c) + \exp(z_2+c)}. 
+\]</div>
+<p>Without loss of generality, we can assume <span class="math notranslate nohighlight">\(z_1=0\)</span>. For any <span class="math notranslate nohighlight">\(\vec z = (z_1, z_2)\)</span>, we can define <span class="math notranslate nohighlight">\(\vec z' = (0, z_2') = (0, z_2-z_1)\)</span> such that <span class="math notranslate nohighlight">\(\vec\sigma(\vec z) = \vec\sigma(\vec z')\)</span>. Assuming <span class="math notranslate nohighlight">\(z_1=0\)</span> doesn’t change the probabilities that <span class="math notranslate nohighlight">\(\vec\sigma\)</span> can output.</p>
+<p>Assuming that <span class="math notranslate nohighlight">\(z_1 =0\)</span> means that <span class="math notranslate nohighlight">\(\exp(z_1) = 1\)</span> and softmax becomes</p>
+<div class="math notranslate nohighlight">
+\[ 
+\sigma(\vec z)_1 = \frac{1}{1 + \exp(z_2)}. 
+\]</div>
+<p>This is effectively our sigmoid function. Hence softmax generalizes the sigmoid function.</p>
+</section>
+<section id="softmax-regression">
+<h2>4.5.3. Softmax Regression<a class="headerlink" href="#softmax-regression" title="Permalink to this headline">¶</a></h2>
+<p>We will now use the softmax function to define a generalization of logistic regression to multi-class classification. The resulting algorithm is called softmax regression.</p>
+<section id="recall-logistic-regression">
+<h3>Recall: Logistic Regression<a class="headerlink" href="#recall-logistic-regression" title="Permalink to this headline">¶</a></h3>
+<p>Logistic regression is a classification algorithm which uses a model <span class="math notranslate nohighlight">\(f_\theta\)</span> of the form
+$<span class="math notranslate nohighlight">\( f_\theta(x) = \sigma(\theta^\top x) = \frac{1}{1 + \exp(-\theta^\top x)}, \)</span><span class="math notranslate nohighlight">\(
+where 
+\)</span><span class="math notranslate nohighlight">\( \sigma(z) = \frac{1}{1 + \exp(-z)} \)</span>$
+is the <em>sigmoid</em> or <em>logistic</em> function. It trains this model using maximum likelihood.</p>
+</section>
+<section id="softmax-regression-model-class">
+<h3>4.5.3.1. Softmax Regression: Model Class<a class="headerlink" href="#softmax-regression-model-class" title="Permalink to this headline">¶</a></h3>
+<p>Softmax regression is a multi-class classification algorithm which uses a model <span class="math notranslate nohighlight">\(f_\theta : \mathcal{X} \to [0,1]^K\)</span> that generalizes logistic regression.</p>
+<p>Softmax regression works as follows:</p>
+<ol class="simple">
+<li><p>Given an input <span class="math notranslate nohighlight">\(x\)</span>, we compute <span class="math notranslate nohighlight">\(K\)</span> scores, one per class. The score</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+z_k = \theta_k^\top x
+\]</div>
+<p>of class <span class="math notranslate nohighlight">\(k\)</span> is a linear function of <span class="math notranslate nohighlight">\(x\)</span> and parameters <span class="math notranslate nohighlight">\(\theta_k\)</span> for class <span class="math notranslate nohighlight">\(k\)</span></p>
+<ol class="simple">
+<li><p>We “squeeze” the vector of scores <span class="math notranslate nohighlight">\(\vec z\)</span> into <span class="math notranslate nohighlight">\([0,1]^K\)</span> using the softmax function <span class="math notranslate nohighlight">\(\vec\sigma\)</span> and we output <span class="math notranslate nohighlight">\(\vec\sigma(\vec z)\)</span>, a vector of <span class="math notranslate nohighlight">\(K\)</span> probabilities.</p></li>
+</ol>
+<p>The parameters of this model are <span class="math notranslate nohighlight">\(\theta = (\theta_1, \theta_2, ..., \theta_K)\)</span>, and the parameter space is <span class="math notranslate nohighlight">\(\Theta = \mathbb{R}^{K \times d}\)</span>.</p>
+<p>The output of the model is a <em>vector</em> of class membership probabilities, whose <span class="math notranslate nohighlight">\(k\)</span>-th component <span class="math notranslate nohighlight">\(f_\theta(x)_k\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta(x)_k = \sigma(\theta_k^\top x)_k = \frac{\exp(\theta_k^\top x)}{\sum_{l=1}^K \exp(\theta_l^\top x)}, 
+\]</div>
+<p>where each <span class="math notranslate nohighlight">\(\theta_l \in \mathbb{R}^d\)</span>  is the vector of parameters for class <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(\theta = (\theta_1, \theta_2, ..., \theta_K)\)</span>.</p>
+<p>This model is again over-parametrized: adding a constant <span class="math notranslate nohighlight">\(c \in \mathbb{R}\)</span> to every score <span class="math notranslate nohighlight">\(\theta_k^\top x\)</span> does not change the output of the model.</p>
+<p>As before, we can assume without loss of generality that <span class="math notranslate nohighlight">\(z_1=0\)</span> (or equivalently that <span class="math notranslate nohighlight">\(\theta_1=0\)</span>). This doesn’t change the set of functions <span class="math notranslate nohighlight">\(\mathcal{X} \to [0,1]^K\)</span> that our model class can represent.</p>
+<p>Note again that softmax regression is actually a <strong>classification</strong> algorithm.
+The term <em>regression</em> is an unfortunate historical misnomer.</p>
+</section>
+<section id="softmax-regression-probabilistic-interpretation">
+<h3>4.5.4.2. Softmax Regression: Probabilistic Interpretation<a class="headerlink" href="#softmax-regression-probabilistic-interpretation" title="Permalink to this headline">¶</a></h3>
+<p>The softmax model outputs a vector of probabilities, and defines a conditional probability distribution as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+P_\theta(y=k | x) &amp; = \vec\sigma(\vec z)_k =\frac{\exp(\theta_k^\top x)}{\sum_{l=1}^K \exp(\theta_l^\top x)}.
+\end{align*}
+\]</div>
+<p>Recall that a probability over <span class="math notranslate nohighlight">\(y\in \{1,2,...,K\}\)</span> is called Categorical.</p>
+</section>
+<section id="softmax-regression-learning-objective-and-optimizer">
+<h3>4.5.4.3. Softmax Regression: Learning Objective and Optimizer<a class="headerlink" href="#softmax-regression-learning-objective-and-optimizer" title="Permalink to this headline">¶</a></h3>
+<p>We again maximize likelihood over a dataset  <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+L(\theta) &amp; = \prod_{i=1}^n P_\theta (y^{(i)} \mid x^{(i)}) = \prod_{i=1}^n \vec \sigma(\vec z^{(i)})_{y^{(i)}} \\
+&amp; = \prod_{i=1}^n \left( \frac{\exp(\theta_{y^{(i)}}^\top x^{(i)})}{\sum_{l=1}^K \exp(\theta_l^\top x^{(i)})} \right). \\
+\end{align*}
+\end{split}\]</div>
+<p>We optimize this using gradient descent.</p>
+<p>Let’s now apply softmax regression to the Iris dataset by using the implementation from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/linear_model/plot_iris_logistic.html</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="n">logreg</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;multinomial&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create an instance of Softmax and fit the data.</span>
+<span class="n">logreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">iris_y</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">logreg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+
+<span class="c1"># Put the result into a color plot</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture4-classification_149_0.png" src="../_images/lecture4-classification_149_0.png" />
+</div>
+</div>
+</section>
+<section id="algorithm-softmax-regression">
+<h3>4.5.4.4. Algorithm: Softmax Regression<a class="headerlink" href="#algorithm-softmax-regression" title="Permalink to this headline">¶</a></h3>
+<p>We summarize the full algorithm below.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (multi-class classification)</p></li>
+<li><p><strong>Model family</strong>: Linear decision boundaries.</p></li>
+<li><p><strong>Objective function</strong>: Softmax loss, a special case of log-likelihood.</p></li>
+<li><p><strong>Optimizer</strong>: Gradient descent.</p></li>
+<li><p><strong>Probabilistic interpretation</strong>: Parametrized categorical distribution.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "aml"
+        },
+        kernelOptions: {
+            name: "aml",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'aml'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="lecture3-linear-regression.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Lecture 3: Linear Regression</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="lecture5-regularization.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 5: Regularization</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Cornell University<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
