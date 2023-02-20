@@ -128,6 +128,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
@@ -145,6 +150,26 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="lecture12-suppor-vector-machines.html">
    Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture16-boosting.html">
+   Lecture 16: Boosting
   </a>
  </li>
 </ul>
@@ -551,18 +576,21 @@ const thebe_selector_output = ".output, .cell_output"
 <li><p>Useful signal hidden in noise, e.g. human speech over a noisy phone.</p></li>
 </ul>
 <p>Two related problems in the area of unsupervised learning we have looked at are <strong>clustering</strong> and <strong>density estimation</strong></p>
-<ul class="simple">
-<li><p><strong>Clustering</strong> is the problem of identifying distinct components in the data. Usually, we apply clustering when we assume that the data will have a certain structure, specifically:</p>
 <ul>
+<li><p><strong>Clustering</strong> is the problem of identifying distinct components in the data. Usually, we apply clustering when we assume that the data will have a certain structure, specifically:</p>
+<ul class="simple">
 <li><p>Datapoints in a cluster are more similar to each other than to points in other clusters</p></li>
 <li><p>Clusters are usually defined by their centers, and potentially by other shape parameters.</p></li>
 <li><p>A simple clustering algorithm we have looked at is <span class="math notranslate nohighlight">\(K\)</span>-Means</p></li>
 </ul>
 </li>
-<li><p><strong>Density Estimation</strong> is the problem of learning <span class="math notranslate nohighlight">\(P_\theta\)</span>
-$<span class="math notranslate nohighlight">\(P_\theta(x) : \mathcal{X} \to [0,1].\)</span><span class="math notranslate nohighlight">\(
-  on an unsupervised dataset \)</span>\mathcal{D}<span class="math notranslate nohighlight">\( to approximate the true data distribution \)</span>P_\text{data}$.</p>
-<ul>
+<li><p><strong>Density Estimation</strong> is the problem of learning <span class="math notranslate nohighlight">\(P_\theta\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+    P_\theta(x) : \mathcal{X} \to [0,1].
+    \]</div>
+<p>on an unsupervised dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> to approximate the true data distribution <span class="math notranslate nohighlight">\(P_\text{data}\)</span>.</p>
+<ul class="simple">
 <li><p>If we successfully learn <span class="math notranslate nohighlight">\(P_\theta \approx P_\text{data}\)</span>, then we can use <span class="math notranslate nohighlight">\(P_\theta\)</span> to solve many downstream tasks, including generation, outlier detection, and also <strong>clustering</strong>.</p></li>
 </ul>
 </li>
@@ -571,8 +599,11 @@ $<span class="math notranslate nohighlight">\(P_\theta(x) : \mathcal{X} \to [0,1
 </section>
 <section id="gaussian-mixture-models-gmm">
 <h2>10.1.2. Gaussian Mixture Models (GMM)<a class="headerlink" href="#gaussian-mixture-models-gmm" title="Permalink to this headline">¶</a></h2>
-<p>Gaussian mixtures is a probabilistic model of the form:
-$<span class="math notranslate nohighlight">\(P_\theta (x,z) = P_\theta (x | z) P_\theta (z)\)</span>$</p>
+<p>Gaussian mixtures is a probabilistic model of the form:</p>
+<div class="math notranslate nohighlight">
+\[
+P_\theta (x,z) = P_\theta (x | z) P_\theta (z)
+\]</div>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(z \in \mathcal{Z} = \{1,2,\ldots,K\}\)</span> is discrete and follows a categorical distribution <span class="math notranslate nohighlight">\(P_\theta(z=k) = \phi_k\)</span>.</p></li>
 <li><p><span class="math notranslate nohighlight">\(x \in \mathbb{R}\)</span> is continuous; conditioned on <span class="math notranslate nohighlight">\(z=k\)</span>, it follows a Normal distribution <span class="math notranslate nohighlight">\(P_\theta(x | z=k) = \mathcal{N}(\mu_k, \Sigma_k)\)</span>.</p></li>
@@ -585,11 +616,14 @@ $<span class="math notranslate nohighlight">\(P_\theta (x,z) = P_\theta (x | z) 
 </ul>
 <p>With this structure, <span class="math notranslate nohighlight">\(z^{(i)}\)</span> is the cluster label for data point <span class="math notranslate nohighlight">\(x^{(i)}\)</span> and can be obtained from <span class="math notranslate nohighlight">\(P(z^{(i)}|x^{(i)})\)</span></p>
 <p>And to get the marginal distribution <span class="math notranslate nohighlight">\(P_\theta (x)\)</span>, we can sum over the joint distribution as follows:</p>
-<p>\begin{align}
-P_\theta (x)
-&amp; = \sum_{k=1}^K P_\theta (z=k) P_\theta (x|z=k)\
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+P_\theta (x) 
+&amp; = \sum_{k=1}^K P_\theta (z=k) P_\theta (x|z=k)\\
 &amp; = \phi_1 \mathcal{N}(x; \mu_1, \Sigma_1)  +  \ldots + \phi_K \mathcal{N}(x; \mu_K, \Sigma_K)
-\end{align}</p>
+\end{align}
+\end{split}\]</div>
 </section>
 <section id="clustering-with-known-cluster-assignments">
 <h2>10.1.3. Clustering With Known Cluster Assignments<a class="headerlink" href="#clustering-with-known-cluster-assignments" title="Permalink to this headline">¶</a></h2>
@@ -802,16 +836,20 @@ P_\theta (x)
 </ol>
 <section id="maximum-marginal-likelihood-learning">
 <h3>10.1.4.1. Maximum Marginal Likelihood Learning<a class="headerlink" href="#maximum-marginal-likelihood-learning" title="Permalink to this headline">¶</a></h3>
-<p>Maximum marginal (log-)likelihood is a way of learning a probabilistic model on an unsupervised dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> by maximizing:
-$<span class="math notranslate nohighlight">\(
+<p>Maximum marginal (log-)likelihood is a way of learning a probabilistic model on an unsupervised dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> by maximizing:</p>
+<div class="math notranslate nohighlight">
+\[
 \frac{1}{n}\sum_{i=1}^n \log P_\theta({x}^{(i)}) = \frac{1}{n}\sum_{i=1}^n \log \left(\sum_{z \in \mathcal{Z}} P_\theta({x}^{(i)}, z)\right).
-\)</span>$</p>
+\]</div>
 <ul class="simple">
 <li><p>This asks <span class="math notranslate nohighlight">\(P_\theta\)</span> to assign a high probability to the training data in <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.</p></li>
 <li><p>However, we need to use <span class="math notranslate nohighlight">\(P(x) = \sum_{z \in \mathcal{Z}} P(x,z)\)</span> to compute this probability because <span class="math notranslate nohighlight">\(z\)</span> is not observed.</p></li>
 </ul>
-<p>Since our objective is
-$<span class="math notranslate nohighlight">\(\max_\theta \frac{1}{n}\sum_{i=1}^n \log \left(\sum_{z \in \mathcal{Z}} P_\theta({x}^{(i)}, z)\right)\)</span>$</p>
+<p>Since our objective is</p>
+<div class="math notranslate nohighlight">
+\[
+\max_\theta \frac{1}{n}\sum_{i=1}^n \log \left(\sum_{z \in \mathcal{Z}} P_\theta({x}^{(i)}, z)\right)
+\]</div>
 <ul class="simple">
 <li><p>Our intuition of assigning high probability to data still holds</p></li>
 </ul>
@@ -821,10 +859,11 @@ $<span class="math notranslate nohighlight">\(\max_\theta \frac{1}{n}\sum_{i=1}^
 <ul class="simple">
 <li><p>We are  still minimizing KL divergence between <span class="math notranslate nohighlight">\(P_\theta\)</span> and <span class="math notranslate nohighlight">\(P_\text{data}\)</span></p></li>
 </ul>
-<p>Recall that the Kullback-Leibler (KL) divergence <span class="math notranslate nohighlight">\(D(\cdot\|\cdot)\)</span> between the model distribution and the data distribution is:
-$<span class="math notranslate nohighlight">\(
+<p>Recall that the Kullback-Leibler (KL) divergence <span class="math notranslate nohighlight">\(D(\cdot\|\cdot)\)</span> between the model distribution and the data distribution is:</p>
+<div class="math notranslate nohighlight">
+\[
 D(P_\text{data} \| P_\theta) = \sum_{{\bf x}} P_\text{data}({\bf x}) \log \frac{P_\text{data}({\bf x})}{P_\theta({\bf x})}.
-\)</span>$</p>
+\]</div>
 <p>The KL divergence is always non-negative, and equals zero when <span class="math notranslate nohighlight">\(P_\text{data}\)</span> and <span class="math notranslate nohighlight">\(P_\theta\)</span> are identical. This makes it a natural measure of similarity that’s useful for comparing distributions.</p>
 <p>How do we optimize the marginal likelihood objective? Optimizing the likelihood of mixture models is harder than optimizing the likelihood of single gaussian models. For mixture models, there are no closed form solutions, and unlike a single Gaussian, a mixture has many local maxima. We will talk about an algorithm to train mixture models later in this lecture</p>
 </section>
@@ -832,7 +871,9 @@ D(P_\text{data} \| P_\theta) = \sum_{{\bf x}} P_\text{data}({\bf x}) \log \frac{
 <h3>10.1.4.2. Recovering Clusters from GMMs<a class="headerlink" href="#recovering-clusters-from-gmms" title="Permalink to this headline">¶</a></h3>
 <p>Given a trained GMM model <span class="math notranslate nohighlight">\(P_\theta (x,z) = P_\theta (x | z) P_\theta (z)\)</span>, it’s easy to compute the <em>posterior</em> probability</p>
 <div class="math notranslate nohighlight">
-\[P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}\]</div>
+\[
+P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}
+\]</div>
 <p>of a point <span class="math notranslate nohighlight">\(x\)</span> belonging to class <span class="math notranslate nohighlight">\(k\)</span>.</p>
 <ul class="simple">
 <li><p>The posterior defines a “soft” assignment of <span class="math notranslate nohighlight">\(x\)</span> to each class.</p></li>
@@ -861,14 +902,22 @@ D(P_\text{data} \| P_\theta) = \sum_{{\bf x}} P_\text{data}({\bf x}) \log \frac{
 <p>We will now introduce expectation maximization (EM), an algorithm that can be used to fit Gaussian mixture models.</p>
 <section id="expectation-maximization-intuition">
 <h2>10.2.1. Expectation Maximization: Intuition<a class="headerlink" href="#expectation-maximization-intuition" title="Permalink to this headline">¶</a></h2>
-<p>Expectation maximization (EM) is an algorithm for maximizing marginal log-likelihood
-$<span class="math notranslate nohighlight">\(\max_\theta \sum_{x^{(i)}\in \mathcal{D}} \log \left( \sum_{z \in \mathcal{Z}}P_\theta(x^{(i)}, z) \right)\)</span>$
-that can also be used to learn Gaussian mixtures.</p>
+<p>Expectation maximization (EM) is an algorithm for maximizing marginal log-likelihood</p>
+<div class="math notranslate nohighlight">
+\[
+\max_\theta \sum_{x^{(i)}\in \mathcal{D}} \log \left( \sum_{z \in \mathcal{Z}}P_\theta(x^{(i)}, z) \right)
+\]</div>
+<p>that can also be used to learn Gaussian mixtures.</p>
 <p>The idea behind expectation maximization is:</p>
 <ul class="simple">
-<li><p>If we know the true <span class="math notranslate nohighlight">\(z^{(i)}\)</span> for each <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, we maximize
-$<span class="math notranslate nohighlight">\(\max_\theta \sum_{x^{(i)}, z^{(i)}\in \mathcal{D}} \log \left( P_\theta(x^{(i)}, z^{(i)}) \right).\)</span><span class="math notranslate nohighlight">\( 
-and it's easy to find the best \)</span>\theta$ (use solution for supervised learning).</p></li>
+<li><p>If we know the true <span class="math notranslate nohighlight">\(z^{(i)}\)</span> for each <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, we maximize</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\max_\theta \sum_{x^{(i)}, z^{(i)}\in \mathcal{D}} \log \left( P_\theta(x^{(i)}, z^{(i)}) \right).
+\]</div>
+<p>and it’s easy to find the best <span class="math notranslate nohighlight">\(\theta\)</span> (use solution for supervised learning).</p>
+<ul class="simple">
 <li><p>If we know <span class="math notranslate nohighlight">\(\theta\)</span>, we can estimate the cluster assignments <span class="math notranslate nohighlight">\(z^{(i)}\)</span> for each <span class="math notranslate nohighlight">\(i\)</span> by computing <span class="math notranslate nohighlight">\(P_\theta(z | x^{(i)})\)</span>.</p></li>
 </ul>
 <p>Expectation maximization alternates between these two steps.</p>
@@ -885,12 +934,15 @@ and use it to “hallucinate” expected cluster assignments <span class="math n
 <p>For <span class="math notranslate nohighlight">\(t=0,1,2,\ldots\)</span>, repeat until convergence:</p>
 <ol class="simple">
 <li><p>(<strong>E-Step</strong>) For each <span class="math notranslate nohighlight">\(x^{(i)} \in \mathcal{D}\)</span> compute <span class="math notranslate nohighlight">\(P_{\theta_t}(z|x^{(i)})\)</span></p></li>
-<li><p>(<strong>M-Step</strong>) Compute new weights <span class="math notranslate nohighlight">\(\theta_{t+1}\)</span> as
-\begin{align*}
-\theta_{t+1} &amp; = \arg\max_{\theta} \sum_{i=1}^n \mathbb{E}<em>{z^{(i)} \sim P</em>{\theta_t}(z|x^{(i)})} \log P_{\theta}(x^{(i)}, z^{(i)}) \
-&amp; = \arg\max_{\theta} \sum_{i=1}^n \sum_{k=1}^K P_{\theta_t}(z=k|x^{(i)}) \log P_{\theta}(x^{(i)}, z=k)
-\end{align*}</p></li>
+<li><p>(<strong>M-Step</strong>) Compute new weights <span class="math notranslate nohighlight">\(\theta_{t+1}\)</span> as</p></li>
 </ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\theta_{t+1} &amp; = \arg\max_{\theta} \sum_{i=1}^n \mathbb{E}_{z^{(i)} \sim P_{\theta_t}(z|x^{(i)})} \log P_{\theta}(x^{(i)}, z^{(i)}) \\
+&amp; = \arg\max_{\theta} \sum_{i=1}^n \sum_{k=1}^K P_{\theta_t}(z=k|x^{(i)}) \log P_{\theta}(x^{(i)}, z=k)
+\end{align*}
+\end{split}\]</div>
 <p>Since assignments <span class="math notranslate nohighlight">\(P_{\theta_t}(z|x^{(i)})\)</span> are “soft”, M-step involves an expectation. For many interesting models, this expectation is tractable.</p>
 </section>
 <section id="pros-and-cons-of-em">
@@ -912,35 +964,48 @@ and use it to “hallucinate” expected cluster assignments <span class="math n
 <p>Next, let’s work through how Expectation Maximization works in Gaussian Mixture Models.</p>
 <section id="deriving-the-e-step">
 <h2>10.3.1. Deriving the E-Step<a class="headerlink" href="#deriving-the-e-step" title="Permalink to this headline">¶</a></h2>
-<p>In the E-step, we compute the posterior for each data point <span class="math notranslate nohighlight">\(x\)</span> as follows
-$<span class="math notranslate nohighlight">\(P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}= \frac{\mathcal{N}(x; \mu_k, \Sigma_k) \cdot \phi_k}{\sum_{l=1}^K \mathcal{N}(x; \mu_l, \Sigma_l) \cdot \phi_l}\)</span><span class="math notranslate nohighlight">\(
-\)</span>P_\theta(z = k\mid x)<span class="math notranslate nohighlight">\( defines a vector of probabilities that \)</span>x<span class="math notranslate nohighlight">\( originates from component \)</span>k<span class="math notranslate nohighlight">\( given the current set of parameters \)</span>\theta$</p>
+<p>In the E-step, we compute the posterior for each data point <span class="math notranslate nohighlight">\(x\)</span> as follows</p>
+<div class="math notranslate nohighlight">
+\[
+ P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}= \frac{\mathcal{N}(x; \mu_k, \Sigma_k) \cdot \phi_k}{\sum_{l=1}^K \mathcal{N}(x; \mu_l, \Sigma_l) \cdot \phi_l}
+ \]</div>
+<p><span class="math notranslate nohighlight">\(P_\theta(z = k\mid x)\)</span> defines a vector of probabilities that <span class="math notranslate nohighlight">\(x\)</span> originates from component <span class="math notranslate nohighlight">\(k\)</span> given the current set of parameters <span class="math notranslate nohighlight">\(\theta\)</span></p>
 </section>
 <section id="deriving-the-m-step">
 <h2>10.3.2. Deriving the M-Step<a class="headerlink" href="#deriving-the-m-step" title="Permalink to this headline">¶</a></h2>
 <p>At the M-step, we optimize the expected log-likelihood of our model.</p>
-<p>\begin{align*}
-&amp;\max_\theta \sum_{x \in D} \mathbb{E}<em>{z \sim P</em>{\theta_t}(z|x)} \log P_\theta(x,z) = \
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+&amp;\max_\theta \sum_{x \in D} \mathbb{E}_{z \sim P_{\theta_t}(z|x)} \log P_\theta(x,z) = \\
 &amp; \max_\theta \left( \sum_{k=1}^K \sum_{x \in D} P_{\theta_t}(z = k|x) \log P_\theta(x|z = k) + \sum_{k=1}^K \sum_{x \in D} P_{\theta_t}(z = k|x) \log P_\theta(z = k) \right)
-\end{align*}</p>
+\end{align*}
+\end{split}\]</div>
 <p>As in supervised learning, we can optimize the two terms above separately.</p>
-<p>We will start with <span class="math notranslate nohighlight">\(P_\theta(x\mid z=k) = \mathcal{N}(x; \mu_k, \Sigma_k)\)</span>. We have to find <span class="math notranslate nohighlight">\(\mu_k^*, \Sigma_k^*\)</span> that optimize
-$<span class="math notranslate nohighlight">\(
+<p>We will start with <span class="math notranslate nohighlight">\(P_\theta(x\mid z=k) = \mathcal{N}(x; \mu_k, \Sigma_k)\)</span>. We have to find <span class="math notranslate nohighlight">\(\mu_k^*, \Sigma_k^*\)</span> that optimize</p>
+<div class="math notranslate nohighlight">
+\[
 \max_\theta \sum_{x^{(i)} \in D} P(z=k|x^{(i)}) \log P_\theta(x^{(i)}|z=k)
-\)</span><span class="math notranslate nohighlight">\(
-Note that this corresponds to fitting a Gaussian to a dataset whose elements \)</span>x^{(i)}<span class="math notranslate nohighlight">\( each have a weight \)</span>P(z=k|x^{(i)})$.</p>
-<p>Similar to how we did this in the supervised regime, we compute the derivative, set it to zero, and obtain closed form solutions:
+\]</div>
+<p>Note that this corresponds to fitting a Gaussian to a dataset whose elements <span class="math notranslate nohighlight">\(x^{(i)}\)</span> each have a weight <span class="math notranslate nohighlight">\(P(z=k|x^{(i)})\)</span>.</p>
+<p>Similar to how we did this in the supervised regime, we compute the derivative, set it to zero, and obtain closed form solutions:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\mu_k^* &amp; = \frac{\sum_{i=1}^n P(z=k|x^{(i)}) x^{(i)}}{n_k} \
-\Sigma_k^* &amp; = \frac{\sum_{i=1}^n P(z=k|x^{(i)}) (x^{(i)} - \mu_k^<em>)(x^{(i)} - \mu_k^</em>)^\top}{n_k} \
+\mu_k^* &amp; = \frac{\sum_{i=1}^n P(z=k|x^{(i)}) x^{(i)}}{n_k} \\
+\Sigma_k^* &amp; = \frac{\sum_{i=1}^n P(z=k|x^{(i)}) (x^{(i)} - \mu_k^*)(x^{(i)} - \mu_k^*)^\top}{n_k} \\
 \end{align*}
-where <span class="math notranslate nohighlight">\(n_k = \sum_{i=1}^n P(z=k|x^{(i)})\)</span></p>
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(n_k = \sum_{i=1}^n P(z=k|x^{(i)})\)</span></p>
 <p>Intuitively, the optimal mean and covariance are the <strong>empirical</strong> mean and convaraince of the dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> when each element <span class="math notranslate nohighlight">\(x^{(i)}\)</span> has a weight <span class="math notranslate nohighlight">\(P(z=k|x^{(i)})\)</span>.</p>
-<p>Similarly, we can show that the optimal class priors <span class="math notranslate nohighlight">\(\phi_k^*\)</span> are
+<p>Similarly, we can show that the optimal class priors <span class="math notranslate nohighlight">\(\phi_k^*\)</span> are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\phi_k^* &amp; = \frac{n_k}{n} \
+\phi_k^* &amp; = \frac{n_k}{n} \\
 \end{align*}
-Intuitively, the optimal <span class="math notranslate nohighlight">\(\phi_k^*\)</span> is just the proportion of data points with class <span class="math notranslate nohighlight">\(k\)</span></p>
+\end{split}\]</div>
+<p>Intuitively, the optimal <span class="math notranslate nohighlight">\(\phi_k^*\)</span> is just the proportion of data points with class <span class="math notranslate nohighlight">\(k\)</span></p>
 </section>
 <section id="summary-em-in-gaussian-mixture-models">
 <h2>10.3.3. Summary: EM in Gaussian Mixture Models<a class="headerlink" href="#summary-em-in-gaussian-mixture-models" title="Permalink to this headline">¶</a></h2>
@@ -957,8 +1022,11 @@ Intuitively, the optimal <span class="math notranslate nohighlight">\(\phi_k^*\)
 <p>Let’s now revisit the concepts of overfitting and underfitting in GMMs.</p>
 <section id="review-data-distribution">
 <h2>10.4.1. Review: Data Distribution<a class="headerlink" href="#review-data-distribution" title="Permalink to this headline">¶</a></h2>
-<p>We will assume that the dataset is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as
-$<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
+<p>We will assume that the dataset is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as</p>
+<div class="math notranslate nohighlight">
+\[
+x \sim \mathbb{P}.
+\]</div>
 <p>The dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}\)</span> consists of <em>independent and identicaly distributed</em> (IID) samples from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
 </section>
 <section id="underfitting-and-overfitting">

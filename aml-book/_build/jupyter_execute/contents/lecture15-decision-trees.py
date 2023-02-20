@@ -28,7 +28,8 @@
 # 
 # Recall that a supervised machine learning problem has the following structure:
 # 
-# $$ \underbrace{\text{Training Dataset}}_\text{Attributes + Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} $$
+# $$ 
+# \underbrace{\text{Training Dataset}}_\text{Attributes + Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} $$
 
 # #### The UCI Diabetes Dataset
 # 
@@ -105,7 +106,11 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 # 
 # To do so, we introduce a core concept for decision trees, that of **decision rules**:
 # * A decision rule $r : \mathcal{X} \to \{\text{True}, \text{False}\}$ is a partition of the feature space into two disjoint regions, e.g.:
-# $$ r(x) = \begin{cases}\text{True} & \text{if } x_\text{bmi} \leq 0.009 \\ \text{False} & \text{if } x_\text{bmi} > 0.009 \end{cases} $$
+# 
+# $$ 
+# r(x) = \begin{cases}\text{True} & \text{if } x_\text{bmi} \leq 0.009 \\ \text{False} & \text{if } x_\text{bmi} > 0.009 \end{cases} 
+# $$
+# 
 # * Normally, a rule applies to only one feature or attribute $x_j$ of $x$.
 # * If $x_j$ is continuous, the rule normally separates inputs $x_j$ into disjoint intervals ($-\infty, c], (c, \infty)$.
 # 
@@ -132,9 +137,16 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 # 
 # Decision trees partition the space of features into regions:
 # * A decision region $R\subseteq \mathcal{X}$ is a subset of the feature space defined by the application of a set of rules $r_1, r_2, \ldots, r_m$ and their values $v_1, v_2, \ldots, v_m \in \{\text{True}, \text{False}\}$, i.e.:
-# $$ R = \{x \in \mathcal{X} \mid r_1(x) = v_1 \text{ and } \ldots \text{ and } r_m(x) = v_m \} $$
+# 
+# $$ 
+# R = \{x \in \mathcal{X} \mid r_1(x) = v_1 \text{ and } \ldots \text{ and } r_m(x) = v_m \} 
+# $$
+# 
 # * For example, a decision region in the diabetes problem is:
-# $$ R = \{x \in \mathcal{X} \mid x_\text{bmi} \leq 0.009 \text{ and } x_\text{bp} > 0.004 \} $$
+# 
+# $$ 
+# R = \{x \in \mathcal{X} \mid x_\text{bmi} \leq 0.009 \text{ and } x_\text{bp} > 0.004 \} 
+# $$
 # 
 # These regions correspond to the leaves of a decision tree.
 
@@ -166,7 +178,11 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 # ### 15.1.3.3. Decision Trees
 # 
 # With the concept of regions, we can define a decision tree as a model $f : \mathcal{X} \to \mathcal{Y}$ of the form
-# $$ f(x) = \sum_{R \in \mathcal{R}} y_R \mathbb{I}\{x \in R\}. $$
+# 
+# $$ 
+# f(x) = \sum_{R \in \mathcal{R}} y_R \mathbb{I}\{x \in R\}. 
+# $$
+# 
 # * The $\mathbb{I}\{\cdot\}$ is an indicator function (one if $\{\cdot\}$ is true, else zero) and values $y_R \in \mathcal{Y}$ are the outputs for that region.
 # * The set $\mathcal{R}$ is a collection of decision regions. They are obtained by a recursive learning procedure (*recursive binary splitting*).
 # * The rules defining the regions $\mathcal{R}$ can be organized into a tree, with one rule per internal node and regions being the leaves.
@@ -205,11 +221,19 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 # What is the set of possible rules that `create_rule` can add to the tree? 
 # 
 # When $x$ has continuous features, the rules have the following form:
-# $$ r(x) = \begin{cases}\text{True} & \text{if } x_j \leq t \\ \text{False} & \text{if } x_j > t \end{cases} $$
+# 
+# $$ 
+# r(x) = \begin{cases}\text{True} & \text{if } x_j \leq t \\ \text{False} & \text{if } x_j > t \end{cases} 
+# $$
+# 
 # for a feature index $j$ and threshold $t \in \mathbb{R}$.
 # 
 # When $x$ has categorical features, rules may have the following form:
-# $$ r(x) = \begin{cases}\text{True} & \text{if } x_j = t_k \\ \text{False} & \text{if } x_j \neq t_k \end{cases} $$
+# 
+# $$ 
+# r(x) = \begin{cases}\text{True} & \text{if } x_j = t_k \\ \text{False} & \text{if } x_j \neq t_k \end{cases} 
+# $$
+# 
 # for a feature index $j$ and possible value $t_k$ for $x_j$.
 # 
 # Thus each rule $r: \mathcal{X} \rightarrow \{\text{T}, \text{F}\}$ maps inputs to either true ($\text{T}$) or false ($\text{F}$) evaluations.
@@ -219,7 +243,10 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 # We will greedily choose the rule that minimizes a loss function.
 # 
 # Specifically, we add to the leaf a new rule $r : \mathcal{X} \to \{\text{T}, \text{F}\}$ that minimizes a loss:
-# $$ \min_{r \in \mathcal{U}} \left( \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{T}\})}_\text{left subtree} +  \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{F}\}}_\text{right subtree})\right) $$
+# 
+# $$ 
+# \min_{r \in \mathcal{U}} \left( \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{T}\})}_\text{left subtree} +  \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{F}\}}_\text{right subtree})\right) 
+# $$
 # 
 # where $L$ is a loss function over a subset of the data flagged by the rule and $\mathcal{U}$ is the set of possible rules.
 
@@ -229,7 +256,10 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 # ### 15.2.2.1. Objectives for Trees: Classification
 # 
 # In classification, we can use the misclassification rate
-# $$ L(\mathcal{D}_R) = \frac{1}{|\mathcal{D}_R|} \sum_{(x, y) \in \mathcal{D}_R} \mathbb{I} \left\{ y \neq \texttt{most-common-y}(\mathcal{D}_R) \right\}. $$
+# 
+# $$ 
+# L(\mathcal{D}_R) = \frac{1}{|\mathcal{D}_R|} \sum_{(x, y) \in \mathcal{D}_R} \mathbb{I} \left\{ y \neq \texttt{most-common-y}(\mathcal{D}_R) \right\}. 
+# $$
 # 
 # At a leaf node with region $R$, we predict $\texttt{most-common-y}(\mathcal{D}_R)$, the most common class $y$ in the data.
 # Notice that this loss incentivizes the algorithm to cluster together points that have similar class labels.
@@ -244,12 +274,18 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 # ### 15.2.2.2. Objectives for Trees: Regression
 # 
 # In regression, it is common to minimize the L2 error between the data and the single best prediction we can make on this data:
-# $$ L(\mathcal{D_R}) = \sum_{(x, y) \in \mathcal{D_R}} \left( y - \texttt{average-y}(\mathcal{D_R}) \right)^2. $$
+# 
+# $$ 
+# L(\mathcal{D_R}) = \sum_{(x, y) \in \mathcal{D_R}} \left( y - \texttt{average-y}(\mathcal{D_R}) \right)^2. 
+# $$
 # 
 # If this was a leaf node, we would predict $\texttt{average-y}(\mathcal{D_R})$, the average $y$ in the data. The above loss measures the resulting squared error.
 
 # This yields the following optimization problem for selecting a rule:
-# $$ \min_{r \in \mathcal{U}} \left[ \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{T}} \left( y - p_\text{true}(r) \right)^2 +  \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{F}} \left( y - p_\text{false}(r) \right)^2 \right] $$
+# 
+# $$ 
+# \min_{r \in \mathcal{U}} \left[ \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{T}} \left( y - p_\text{true}(r) \right)^2 +  \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{F}} \left( y - p_\text{false}(r) \right)^2 \right] 
+# $$
 # 
 # where $p_\text{True}(r) = \texttt{average-y}(\{(x, y) \mid (x, y) \in \mathcal{D}_R \text{ and } r(x) = \text{True}\})$ and $p_\text{False}(r) = \texttt{average-y}(\{(x, y) \mid (x, y) \in \mathcal{D}_R \text{ and } r(x) = \text{False}\})$ are the average predictions on each part of the data split.
 # 

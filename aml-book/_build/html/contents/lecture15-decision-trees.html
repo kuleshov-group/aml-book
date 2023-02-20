@@ -726,7 +726,8 @@ const thebe_selector_output = ".output, .cell_output"
 <h3>Review: Components of A Supervised Machine Learning Problem<a class="headerlink" href="#review-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h3>
 <p>Recall that a supervised machine learning problem has the following structure:</p>
 <div class="math notranslate nohighlight">
-\[ \underbrace{\text{Training Dataset}}_\text{Attributes + Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} \]</div>
+\[ 
+\underbrace{\text{Training Dataset}}_\text{Attributes + Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} \]</div>
 </section>
 <section id="the-uci-diabetes-dataset">
 <h3>The UCI Diabetes Dataset<a class="headerlink" href="#the-uci-diabetes-dataset" title="Permalink to this headline">¶</a></h3>
@@ -948,8 +949,13 @@ For patients with <strong>high</strong> blood pressure (values exceeding <code c
 <h3>15.1.3.1. Decision Rules<a class="headerlink" href="#decision-rules" title="Permalink to this headline">¶</a></h3>
 <p>To do so, we introduce a core concept for decision trees, that of <strong>decision rules</strong>:</p>
 <ul class="simple">
-<li><p>A decision rule <span class="math notranslate nohighlight">\(r : \mathcal{X} \to \{\text{True}, \text{False}\}\)</span> is a partition of the feature space into two disjoint regions, e.g.:
-$<span class="math notranslate nohighlight">\( r(x) = \begin{cases}\text{True} &amp; \text{if } x_\text{bmi} \leq 0.009 \\ \text{False} &amp; \text{if } x_\text{bmi} &gt; 0.009 \end{cases} \)</span>$</p></li>
+<li><p>A decision rule <span class="math notranslate nohighlight">\(r : \mathcal{X} \to \{\text{True}, \text{False}\}\)</span> is a partition of the feature space into two disjoint regions, e.g.:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+r(x) = \begin{cases}\text{True} &amp; \text{if } x_\text{bmi} \leq 0.009 \\ \text{False} &amp; \text{if } x_\text{bmi} &gt; 0.009 \end{cases} 
+\end{split}\]</div>
+<ul class="simple">
 <li><p>Normally, a rule applies to only one feature or attribute <span class="math notranslate nohighlight">\(x_j\)</span> of <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
 <li><p>If <span class="math notranslate nohighlight">\(x_j\)</span> is continuous, the rule normally separates inputs <span class="math notranslate nohighlight">\(x_j\)</span> into disjoint intervals (<span class="math notranslate nohighlight">\(-\infty, c], (c, \infty)\)</span>.</p></li>
 </ul>
@@ -978,11 +984,19 @@ $<span class="math notranslate nohighlight">\( r(x) = \begin{cases}\text{True} &
 <p>The next important concept in decision tress is that to <strong>decision regions</strong>.</p>
 <p>Decision trees partition the space of features into regions:</p>
 <ul class="simple">
-<li><p>A decision region <span class="math notranslate nohighlight">\(R\subseteq \mathcal{X}\)</span> is a subset of the feature space defined by the application of a set of rules <span class="math notranslate nohighlight">\(r_1, r_2, \ldots, r_m\)</span> and their values <span class="math notranslate nohighlight">\(v_1, v_2, \ldots, v_m \in \{\text{True}, \text{False}\}\)</span>, i.e.:
-$<span class="math notranslate nohighlight">\( R = \{x \in \mathcal{X} \mid r_1(x) = v_1 \text{ and } \ldots \text{ and } r_m(x) = v_m \} \)</span>$</p></li>
-<li><p>For example, a decision region in the diabetes problem is:
-$<span class="math notranslate nohighlight">\( R = \{x \in \mathcal{X} \mid x_\text{bmi} \leq 0.009 \text{ and } x_\text{bp} &gt; 0.004 \} \)</span>$</p></li>
+<li><p>A decision region <span class="math notranslate nohighlight">\(R\subseteq \mathcal{X}\)</span> is a subset of the feature space defined by the application of a set of rules <span class="math notranslate nohighlight">\(r_1, r_2, \ldots, r_m\)</span> and their values <span class="math notranslate nohighlight">\(v_1, v_2, \ldots, v_m \in \{\text{True}, \text{False}\}\)</span>, i.e.:</p></li>
 </ul>
+<div class="math notranslate nohighlight">
+\[ 
+R = \{x \in \mathcal{X} \mid r_1(x) = v_1 \text{ and } \ldots \text{ and } r_m(x) = v_m \} 
+\]</div>
+<ul class="simple">
+<li><p>For example, a decision region in the diabetes problem is:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ 
+R = \{x \in \mathcal{X} \mid x_\text{bmi} \leq 0.009 \text{ and } x_\text{bp} &gt; 0.004 \} 
+\]</div>
 <p>These regions correspond to the leaves of a decision tree.</p>
 <p>We can illustrate decision regions via this figure from Hastie et al.</p>
 <center><img width=50% src="../slides/img/decision_tree.png"></center><p>The illustrations are as follows:</p>
@@ -1006,8 +1020,11 @@ Specifically, for this image the central region that is non-rectangular cannot b
 </section>
 <section id="id1">
 <h3>15.1.3.3. Decision Trees<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>With the concept of regions, we can define a decision tree as a model <span class="math notranslate nohighlight">\(f : \mathcal{X} \to \mathcal{Y}\)</span> of the form
-$<span class="math notranslate nohighlight">\( f(x) = \sum_{R \in \mathcal{R}} y_R \mathbb{I}\{x \in R\}. \)</span>$</p>
+<p>With the concept of regions, we can define a decision tree as a model <span class="math notranslate nohighlight">\(f : \mathcal{X} \to \mathcal{Y}\)</span> of the form</p>
+<div class="math notranslate nohighlight">
+\[ 
+f(x) = \sum_{R \in \mathcal{R}} y_R \mathbb{I}\{x \in R\}. 
+\]</div>
 <ul class="simple">
 <li><p>The <span class="math notranslate nohighlight">\(\mathbb{I}\{\cdot\}\)</span> is an indicator function (one if <span class="math notranslate nohighlight">\(\{\cdot\}\)</span> is true, else zero) and values <span class="math notranslate nohighlight">\(y_R \in \mathcal{Y}\)</span> are the outputs for that region.</p></li>
 <li><p>The set <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> is a collection of decision regions. They are obtained by a recursive learning procedure (<em>recursive binary splitting</em>).</p></li>
@@ -1045,18 +1062,27 @@ $<span class="math notranslate nohighlight">\( f(x) = \sum_{R \in \mathcal{R}} y
 <section id="learning-new-decision-rules">
 <h2>15.2.1. Learning New Decision Rules<a class="headerlink" href="#learning-new-decision-rules" title="Permalink to this headline">¶</a></h2>
 <p>What is the set of possible rules that <code class="docutils literal notranslate"><span class="pre">create_rule</span></code> can add to the tree?</p>
-<p>When <span class="math notranslate nohighlight">\(x\)</span> has continuous features, the rules have the following form:
-$<span class="math notranslate nohighlight">\( r(x) = \begin{cases}\text{True} &amp; \text{if } x_j \leq t \\ \text{False} &amp; \text{if } x_j &gt; t \end{cases} \)</span><span class="math notranslate nohighlight">\(
-for a feature index \)</span>j<span class="math notranslate nohighlight">\( and threshold \)</span>t \in \mathbb{R}$.</p>
-<p>When <span class="math notranslate nohighlight">\(x\)</span> has categorical features, rules may have the following form:
-$<span class="math notranslate nohighlight">\( r(x) = \begin{cases}\text{True} &amp; \text{if } x_j = t_k \\ \text{False} &amp; \text{if } x_j \neq t_k \end{cases} \)</span><span class="math notranslate nohighlight">\(
-for a feature index \)</span>j<span class="math notranslate nohighlight">\( and possible value \)</span>t_k<span class="math notranslate nohighlight">\( for \)</span>x_j$.</p>
+<p>When <span class="math notranslate nohighlight">\(x\)</span> has continuous features, the rules have the following form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+r(x) = \begin{cases}\text{True} &amp; \text{if } x_j \leq t \\ \text{False} &amp; \text{if } x_j &gt; t \end{cases} 
+\end{split}\]</div>
+<p>for a feature index <span class="math notranslate nohighlight">\(j\)</span> and threshold <span class="math notranslate nohighlight">\(t \in \mathbb{R}\)</span>.</p>
+<p>When <span class="math notranslate nohighlight">\(x\)</span> has categorical features, rules may have the following form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+r(x) = \begin{cases}\text{True} &amp; \text{if } x_j = t_k \\ \text{False} &amp; \text{if } x_j \neq t_k \end{cases} 
+\end{split}\]</div>
+<p>for a feature index <span class="math notranslate nohighlight">\(j\)</span> and possible value <span class="math notranslate nohighlight">\(t_k\)</span> for <span class="math notranslate nohighlight">\(x_j\)</span>.</p>
 <p>Thus each rule <span class="math notranslate nohighlight">\(r: \mathcal{X} \rightarrow \{\text{T}, \text{F}\}\)</span> maps inputs to either true (<span class="math notranslate nohighlight">\(\text{T}\)</span>) or false (<span class="math notranslate nohighlight">\(\text{F}\)</span>) evaluations.</p>
 <p>How does the <code class="docutils literal notranslate"><span class="pre">create_rule</span></code> function choose a new rule <span class="math notranslate nohighlight">\(r\)</span>?
 Given a dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}\mid i =1,2,\ldots,n\}\)</span>, let’s say that <span class="math notranslate nohighlight">\(R\)</span> is the region of a leaf and <span class="math notranslate nohighlight">\(\mathcal{D}_R = \{(x^{(i)}, y^{(i)}\mid x^{(i)} \in R \}\)</span> is the data for <span class="math notranslate nohighlight">\(R\)</span>.
 We will greedily choose the rule that minimizes a loss function.</p>
-<p>Specifically, we add to the leaf a new rule <span class="math notranslate nohighlight">\(r : \mathcal{X} \to \{\text{T}, \text{F}\}\)</span> that minimizes a loss:
-$<span class="math notranslate nohighlight">\( \min_{r \in \mathcal{U}} \left( \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{T}\})}_\text{left subtree} +  \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{F}\}}_\text{right subtree})\right) \)</span>$</p>
+<p>Specifically, we add to the leaf a new rule <span class="math notranslate nohighlight">\(r : \mathcal{X} \to \{\text{T}, \text{F}\}\)</span> that minimizes a loss:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\min_{r \in \mathcal{U}} \left( \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{T}\})}_\text{left subtree} +  \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{F}\}}_\text{right subtree})\right) 
+\]</div>
 <p>where <span class="math notranslate nohighlight">\(L\)</span> is a loss function over a subset of the data flagged by the rule and <span class="math notranslate nohighlight">\(\mathcal{U}\)</span> is the set of possible rules.</p>
 </section>
 <section id="objectives-for-trees">
@@ -1064,8 +1090,11 @@ $<span class="math notranslate nohighlight">\( \min_{r \in \mathcal{U}} \left( \
 <p>What loss functions might we want to use when training a decision tree?</p>
 <section id="objectives-for-trees-classification">
 <h3>15.2.2.1. Objectives for Trees: Classification<a class="headerlink" href="#objectives-for-trees-classification" title="Permalink to this headline">¶</a></h3>
-<p>In classification, we can use the misclassification rate
-$<span class="math notranslate nohighlight">\( L(\mathcal{D}_R) = \frac{1}{|\mathcal{D}_R|} \sum_{(x, y) \in \mathcal{D}_R} \mathbb{I} \left\{ y \neq \texttt{most-common-y}(\mathcal{D}_R) \right\}. \)</span>$</p>
+<p>In classification, we can use the misclassification rate</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(\mathcal{D}_R) = \frac{1}{|\mathcal{D}_R|} \sum_{(x, y) \in \mathcal{D}_R} \mathbb{I} \left\{ y \neq \texttt{most-common-y}(\mathcal{D}_R) \right\}. 
+\]</div>
 <p>At a leaf node with region <span class="math notranslate nohighlight">\(R\)</span>, we predict <span class="math notranslate nohighlight">\(\texttt{most-common-y}(\mathcal{D}_R)\)</span>, the most common class <span class="math notranslate nohighlight">\(y\)</span> in the data.
 Notice that this loss incentivizes the algorithm to cluster together points that have similar class labels.</p>
 <p>A few other perspectives on the classification objective above:</p>
@@ -1078,11 +1107,17 @@ Notice that this loss incentivizes the algorithm to cluster together points that
 </section>
 <section id="objectives-for-trees-regression">
 <h3>15.2.2.2. Objectives for Trees: Regression<a class="headerlink" href="#objectives-for-trees-regression" title="Permalink to this headline">¶</a></h3>
-<p>In regression, it is common to minimize the L2 error between the data and the single best prediction we can make on this data:
-$<span class="math notranslate nohighlight">\( L(\mathcal{D_R}) = \sum_{(x, y) \in \mathcal{D_R}} \left( y - \texttt{average-y}(\mathcal{D_R}) \right)^2. \)</span>$</p>
+<p>In regression, it is common to minimize the L2 error between the data and the single best prediction we can make on this data:</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(\mathcal{D_R}) = \sum_{(x, y) \in \mathcal{D_R}} \left( y - \texttt{average-y}(\mathcal{D_R}) \right)^2. 
+\]</div>
 <p>If this was a leaf node, we would predict <span class="math notranslate nohighlight">\(\texttt{average-y}(\mathcal{D_R})\)</span>, the average <span class="math notranslate nohighlight">\(y\)</span> in the data. The above loss measures the resulting squared error.</p>
-<p>This yields the following optimization problem for selecting a rule:
-$<span class="math notranslate nohighlight">\( \min_{r \in \mathcal{U}} \left[ \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{T}} \left( y - p_\text{true}(r) \right)^2 +  \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{F}} \left( y - p_\text{false}(r) \right)^2 \right] \)</span>$</p>
+<p>This yields the following optimization problem for selecting a rule:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\min_{r \in \mathcal{U}} \left[ \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{T}} \left( y - p_\text{true}(r) \right)^2 +  \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{F}} \left( y - p_\text{false}(r) \right)^2 \right] 
+\]</div>
 <p>where <span class="math notranslate nohighlight">\(p_\text{True}(r) = \texttt{average-y}(\{(x, y) \mid (x, y) \in \mathcal{D}_R \text{ and } r(x) = \text{True}\})\)</span> and <span class="math notranslate nohighlight">\(p_\text{False}(r) = \texttt{average-y}(\{(x, y) \mid (x, y) \in \mathcal{D}_R \text{ and } r(x) = \text{False}\})\)</span> are the average predictions on each part of the data split.</p>
 <p>Notice that this loss incentivizes the algorithm to cluster together all the data points that have similar <span class="math notranslate nohighlight">\(y\)</span> values into the same region.</p>
 </section>

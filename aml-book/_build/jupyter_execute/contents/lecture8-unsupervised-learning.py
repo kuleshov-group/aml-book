@@ -19,7 +19,9 @@
 
 # In unsupervised learning, we also define a dataset and a learning algorithm.
 # 
-# $$ \text{Dataset} + \text{Learning Algorithm} \to \text{Unsupervised Model} $$
+# $$ 
+# \text{Dataset} + \text{Learning Algorithm} \to \text{Unsupervised Model} 
+# $$
 # 
 # The unsupervised model describes interesting structures in the data. For instance, it can identify interesting hidden clusters.
 
@@ -150,7 +152,10 @@ plt.legend(handles=p1.legend_elements()[0], labels=['Iris Setosa', 'Iris Versico
 # $$ \underbrace{\text{Dataset}}_\text{Attributes, Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Unsupervised Model} $$
 
 # We define a dataset of size $n$ for unsupervised learning as
-# $$\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}$$
+# 
+# $$
+# \mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}
+# $$
 # 
 # Each $x^{(i)} \in \mathbb{R}^d$ denotes an input, a vector of $d$ attributes or features.
 
@@ -165,7 +170,11 @@ plt.legend(handles=p1.legend_elements()[0], labels=['Iris Setosa', 'Iris Versico
 # ### 8.2.1.1. Model: Notation
 # 
 # We'll say that a model is a function
-# $$ f_\theta : \mathcal{X} \to \mathcal{S} $$
+# 
+# $$ 
+# f_\theta : \mathcal{X} \to \mathcal{S} 
+# $$
+# 
 # that maps inputs $x \in \mathcal{X}$ to some notion of structure $s \in \mathcal{S}$. Models may have *parameters* $\theta \in \Theta$ living in a set $\Theta$
 # 
 # Structures can take many forms (clusters, low-dimensional representations, etc.), and we will see many examples.
@@ -173,21 +182,32 @@ plt.legend(handles=p1.legend_elements()[0], labels=['Iris Setosa', 'Iris Versico
 # ### 8.2.1.2. Model Class: Notation
 # 
 # Formally, the model class is a set 
-# $$\mathcal{M} = \{f_\theta \mid f_\theta : \mathcal{X} \to \mathcal{S}; \; \theta \in \Theta \}.$$
+# 
+# $$
+# \mathcal{M} = \{f_\theta \mid f_\theta : \mathcal{X} \to \mathcal{S}; \; \theta \in \Theta \}.
+# $$
+# 
 # of possible models (models with different parameters) that map input features to structural elements.
 
 # ### 8.2.1.3. Objective: Notation
 # 
 # We again define an *objective function* (also called a *loss function*)
-# $$J(\theta) : \Theta \to [0, \infty), $$
+# 
+# $$
+# J(\theta) : \Theta \to [0, \infty), 
+# $$
+# 
 # which describes the extent to which $f_\theta$ "fits" the data $\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}$.
 
 # ### 8.2.1.4. Optimizer: Notation
 # 
 # An optimizer finds a model $f_\theta \in \mathcal{M}$ with the smallest value of the objective $J$.
+# 
+# $$
 # \begin{align*}
 # \min_{\theta \in \Theta} J(\theta)
 # \end{align*}
+# $$
 # 
 # Intuitively, this is the function that bests "fits" the data on the training dataset.
 
@@ -206,7 +226,11 @@ plt.legend(handles=p1.legend_elements()[0], labels=['Iris Setosa', 'Iris Versico
 # The parameters $\theta$ of the model are $K$ *centroids* $c_1, c_2, \ldots c_K \in \mathcal{X}$. The class of $x$ is $k$ if $c_k$ is the closest centroid to $x$ (for this lecture, let's assume the distance metric in use is Euclidean distance, although the algorithm works with any distance metric of your choice).
 
 # We can think of the model returned by $K$-Means as a function
-# $$f_\theta : \mathcal{X} \to \mathcal{S}$$
+# 
+# $$
+# f_\theta : \mathcal{X} \to \mathcal{S}
+# $$
+# 
 # that assigns each input $x$ to a cluster $s \in \mathcal{S} = \{1,2,\ldots,K\}$.
 
 # ### 8.2.2.2. K-Means at a High Level
@@ -226,7 +250,11 @@ plt.legend(handles=p1.legend_elements()[0], labels=['Iris Setosa', 'Iris Versico
 # How do we determine whether $f_\theta$ is a good clustering of the dataset $\mathcal{D}$?
 
 # We seek centroids $c_k$ such that the distance between the points and their closest centroid is minimized:
-# $$J(\theta) = \sum_{i=1}^n || x^{(i)} - \text{centroid}(f_\theta(x^{(i)})) ||,$$
+# 
+# $$
+# J(\theta) = \sum_{i=1}^n || x^{(i)} - \text{centroid}(f_\theta(x^{(i)})) ||,
+# $$
+# 
 # where $\text{centroid}(k) = c_k$ denotes the centroid for cluster $k$.
 
 # ### 8.2.2.4. The $K$-Means Optimizer
@@ -372,7 +400,10 @@ plt.scatter(X[:,0], X[:,1], c=y, alpha=0.1)
 # ## 8.3.5. Generalization in Unsupervised Learning
 # 
 # To talk about generalization, we usually assume that the dataset is sampled from a probability distribution $\mathbb{P}$, which we will call the *data distribution*. We will denote this as
-# $$x \sim \mathbb{P}.$$
+# 
+# $$
+# x \sim \mathbb{P}.
+# $$
 # 
 # Moreover, we assume the dataset $\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}$ consists of *independent and identicaly distributed* (IID) samples from $\mathbb{P}$.
 

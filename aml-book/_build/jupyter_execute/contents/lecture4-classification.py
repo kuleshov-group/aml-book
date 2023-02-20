@@ -535,14 +535,11 @@ plt.plot(theta_vals, coin_likelihood(theta_vals))
 # Our log-likelihood function is
 # 
 # $$
-# \begin{eqnarray}
-# \nonumber
-# L(\theta) &=& \theta^{\#\,\text{heads}} \cdot (1-\theta)^{\#\,\text{tails}}\\
-# \nonumber
-# \log L(\theta) &=& \log(\theta^{\#\,\text{heads}} \cdot (1-\theta)^{\#\,\text{tails}}) \\
-# \nonumber
-# &=& \#\,\text{heads} \cdot \log(\theta) + \#\,\text{tails} \cdot \log(1-\theta)
-# \end{eqnarray}
+# \begin{aligned}
+# L(\theta) & =\theta^{\# \text { heads }} \cdot(1-\theta)^{\# \text { tails }} \\
+# \log L(\theta) & =\log \left(\theta^{\# \text { heads }} \cdot(1-\theta)^{\# \text { tails }}\right) \\
+# & =\# \text { heads } \cdot \log (\theta)+\# \text { tails } \cdot \log (1-\theta)
+# \end{aligned}
 # $$
 # 
 # The maximum likelihood estimate is the $\theta^* \in [0,1]$ such that $\log L(\theta^*)$ is maximized.

@@ -27,15 +27,22 @@
 # #### Linear Model Family
 # 
 # In this lecture, we will work with linear models of the form:
+# 
+# $$
 # \begin{align*}
 # f_\theta(x) & = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d
 # \end{align*}
+# $$
+# 
 # where $x \in \mathbb{R}^d$ is a vector of features and $y \in \{-1, 1\}$ is the target. The $\theta_j$ are the *parameters* of the model.
 # 
 # We can represent the model in a vectorized form
+# 
+# $$
 # \begin{align*}
 # f_\theta(x) = \theta^\top x + \theta_0.
 # \end{align*}
+# $$
 
 # #### 12.1.1.2. Binary Classification Problem and The Iris Dataset
 # 
@@ -129,7 +136,11 @@ plt.show()
 # 
 # Most classification algorithms output not just a class label but a score.
 # * For example, logistic regression returns the class probability
-# $$ p(y=1|\mid x) = \sigma(\theta^\top x) \in [0,1] $$
+# 
+# $$ 
+# p(y=1|\mid x) = \sigma(\theta^\top x) \in [0,1] 
+# $$
+# 
 # If the class probability is $>0.5$, the model outputs class $1$. 
 # 
 # The score is an estimate of confidence; it also represents how far we are from the decision boundary.
@@ -205,12 +216,18 @@ plt.ylim([2.25, 4])
 # How can we define the concept of margin more formally?
 # 
 # We can try to define the margin $\tilde \gamma^{(i)}$ with respect to a training example $(x^{(i)}, y^{(i)})$ as
-# $$ \tilde \gamma^{(i)} = y^{(i)} \cdot f(x^{(i)}) = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right). $$
+# 
+# $$ 
+# \tilde \gamma^{(i)} = y^{(i)} \cdot f(x^{(i)}) = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right). 
+# $$
 # 
 # We call this the *functional* margin. Let's analyze it.
 
 # We defined the functional margin as
-# $$ \tilde\gamma^{(i)} = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right).$$
+# 
+# $$ 
+# \tilde\gamma^{(i)} = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right).
+# $$
 
 # * If $y^{(i)}=1$, then the margin $\tilde\gamma^{(i)}$ is large when the model score $f(x^{(i)}) = \theta^\top x^{(i)} + \theta_0$ is positive and large.
 
@@ -233,7 +250,11 @@ plt.ylim([2.25, 4])
 # ## 12.1.4. The Geometric Classification Margin
 # 
 # We define the *geometric* margin $\gamma^{(i)}$ with respect to a training example $(x^{(i)}, y^{(i)})$ as
-# $$ \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). $$
+# 
+# $$ 
+# \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). 
+# $$
+# 
 # We call it geomtric because $\gamma^{(i)}$ equals the distance between $x^{(i)}$ and the hyperplane.
 
 # * We normalize the functional margin by $||\theta||$ 
@@ -241,7 +262,10 @@ plt.ylim([2.25, 4])
 # * Rescaling the weights does not make the margin arbitrarily large.
 
 # Let's make sure our intuition about the margin holds.
-# $$ \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). $$
+# 
+# $$ 
+# \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). 
+# $$
 
 # * If $y^{(i)}=1$, then the margin $\gamma^{(i)}$ is large when the model score $f(x^{(i)}) = \theta^\top x^{(i)} + \theta_0$ is positive and large.
 
@@ -264,13 +288,23 @@ plt.ylim([2.25, 4])
 # 
 # 3. Let $x_0$ be the point on the boundary closest to $x^{(i)}$. Then by definition of the margin
 # $x^{(i)} = x_0 + \gamma^{(i)} \frac{\theta}{||\theta||}$ or
-# $$ x_0 = x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||}. $$
+# 
+# $$ 
+# x_0 = x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||}. 
+# $$
 
 # 4. Since $x_0$ is on the hyperplane, $\theta^\top x_0 + \theta_0 = 0$, or
-# $$\theta^\top \left(x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||} \right) + \theta_0 = 0.$$
+# 
+# $$
+# \theta^\top \left(x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||} \right) + \theta_0 = 0.
+# $$
+# 
 
 # 5. Solving for $\gamma^{(i)}$ and using the fact that $\theta^\top \theta = ||\theta||^2$, we obtain
-# $$ \gamma^{(i)} =  \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||}. $$
+# 
+# $$ 
+# \gamma^{(i)} =  \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||}. 
+# $$
 # 
 # Which is our geometric margin. The case of $y^{(i)}=-1$ can also be proven in a similar way.
 
@@ -310,18 +344,24 @@ plt.show()
 # ## 12.2.1. Maximizing the Margin
 # 
 # We want to define an objective that will result in maximizing the margin. As a first attempt, consider the following optimization problem.
+# 
+# $$
 # \begin{align*}
 # \max_{\theta,\theta_0,\gamma} \gamma \; &  \\
 # \text{subject to } \; & y^{(i)}\frac{(x^{(i)})^\top\theta+\theta_0}{||\theta||}\geq \gamma \; \text{for all $i$} 
 # \end{align*}
+# $$
 # 
 # This is maximies the smallest margin over the $(x^{(i)}, y^{(i)})$. It guarantees each point has margin at least $\gamma$.
 
 # This problem is difficult to optimize because of the division by $||\theta||$ and we would like to simplify it. First, consider the equivalent problem:
+# 
+# $$
 # \begin{align*}
 # \max_{\theta,\theta_0,\gamma} \gamma \; &  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq \gamma ||\theta|| \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # Note that this problem has an extra degree of freedom: 
 # 
@@ -330,24 +370,36 @@ plt.show()
 # * This yields another valid solution!
 
 # To enforce uniqueness, we add another constraint that doesn't change the minimizer:
-# $$ ||\theta|| \cdot \gamma = 1. $$
+# 
+# $$ 
+# ||\theta|| \cdot \gamma = 1. 
+# $$
 
 # This ensures we cannot rescale $\theta$ and also asks our linear model to assign each $x^{(i)}$ a score of at least $\pm 1$:
-# $$ y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$} $$
+# 
+# $$ 
+# y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$} 
+# $$
 
 # If we constraint $||\theta|| \cdot \gamma = 1$ holds, then we know that $\gamma = 1/||\theta||$ and we can replace $\gamma$ in the optimization problem to obtain:
+# 
+# $$
 # \begin{align*}
 # \max_{\theta,\theta_0} \frac{1}{||\theta||} \; &  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
 # \end{align*}
+# $$
 # 
 # The solution of this problem is still the same.
 
 # Finally, instead of maximizing $1/||\theta||$, we can minimize $||\theta||$, or equvalently we can minimize $\frac{1}{2}||\theta||^2$.
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
 # \end{align*}
+# $$
 # 
 # This is now a quadratic program that can be solved using off-the-shelf optimization algorithms!
 
@@ -375,6 +427,7 @@ plt.show()
 # So far, we have assume that a linear hyperplane exists. However, what if the classes are non-separable? Then our optimization problem does not have a solution and we need to modify it.
 
 # Our solution is going to be to make each constraint "soft", by introducing "slack" variables, which allow the constraint to be violated.
+# 
 # $$
 # y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i.
 # $$
@@ -386,19 +439,25 @@ plt.show()
 # * We define optimization such that the $\xi_i$ are chosen to be as small as possible.
 
 # In the optimization problem, we assign a penalty $C$ to these slack variables to obtain:
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0, \xi}\; & \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
 # \text{subject to } \; & y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\geq 1 - \xi_i \; \text{for all $i$} \\
 # & \xi_i \geq 0
 # \end{align*}
+# $$
 
 # ## 12.3.2. Towards an Unconstrained Objective
 # 
 # Let's further modify things. Moving around terms in the inequality we get:
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0, \xi}\; & \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
 # \text{subject to } \; & \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) \; \xi_i \geq 0 \; \text{for all $i$} 
 # \end{align*}
+# $$
 
 # If $0 \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)$, we classified $x^{(i)}$ perfectly and $\xi_i = 0$
 
@@ -409,23 +468,35 @@ plt.show()
 # We simplify notation a bit by using the notation $(x)^+ = \max(x,0)$.
 # 
 # This yields:
-# $$\xi_i = \max\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right), 0 \right) := \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+$$
+# 
+# $$
+# \xi_i = \max\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right), 0 \right) := \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+
+# $$
 
 # Since $\xi_i = \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+$, we can take
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0, \xi}\; & \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
 # \text{subject to } \; & \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) \; \xi_i \geq 0 \; \text{for all $i$} 
 # \end{align*}
+# $$
 
 # And we turn it into the following by plugging in the definition of $\xi_i$:
-# $$ \min_{\theta,\theta_0}\; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ $$
+# 
+# $$ 
+# \min_{\theta,\theta_0}\; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ 
+# $$
 
 # Since it doesn't matter which term we multiply by $C>0$, this is equivalent to
 # $$ \min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ + \frac{\lambda}{2}||\theta||^2 $$
 # for some $\lambda > 0$.
 
 # We have now turned our optimizatin problem into an unconstrained form:
-# $$ \min_{\theta,\theta_0}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} $$
+# 
+# $$ 
+# \min_{\theta,\theta_0}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} 
+# $$
 # 
 # * The hinge loss penalizes incorrect predictions.
 # * The L2 regularizer ensures the weights are small and well-behaved.
@@ -433,7 +504,10 @@ plt.show()
 # ## 12.3.3. The Hinge Loss
 # 
 # Consider again our new loss term for a label $y$ and a prediction $f$:
-# $$ L(y, f) = \max\left(1 - y \cdot f, 0\right). $$
+# 
+# $$ 
+# L(y, f) = \max\left(1 - y \cdot f, 0\right). 
+# $$
 
 # * If prediction $f$ has same class as $y$, and $|f| \geq 1$, the loss is zero.
 #     * If class correct, no penalty if score $f$ is larger than target $y$.
@@ -487,7 +561,10 @@ plt.legend(['Hinge Loss'])
 # #### Review: SVM Objective
 # 
 # Maximizing the margin can be done in the following form:
-# $$ \min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} $$
+# 
+# $$ 
+# \min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} 
+# $$
 # 
 # * The hinge loss penalizes incorrect predictions.
 # * The L2 regularizer ensures the weights are small and well-behaved.
@@ -530,7 +607,10 @@ def svm_objective(theta, X, y, C=.1):
 
 # #### Review: Gradient Descent
 # If we want to optimize $J(\theta)$, we start with an initial guess $\theta_0$ for the parameters and repeat the following update:
-# $$ \theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). $$
+# 
+# $$ 
+# \theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). 
+# $$
 # 
 # As code, this method may look as follows:
 # ```python
@@ -543,7 +623,11 @@ def svm_objective(theta, X, y, C=.1):
 # ## 12.4.1.  A Gradient for the Hinge Loss?
 # 
 # What is the gradient for the hinge loss with a linear $f$?
-# $$ J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). $$
+# 
+# $$ 
+# J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). 
+# $$
+# 
 
 # Here, you see the linear part of $J$ that behaves like $1 - y \cdot f_\theta(x)$ (when $y \cdot f_\theta(x) < 1$) in orange:
 
@@ -559,14 +643,21 @@ plt.legend(['Hinge Loss', 'Hinge Loss when $y \cdot f < 1$'])
 # <!-- Our objective is
 # $$ J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). $$ -->
 # Hence the gradient in this regime is: 
-# $$\nabla_\theta J(\theta) = -y \cdot \nabla f_\theta(x) = -y \cdot x$$
+# 
+# $$
+# \nabla_\theta J(\theta) = -y \cdot \nabla f_\theta(x) = -y \cdot x
+# $$
+# 
 # where we used $\nabla_\theta \theta^\top x = x$.
 
 # When $y \cdot f_\theta(x) \geq 1$, we are in the "flat" part and $J(\theta) = 0$.
 # Hence the gradient is also just zero!
 
 # What is the gradient for the hinge loss with a linear $f$?
-# $$ J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). $$
+# 
+# $$ 
+# J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). 
+# $$
 # 
 # When $y \cdot f_\theta(x) = 1$, we are in the "kink", and the gradient is not defined!
 # * In practice, we can either take the gradient when $y \cdot f_\theta(x) > 1$ or the gradient when $y \cdot f_\theta(x) < 1$ or anything in between. This is called the *subgradient*.
@@ -574,9 +665,16 @@ plt.legend(['Hinge Loss', 'Hinge Loss when $y \cdot f < 1$'])
 # ### 12.4.1.1.  A Steepest Descent Direction for the Hinge Loss
 # 
 # We can define a "gradient" like function $\tilde \nabla_\theta J(\theta)$ for the hinge loss
-# $$ J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). $$
+# 
+# $$ 
+# J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). 
+# $$
+# 
 # It equals:
-# $$\tilde \nabla_\theta J(\theta) = \begin{cases} -y \cdot x & \text{ if $y \cdot f_\theta(x) < 1$} \\ 0 & \text{ otherwise} \end{cases} $$
+# 
+# $$
+# \tilde \nabla_\theta J(\theta) = \begin{cases} -y \cdot x & \text{ if $y \cdot f_\theta(x) < 1$} \\ 0 & \text{ otherwise} \end{cases} 
+# $$
 
 # ## 12.4.2. (Sub-)Gradient Descent for SVM
 # 

@@ -108,7 +108,10 @@
 # **Step 1:** Fit weak learner $g_t$ on $\mathcal{D}$ with weights $w^{(i)}$.
 
 # **Step 2:** Compute misclassification error
-# $$e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq g_t(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}}$$
+# 
+# $$
+# e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq g_t(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}}
+# $$
 # 
 # * Recall that $\mathbb{I}\{\cdot\}$ is an indicator function that takes on value 1 when the condition in the brackets is true and 0 otherwise.
 #  
@@ -117,8 +120,13 @@
 
 # **Step 3:** Compute model weight and update function.
 # 
-# $$\alpha_t = \log[(1-e_t)/e_t]$$
-# $$f \gets f + \alpha_t g_t$$
+# $$
+# \alpha_t = \log[(1-e_t)/e_t]
+# $$
+# 
+# $$
+# f \gets f + \alpha_t g_t
+# $$
 # 
 # 
 # * Notice that $e_t$ intuitively measures how much *influence* $g_t$ should have on our overall predictor $f$.
@@ -221,7 +229,11 @@ plt.legend(loc='upper right');
 # There are other approaches to ensembling that are useful to know about.
 # * In stacking, we train $m$ independent models $g_j(x)$ (possibly from different model classes) and then train another model $f(x)$ to predict $y$ from the outputs of $g_j$.
 # * The Bayesian approach can also be seen as form of ensembling
-# $$P(y\mid x) = \int_\theta P(y\mid x,\theta) P(\theta \mid \mathcal{D}) d\theta$$
+# 
+# $$
+# P(y\mid x) = \int_\theta P(y\mid x,\theta) P(\theta \mid \mathcal{D}) d\theta
+# $$
+# 
 # where we average models $P(y\mid x,\theta)$ using weights $P(\theta \mid \mathcal{D})$.
 
 # Ensembling is a useful technique in machine learning, as it often helps squeeze out additional performance out of ML algorithms, however this comes at the cost of additional (potentially quite expensive) computation to train and use ensembles.
@@ -239,7 +251,10 @@ plt.legend(loc='upper right');
 # Next, we are going to see another perspective on boosting and derive new boosting algorithms.
 
 # Boosting can be seen as a way of fitting more general *additive models*:
-# $$ f(x) = \sum_{t=1}^T \alpha_t g(x; \phi_t). $$
+# 
+# $$ 
+# f(x) = \sum_{t=1}^T \alpha_t g(x; \phi_t). 
+# $$
 
 # * The main model $f(x)$ consists of $T$ smaller models $g$ with weights $\alpha_t$ and paramaters $\phi_t$.
 
@@ -257,10 +272,17 @@ plt.legend(loc='upper right');
 # * Suppose we have a loss $L : \mathcal{Y} \times \mathcal{Y} \to [0, \infty)$.
 
 # * Start with
-# $$f_0 = \arg \min_\phi \sum_{i=1}^n L(y^{(i)}, g(x^{(i)}; \phi))$$
+# 
+# $$
+# f_0 = \arg \min_\phi \sum_{i=1}^n L(y^{(i)}, g(x^{(i)}; \phi))
+# $$
 
 # * At each iteration $t$ we fit the best addition to the current model.
-# $$ \alpha_t, \phi_t = \arg\min_{\alpha, \phi} \sum_{i=1}^n L(y^{(i)}, f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))$$
+# 
+# $$ 
+# \alpha_t, \phi_t = \arg\min_{\alpha, \phi} \sum_{i=1}^n L(y^{(i)}, f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))
+# $$
+# 
 #  * Note that each step $f_{t-1}$ is fixed, and we are only optimizing over the weight $\alpha_t$ and the new model parameters $\phi_t$.
 #  This helps keep the optimization process tractable.
 
@@ -277,7 +299,9 @@ plt.legend(loc='upper right');
 # We start with the exponential loss.
 # Give a binary classification problem with labels $\mathcal{Y} = \{-1, +1\}$, the exponential loss is defined as
 # 
-# $$ L(y, f) = \exp(-y \cdot f). $$
+# $$ 
+# L(y, f) = \exp(-y \cdot f). 
+# $$
 # 
 # * When $y=1$, $L$ is small when $f \to \infty$.
 # * When $y=-1$, $L$ is small when $f \to - \infty$.
@@ -318,23 +342,35 @@ plt.tight_layout()
 # Adaboost is an instance of forward stagewise additive modeling with the exponential loss.
 
 # At each step $t,$ we minimize
-# $$L_t = \sum_{i=1}^n e^{-y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))} = \sum_{i=1}^n w^{(i)} \exp\left(-y^{(i)}\alpha g(x^{(i)}; \phi)\right) $$
+# 
+# $$
+# L_t = \sum_{i=1}^n e^{-y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))} = \sum_{i=1}^n w^{(i)} \exp\left(-y^{(i)}\alpha g(x^{(i)}; \phi)\right) 
+# $$
+# 
 # with $w^{(i)} = \exp(-y^{(i)}f_{t-1}(x^{(i)}))$.
 # 
 # We can derive the Adaboost update rules from this equation.
 
 # Suppose that $g(y; \phi) \in \{-1,1\}$. With a bit of algebraic manipulations, we get that:
+# 
+# $$
 # \begin{align*}
 # L_t & = e^{\alpha} \sum_{y^{(i)} \neq g(x^{(i)})} w^{(i)} + e^{-\alpha} \sum_{y^{(i)} = g(x^{(i)})} w^{(i)} \\
 # & = (e^{\alpha} - e^{-\alpha}) \sum_{i=1}^n w^{(i)} \mathbb{I}\{{y^{(i)} \neq g(x^{(i)})}\} + e^{-\alpha} \sum_{i=1}^n w^{(i)}.\\
 # \end{align*}
+# $$
+# 
 # where $\mathbb{I}\{\cdot\}$ is the indicator function.
 
 # From there, we get that:
+# 
+# $$
 # \begin{align*}
 # \phi_t & = \arg\min_{\phi} \sum_{i=1}^n w^{(i)} \mathbb{I}\{{y^{(i)} \neq g(x^{(i)}; \phi)}\} \\
 # \alpha_t & = \log[(1-e_t)/e_t]
 # \end{align*}
+# $$
+# 
 # where $e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq f(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}\}}$.
 # 
 # These are update rules for Adaboost, and it's not hard to show that the update rule for $w^{(i)}$ is the same as well.
@@ -343,11 +379,18 @@ plt.tight_layout()
 # 
 # Another popular choice of loss is the squared loss, which allows us to derive a principled boosting algorithm for regression (as opposed to the exponential loss which can be used for classification).
 # We define the squared loss as:
-# $$ L(y, f) = (y-f)^2. $$
+# 
+# $$ 
+# L(y, f) = (y-f)^2. 
+# $$
 
 # The resulting algorithm is often called L2Boost.
 # At step $t,$ we minimize
-# $$\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, $$
+# 
+# $$
+# \sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+# $$
+# 
 # where $r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}$ is the residual from the model at time $t-1$.
 
 # ### 16.5.2.3. Logistic Loss
@@ -360,7 +403,10 @@ plt.tight_layout()
 # This looks like the log of the exponential loss; it is less sensitive to outliers since it doesn't penalize large errors as much.
 
 # In the context of boosting, we minimize
-# $$J(\alpha, \phi) = \sum_{i=1}^n \log\left(1+\exp\left(-2y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi)\right)\right).$$
+# 
+# $$
+# J(\alpha, \phi) = \sum_{i=1}^n \log\left(1+\exp\left(-2y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi)\right)\right).
+# $$
 
 # This gives a different weight update compared to Adabost. This algorithm is called LogitBoost.
 
@@ -415,19 +461,36 @@ plt.tight_layout()
 # Let's start to motivate gradient boosting by taking a new lens to the boosting algorithms we saw above.
 # 
 # Consider, for example, L2Boost, which optimizes the L2 loss
-# $$ L(y, f) = \frac{1}{2}(y-f)^2. $$
+# 
+# $$ 
+# L(y, f) = \frac{1}{2}(y-f)^2. 
+# $$
 
 # At step $t,$ we minimize
-# $$\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, $$
+# 
+# $$
+# \sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+# $$
+# 
 # where $r^{(i)}_t = y^{(i)} - f_{t-1}(x^{(i)})$ is the residual from the model at time $t-1$.
 
 # Observe that the residual is also the derivative of the $L2$ loss 
-# $$\frac{1}{2}(y^{(i)} - f_{t-1}(x^{(i)}))^2$$
+# 
+# $$
+# \frac{1}{2}(y^{(i)} - f_{t-1}(x^{(i)}))^2
+# $$
+# 
 # with respect to $f$ at $f_{t-1}(x^{(i)})$:
-# $$r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}$$
+# 
+# $$
+# r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}
+# $$
 
 # Thus, at step $t,$ we are minimizing
-# $$\sum_{i=1}^n \left( \underbrace{\left(y^{(i)} - f_{t-1}(x^{(i)})\right)}_\text{derivative of $L$ at $f_{t-1}(x^{(i)})$} - g(x^{(i)}; \phi_t)\right)^2. $$
+# 
+# $$
+# \sum_{i=1}^n \left( \underbrace{\left(y^{(i)} - f_{t-1}(x^{(i)})\right)}_\text{derivative of $L$ at $f_{t-1}(x^{(i)})$} - g(x^{(i)}; \phi_t)\right)^2. 
+# $$
 # 
 # That is, we are trying to select the parameters $\phi_t$ that are closest to the residuals, which we are now viewing as the gradient with respect to $f_{t-1}(x^{(i)})$. 
 
@@ -440,10 +503,17 @@ plt.tight_layout()
 # ### 16.6.3.1. Supervised Learning: The Model
 # 
 # Recall that a machine learning model is a function
-# $$ f_\theta : \mathcal{X} \to \mathcal{Y} $$
+# 
+# $$ 
+# f_\theta : \mathcal{X} \to \mathcal{Y} 
+# $$
+# 
 # that maps inputs $x \in \mathcal{X}$ to targets $y \in \mathcal{Y}$. 
 # The model has a $d$-dimensional set of parameters $\theta$:
-# $$\theta = (\theta_1, \theta_2, ..., \theta_d). $$
+# 
+# $$
+# \theta = (\theta_1, \theta_2, ..., \theta_d). 
+# $$
 
 # ### 16.6.3.2. Supervised Learning: The Learning Objective
 # 
@@ -458,9 +528,12 @@ plt.tight_layout()
 # Recall that formally, an expectation $\mathbb{E}_{x\sim {P}} f(x)$ is $\sum_{x \in \mathcal{X}} f(x) P(x)$ if $x$ is discrete and $\int_{x \in \mathcal{X}} f(x) P(x) dx$ if $x$ is continuous.
 
 # Intuitively,
-# $$J(\theta) = \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left( y, f_\theta( x) \right) \right]
+# 
+# $$
+# J(\theta) = \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left( y, f_\theta( x) \right) \right]
 # = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} L\left(y, f_\theta(x) \right) \mathbb{P}(x, y)
 # $$
+# 
 # is the performance on an *infinite-sized* holdout set, where we have sampled every possible point.
 # 
 
@@ -468,23 +541,33 @@ plt.tight_layout()
 # 
 # The gradient $\nabla J(\theta)$ is the $d$-dimensional vector of partial derivatives:
 # 
-# $$ \nabla J (\theta) = \begin{bmatrix}
+# $$ 
+# \nabla J (\theta) = \begin{bmatrix}
 # \frac{\partial J(\theta)}{\partial \theta_1} \\
 # \frac{\partial J(\theta)}{\partial \theta_2} \\
 # \vdots \\
 # \frac{\partial J(\theta)}{\partial \theta_d}
-# \end{bmatrix}.$$
+# \end{bmatrix}.
+# $$
 # 
 # The $j$-th entry of the vector $\nabla J (\theta)$ is the partial derivative $\frac{\partial J(\theta)}{\partial \theta_j}$ of $J$ with respect to the $j$-th component of $\theta$.
 
 # We can optimize $J(\theta)$ using gradient descent via the usual update rule:
-# $$\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1}).$$
+# 
+# $$
+# \theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1}).
+# $$
 
 # However, in practice, we cannot measure
-# $$\nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]$$
+# 
+# $$
+# \nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]
+# $$
+# 
 # on infinite data. 
 
 # We substitute $\nabla J(\theta)$ with an approximation $\hat \nabla J(\theta)$ measured on a dataset $\mathcal{D}$ sampled from $\mathbb{P}$:
+# 
 # $$
 # \hat \nabla J (\theta) = \frac{1}{m} \sum_{i=1}^m \nabla L\left( y^{(i)}, f_\theta( x^{(i)}) \right).
 # $$
@@ -496,11 +579,15 @@ plt.tight_layout()
 
 # But what do we mean by "infinite-dimensional functions?"
 # Letting our model space be the (unrestricted) set of functions $f: \mathcal{X} \to \mathcal{Y},$ each function is an infinite-dimensional *vector* indexed by $x \in \mathcal{X}$:
-# $$ f = \begin{bmatrix}
+# 
+# $$ 
+# f = \begin{bmatrix}
 # \vdots \\
 # f(x) \\
 # \vdots
-# \end{bmatrix}.$$
+# \end{bmatrix}.
+# $$
+# 
 # The $x$-th component of the vector $f$ is $f(x)$.
 # So rather than uniquely characterizing a function by some finite dimensional vector of parameters, a point in function space can be uniquely characterized by the values that it takes on every possible input, of which there can be infinitely many.
 # It's as if we choose infinite parameters $\theta=(..., f(x), ...)$ that specify function values, and we optimize over that.
@@ -520,14 +607,19 @@ plt.tight_layout()
 # 
 # We would like to again optimize $J(f)$ using gradient descent:
 # 
-# $$\min_f J(f) = \min_f \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left(y, f(x \right)) \right].$$
+# $$
+# \min_f J(f) = \min_f \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left(y, f(x \right)) \right].
+# $$
 # 
 # We may define the functional gradient of this loss at $f$ as an infinite-dimensional vector $\nabla J(f) : \mathcal{X} \to \mathbb{R}$ "indexed" by $x$:
-# $$ \nabla J (f) = \begin{bmatrix}
+# 
+# $$ 
+# \nabla J (f) = \begin{bmatrix}
 # \vdots \\
 # \frac{\partial J(f)}{\partial f(x)} \\
 # \vdots \\
-# \end{bmatrix}.$$
+# \end{bmatrix}.
+# $$
 
 # Let's compare the parametric and the functional gradients.
 
@@ -549,28 +641,42 @@ plt.tight_layout()
 
 # Recall that we are taking the perspective that $f$ is a vector indexed by $x.$
 # Thus the $x$-th entry of the vector $\nabla J (f)$ is the partial derivative $\frac{\partial J(f)}{\partial f(x)}$ of $J$ with respect to $f(x)$, the $x$-th component of $f$.
+# 
 # $$
 # \frac{\partial J(f)}{\partial f(x)} = \frac{\partial}{\partial f(x)} \left( \mathbb{E}_{( x,  y)\sim \mathbb{P}} \left[ L\left( y, f( x \right)) \right] \right) = \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)}
 # $$
 
 # So the functional gradient is
-# $$ \nabla J (f) = \begin{bmatrix}
+# 
+# $$ 
+# \nabla J (f) = \begin{bmatrix}
 # \vdots \\
 # \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)} \\
 # \vdots \\
-# \end{bmatrix}.$$
+# \end{bmatrix}.
+# $$
+# 
 # This is an infinite-dimensional vector indexed by $x$.
 
 # #### Functional Gradient Descent
 # 
 # Previously, we optimized $J(\theta)$ using gradient descent via the update rule:
-# $$\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1})$$
+# 
+# $$
+# \theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1})
+# $$
 
 # We can now optimize our objective using gradient descent in functional space via the same update:
-# $$f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1}).$$
+# 
+# $$
+# f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1}).
+# $$
 
 # After $T$ steps of $f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1})$, we get a model of the form
-# $$f_T = f_0-\sum_{t=0}^{T-1} \alpha_t \nabla J(f_{t})$$
+# 
+# $$
+# f_T = f_0-\sum_{t=0}^{T-1} \alpha_t \nabla J(f_{t})
+# $$
 
 # #### The Challenge of Supervised Learning Over Functions
 # 
@@ -582,6 +688,7 @@ plt.tight_layout()
 
 # But recall as well that in the standard supervised learning approach that we reviewed above, we were not able to compute $\nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]$
 # on infinite data and instead we used:
+# 
 # $$
 # \hat \nabla J (\theta) = \frac{1}{m} \sum_{i=1}^m \nabla L\left( y^{(i)}, f_\theta( x^{(i)}) \right).
 # $$
@@ -610,9 +717,13 @@ plt.tight_layout()
 
 # We can apply the same idea to gradients, learning $\nabla J(f).$ 
 # * We search for a model $g_{\theta_t} : \mathcal{X} \to R$ within a more restricted function class $\mathcal{M}$ that can approximate the functional gradient $\nabla J(f_t)$.
+# 
+# $$
 # \begin{align*}
 # g_{\theta_t} \in \mathcal{M} & & g_{\theta_t} \approx \nabla J(f_t)
 # \end{align*}
+# $$
+# 
 # * The model extrapolates beyond the training set. Given enough datapoints, $g_{\theta_t}$ learns $\nabla J(f_t)$.
 # * Think of $g_{\theta_t}$ as the *projection* of $\nabla J(f_t)$ onto the function class $\mathcal{M}.$
 
@@ -624,16 +735,26 @@ plt.tight_layout()
 # 
 # In practice, what does it mean to approximate a functional gradient $g \approx \nabla J(f)m$?
 # We can use standard supervised learning. Suppose we have a fixed function $f$ and we want to estimate the functional gradient of $L$
-# $$\frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f(x)}.$$
+# 
+# $$
+# \frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f(x)}.
+# $$
+# 
 # at any $x \in \mathcal{X}$
 
 # **Step 1:** We define a loss $L_g$ (e.g., L2 loss) to measure how well $g \approx \nabla J(f)$.
 
 # **Step 2:** We compute $\nabla J(f)$ on the training dataset:
-# $$\mathcal{D}_g = \left\{ \left(x^{(i)}, \underbrace{\frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f(x^{(i)})}}_\text{functional derivative $\nabla_f J(f)_i$ at $f(x^{(i)})$} \right), i=1,2,\ldots,n \right\} $$
+# 
+# $$
+# \mathcal{D}_g = \left\{ \left(x^{(i)}, \underbrace{\frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f(x^{(i)})}}_\text{functional derivative $\nabla_f J(f)_i$ at $f(x^{(i)})$} \right), i=1,2,\ldots,n \right\} 
+# $$
 
 # **Step 3:** We train a model $g : \mathcal{X} \to \mathbb{R}$ on $\mathcal{D}_g$ to predict functional gradients at any $x$:
-# $$ g(x) \approx \frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f_0(x)}.$$
+# 
+# $$ 
+# g(x) \approx \frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f_0(x)}.
+# $$
 
 # ## 16.6.7. Gradient Boosting
 # 
@@ -643,10 +764,16 @@ plt.tight_layout()
 # Start with $f(x) = 0$. Then, at each step $t>1$:
 
 # **Step 1:** Create a training dataset $\mathcal{D}_g$ and fit $g_t(x^{(i)})$ using loss $L_g$:
-# $$ g_t(x) \approx \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}.$$
+# 
+# $$ 
+# g_t(x) \approx \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}.
+# $$
 
 # **Step 2:** Take a step of gradient descent using approximate gradients with step $\alpha_t$:
-# $$f_t(x) = f_{t-1}(x) - \alpha_t \cdot g_t(x).$$
+# 
+# $$
+# f_t(x) = f_{t-1}(x) - \alpha_t \cdot g_t(x).
+# $$
 
 # ## 16.6.8. Interpreting Gradient Boosting
 # 
@@ -661,16 +788,30 @@ plt.tight_layout()
 # ## 16.6.9. Returning to L2 Boosting
 # 
 # To better highlight the connections between boosting and gradient boosting, let's return to the example of L2Boost, which optimizes the L2 loss
-# $$ L(y, f) = \frac{1}{2}(y-f)^2$$
+# 
+# $$ 
+# L(y, f) = \frac{1}{2}(y-f)^2
+# $$
 
 # At step $t,$ we minimize
-# $$\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, $$
+# 
+# $$
+# \sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+# $$
+# 
 # where $r^{(i)}_t = y^{(i)} - f_{t-1}(x^{(i)})$ is the residual from the model at time $t-1$.
 
 # Observe that the residual
-# $$r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}$$
+# 
+# $$
+# r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}
+# $$
+# 
 # is also the gradient of the $L2$ loss with respect to $f$ at $f(x^{(i)})$
-# $$r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}$$
+# 
+# $$
+# r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}
+# $$
 # 
 # This answers our question from above as to "why in L2Boost we are fitting the derivatives of the L2 loss?"
 # The reason is that we are finding an approximation $g(\cdot; \phi)$ to $\nabla J(f)$ and to do so we are minimize the square loss between $\nabla J(f)(x^{(i)}) = r_t^{(i)}$ and $g(x^{(i)}; \phi)$ at our $n$ training points.

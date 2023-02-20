@@ -856,8 +856,11 @@ Give more weight to points with errors.</p>
 <h2>16.3.1. Defining Adaboost<a class="headerlink" href="#defining-adaboost" title="Permalink to this headline">¶</a></h2>
 <p>We start with uniform weights <span class="math notranslate nohighlight">\(w^{(i)} = 1/n\)</span> and <span class="math notranslate nohighlight">\(f = 0\)</span>. Then for <span class="math notranslate nohighlight">\(t=1,2,...,T\)</span>:</p>
 <p><strong>Step 1:</strong> Fit weak learner <span class="math notranslate nohighlight">\(g_t\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> with weights <span class="math notranslate nohighlight">\(w^{(i)}\)</span>.</p>
-<p><strong>Step 2:</strong> Compute misclassification error
-$<span class="math notranslate nohighlight">\(e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq g_t(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}}\)</span>$</p>
+<p><strong>Step 2:</strong> Compute misclassification error</p>
+<div class="math notranslate nohighlight">
+\[
+e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq g_t(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}}
+\]</div>
 <ul class="simple">
 <li><p>Recall that <span class="math notranslate nohighlight">\(\mathbb{I}\{\cdot\}\)</span> is an indicator function that takes on value 1 when the condition in the brackets is true and 0 otherwise.</p></li>
 <li><p>Notice that if all the weights <span class="math notranslate nohighlight">\(w^{(i)}\)</span> are the same, then this is just the misclassification rate.
@@ -865,9 +868,13 @@ When each weight can be different, we get a “weighted” misclassification err
 </ul>
 <p><strong>Step 3:</strong> Compute model weight and update function.</p>
 <div class="math notranslate nohighlight">
-\[\alpha_t = \log[(1-e_t)/e_t]\]</div>
+\[
+\alpha_t = \log[(1-e_t)/e_t]
+\]</div>
 <div class="math notranslate nohighlight">
-\[f \gets f + \alpha_t g_t\]</div>
+\[
+f \gets f + \alpha_t g_t
+\]</div>
 <ul class="simple">
 <li><p>Notice that <span class="math notranslate nohighlight">\(e_t\)</span> intuitively measures how much <em>influence</em> <span class="math notranslate nohighlight">\(g_t\)</span> should have on our overall predictor <span class="math notranslate nohighlight">\(f\)</span>.
 As <span class="math notranslate nohighlight">\(e_t\)</span> approaches zero, meaning few of the highly weighted points were misclassified by <span class="math notranslate nohighlight">\(g_t\)</span>, <span class="math notranslate nohighlight">\(\alpha_t\)</span> will be large, allowing <span class="math notranslate nohighlight">\(g_t\)</span> to have a bigger contribution to our predictor.
@@ -982,10 +989,13 @@ We use the <code class="docutils literal notranslate"><span class="pre">AdaBoost
 <p>There are other approaches to ensembling that are useful to know about.</p>
 <ul class="simple">
 <li><p>In stacking, we train <span class="math notranslate nohighlight">\(m\)</span> independent models <span class="math notranslate nohighlight">\(g_j(x)\)</span> (possibly from different model classes) and then train another model <span class="math notranslate nohighlight">\(f(x)\)</span> to predict <span class="math notranslate nohighlight">\(y\)</span> from the outputs of <span class="math notranslate nohighlight">\(g_j\)</span>.</p></li>
-<li><p>The Bayesian approach can also be seen as form of ensembling
-$<span class="math notranslate nohighlight">\(P(y\mid x) = \int_\theta P(y\mid x,\theta) P(\theta \mid \mathcal{D}) d\theta\)</span><span class="math notranslate nohighlight">\(
-where we average models \)</span>P(y\mid x,\theta)<span class="math notranslate nohighlight">\( using weights \)</span>P(\theta \mid \mathcal{D})$.</p></li>
+<li><p>The Bayesian approach can also be seen as form of ensembling</p></li>
 </ul>
+<div class="math notranslate nohighlight">
+\[
+P(y\mid x) = \int_\theta P(y\mid x,\theta) P(\theta \mid \mathcal{D}) d\theta
+\]</div>
+<p>where we average models <span class="math notranslate nohighlight">\(P(y\mid x,\theta)\)</span> using weights <span class="math notranslate nohighlight">\(P(\theta \mid \mathcal{D})\)</span>.</p>
 <p>Ensembling is a useful technique in machine learning, as it often helps squeeze out additional performance out of ML algorithms, however this comes at the cost of additional (potentially quite expensive) computation to train and use ensembles.</p>
 <p>As we have seen with Adaboost, boosting algorithms are a form of ensembling that yield high accuracy via a highly expressive non-linear model family. If trees are used as weak learners, then we also have the added benefit of requiring little to no preprocessing. However, as we saw with the random forest algorithm, with boosting, the interpretability of the weak learners is lost.</p>
 <section id="bagging-vs-boosting">
@@ -1001,8 +1011,11 @@ While both concepts refer to methods for combining the outputs of various models
 <section class="tex2jax_ignore mathjax_ignore" id="additive-models">
 <h1>16.5. Additive Models<a class="headerlink" href="#additive-models" title="Permalink to this headline">¶</a></h1>
 <p>Next, we are going to see another perspective on boosting and derive new boosting algorithms.</p>
-<p>Boosting can be seen as a way of fitting more general <em>additive models</em>:
-$<span class="math notranslate nohighlight">\( f(x) = \sum_{t=1}^T \alpha_t g(x; \phi_t). \)</span>$</p>
+<p>Boosting can be seen as a way of fitting more general <em>additive models</em>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+f(x) = \sum_{t=1}^T \alpha_t g(x; \phi_t). 
+\]</div>
 <ul class="simple">
 <li><p>The main model <span class="math notranslate nohighlight">\(f(x)\)</span> consists of <span class="math notranslate nohighlight">\(T\)</span> smaller models <span class="math notranslate nohighlight">\(g\)</span> with weights <span class="math notranslate nohighlight">\(\alpha_t\)</span> and paramaters <span class="math notranslate nohighlight">\(\phi_t\)</span>.</p></li>
 </ul>
@@ -1019,12 +1032,20 @@ We will see a more general approach below.</p>
 <li><p>Suppose we have a loss <span class="math notranslate nohighlight">\(L : \mathcal{Y} \times \mathcal{Y} \to [0, \infty)\)</span>.</p></li>
 </ul>
 <ul class="simple">
-<li><p>Start with
-$<span class="math notranslate nohighlight">\(f_0 = \arg \min_\phi \sum_{i=1}^n L(y^{(i)}, g(x^{(i)}; \phi))\)</span>$</p></li>
+<li><p>Start with</p></li>
 </ul>
+<div class="math notranslate nohighlight">
+\[
+f_0 = \arg \min_\phi \sum_{i=1}^n L(y^{(i)}, g(x^{(i)}; \phi))
+\]</div>
 <ul class="simple">
-<li><p>At each iteration <span class="math notranslate nohighlight">\(t\)</span> we fit the best addition to the current model.
-$<span class="math notranslate nohighlight">\( \alpha_t, \phi_t = \arg\min_{\alpha, \phi} \sum_{i=1}^n L(y^{(i)}, f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))\)</span>$</p></li>
+<li><p>At each iteration <span class="math notranslate nohighlight">\(t\)</span> we fit the best addition to the current model.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ 
+\alpha_t, \phi_t = \arg\min_{\alpha, \phi} \sum_{i=1}^n L(y^{(i)}, f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))
+\]</div>
+<ul class="simple">
 <li><p>Note that each step <span class="math notranslate nohighlight">\(f_{t-1}\)</span> is fixed, and we are only optimizing over the weight <span class="math notranslate nohighlight">\(\alpha_t\)</span> and the new model parameters <span class="math notranslate nohighlight">\(\phi_t\)</span>.
 This helps keep the optimization process tractable.</p></li>
 </ul>
@@ -1043,7 +1064,9 @@ This helps keep the optimization process tractable.</p></li>
 <p>We start with the exponential loss.
 Give a binary classification problem with labels <span class="math notranslate nohighlight">\(\mathcal{Y} = \{-1, +1\}\)</span>, the exponential loss is defined as</p>
 <div class="math notranslate nohighlight">
-\[ L(y, f) = \exp(-y \cdot f). \]</div>
+\[ 
+L(y, f) = \exp(-y \cdot f). 
+\]</div>
 <ul class="simple">
 <li><p>When <span class="math notranslate nohighlight">\(y=1\)</span>, <span class="math notranslate nohighlight">\(L\)</span> is small when <span class="math notranslate nohighlight">\(f \to \infty\)</span>.</p></li>
 <li><p>When <span class="math notranslate nohighlight">\(y=-1\)</span>, <span class="math notranslate nohighlight">\(L\)</span> is small when <span class="math notranslate nohighlight">\(f \to - \infty\)</span>.</p></li>
@@ -1084,34 +1107,49 @@ This could potentially be an issue in the presence of outliers or if we have som
 <section id="special-case-adaboost">
 <h4>Special Case: Adaboost<a class="headerlink" href="#special-case-adaboost" title="Permalink to this headline">¶</a></h4>
 <p>Adaboost is an instance of forward stagewise additive modeling with the exponential loss.</p>
-<p>At each step <span class="math notranslate nohighlight">\(t,\)</span> we minimize
-$<span class="math notranslate nohighlight">\(L_t = \sum_{i=1}^n e^{-y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))} = \sum_{i=1}^n w^{(i)} \exp\left(-y^{(i)}\alpha g(x^{(i)}; \phi)\right) \)</span><span class="math notranslate nohighlight">\(
-with \)</span>w^{(i)} = \exp(-y^{(i)}f_{t-1}(x^{(i)}))$.</p>
+<p>At each step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+L_t = \sum_{i=1}^n e^{-y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))} = \sum_{i=1}^n w^{(i)} \exp\left(-y^{(i)}\alpha g(x^{(i)}; \phi)\right) 
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(w^{(i)} = \exp(-y^{(i)}f_{t-1}(x^{(i)}))\)</span>.</p>
 <p>We can derive the Adaboost update rules from this equation.</p>
-<p>Suppose that <span class="math notranslate nohighlight">\(g(y; \phi) \in \{-1,1\}\)</span>. With a bit of algebraic manipulations, we get that:
+<p>Suppose that <span class="math notranslate nohighlight">\(g(y; \phi) \in \{-1,1\}\)</span>. With a bit of algebraic manipulations, we get that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-L_t &amp; = e^{\alpha} \sum_{y^{(i)} \neq g(x^{(i)})} w^{(i)} + e^{-\alpha} \sum_{y^{(i)} = g(x^{(i)})} w^{(i)} \
-&amp; = (e^{\alpha} - e^{-\alpha}) \sum_{i=1}^n w^{(i)} \mathbb{I}{{y^{(i)} \neq g(x^{(i)})}} + e^{-\alpha} \sum_{i=1}^n w^{(i)}.\
+L_t &amp; = e^{\alpha} \sum_{y^{(i)} \neq g(x^{(i)})} w^{(i)} + e^{-\alpha} \sum_{y^{(i)} = g(x^{(i)})} w^{(i)} \\
+&amp; = (e^{\alpha} - e^{-\alpha}) \sum_{i=1}^n w^{(i)} \mathbb{I}\{{y^{(i)} \neq g(x^{(i)})}\} + e^{-\alpha} \sum_{i=1}^n w^{(i)}.\\
 \end{align*}
-where <span class="math notranslate nohighlight">\(\mathbb{I}\{\cdot\}\)</span> is the indicator function.</p>
-<p>From there, we get that:
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbb{I}\{\cdot\}\)</span> is the indicator function.</p>
+<p>From there, we get that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\phi_t &amp; = \arg\min_{\phi} \sum_{i=1}^n w^{(i)} \mathbb{I}{{y^{(i)} \neq g(x^{(i)}; \phi)}} \
+\phi_t &amp; = \arg\min_{\phi} \sum_{i=1}^n w^{(i)} \mathbb{I}\{{y^{(i)} \neq g(x^{(i)}; \phi)}\} \\
 \alpha_t &amp; = \log[(1-e_t)/e_t]
 \end{align*}
-where <span class="math notranslate nohighlight">\(e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq f(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}\}}\)</span>.</p>
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq f(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}\}}\)</span>.</p>
 <p>These are update rules for Adaboost, and it’s not hard to show that the update rule for <span class="math notranslate nohighlight">\(w^{(i)}\)</span> is the same as well.</p>
 </section>
 </section>
 <section id="squared-loss">
 <h3>16.5.2.2. Squared Loss<a class="headerlink" href="#squared-loss" title="Permalink to this headline">¶</a></h3>
 <p>Another popular choice of loss is the squared loss, which allows us to derive a principled boosting algorithm for regression (as opposed to the exponential loss which can be used for classification).
-We define the squared loss as:
-$<span class="math notranslate nohighlight">\( L(y, f) = (y-f)^2. \)</span>$</p>
+We define the squared loss as:</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = (y-f)^2. 
+\]</div>
 <p>The resulting algorithm is often called L2Boost.
-At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize
-$<span class="math notranslate nohighlight">\(\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, \)</span><span class="math notranslate nohighlight">\(
-where \)</span>r^{(i)}<em>t = y^{(i)} - f(x^{(i)})</em>{t-1}<span class="math notranslate nohighlight">\( is the residual from the model at time \)</span>t-1$.</p>
+At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}\)</span> is the residual from the model at time <span class="math notranslate nohighlight">\(t-1\)</span>.</p>
 </section>
 <section id="logistic-loss">
 <h3>16.5.2.3. Logistic Loss<a class="headerlink" href="#logistic-loss" title="Permalink to this headline">¶</a></h3>
@@ -1120,8 +1158,11 @@ When <span class="math notranslate nohighlight">\(\mathcal{Y}=\{-1,1\}\)</span> 
 <div class="math notranslate nohighlight">
 \[L(y, f) = \log(1+\exp(-2\cdot y\cdot f)).\]</div>
 <p>This looks like the log of the exponential loss; it is less sensitive to outliers since it doesn’t penalize large errors as much.</p>
-<p>In the context of boosting, we minimize
-$<span class="math notranslate nohighlight">\(J(\alpha, \phi) = \sum_{i=1}^n \log\left(1+\exp\left(-2y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi)\right)\right).\)</span>$</p>
+<p>In the context of boosting, we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+J(\alpha, \phi) = \sum_{i=1}^n \log\left(1+\exp\left(-2y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi)\right)\right).
+\]</div>
 <p>This gives a different weight update compared to Adabost. This algorithm is called LogitBoost.</p>
 <p>Let’s plot some of these new losses as we did before.</p>
 <div class="cell docutils container">
@@ -1180,17 +1221,32 @@ $<span class="math notranslate nohighlight">\( f(x) = \sum_{t=1}^T \alpha_t g(x;
 <section id="motivating-gradient-boosting">
 <h2>16.6.2. Motivating Gradient Boosting<a class="headerlink" href="#motivating-gradient-boosting" title="Permalink to this headline">¶</a></h2>
 <p>Let’s start to motivate gradient boosting by taking a new lens to the boosting algorithms we saw above.</p>
-<p>Consider, for example, L2Boost, which optimizes the L2 loss
-$<span class="math notranslate nohighlight">\( L(y, f) = \frac{1}{2}(y-f)^2. \)</span>$</p>
-<p>At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize
-$<span class="math notranslate nohighlight">\(\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, \)</span><span class="math notranslate nohighlight">\(
-where \)</span>r^{(i)}<em>t = y^{(i)} - f</em>{t-1}(x^{(i)})<span class="math notranslate nohighlight">\( is the residual from the model at time \)</span>t-1$.</p>
-<p>Observe that the residual is also the derivative of the <span class="math notranslate nohighlight">\(L2\)</span> loss
-$<span class="math notranslate nohighlight">\(\frac{1}{2}(y^{(i)} - f_{t-1}(x^{(i)}))^2\)</span><span class="math notranslate nohighlight">\(
-with respect to \)</span>f<span class="math notranslate nohighlight">\( at \)</span>f_{t-1}(x^{(i)})<span class="math notranslate nohighlight">\(:
-\)</span><span class="math notranslate nohighlight">\(r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}\)</span>$</p>
-<p>Thus, at step <span class="math notranslate nohighlight">\(t,\)</span> we are minimizing
-$<span class="math notranslate nohighlight">\(\sum_{i=1}^n \left( \underbrace{\left(y^{(i)} - f_{t-1}(x^{(i)})\right)}_\text{derivative of \)</span>L<span class="math notranslate nohighlight">\( at \)</span>f_{t-1}(x^{(i)})<span class="math notranslate nohighlight">\(} - g(x^{(i)}; \phi_t)\right)^2. \)</span>$</p>
+<p>Consider, for example, L2Boost, which optimizes the L2 loss</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = \frac{1}{2}(y-f)^2. 
+\]</div>
+<p>At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(r^{(i)}_t = y^{(i)} - f_{t-1}(x^{(i)})\)</span> is the residual from the model at time <span class="math notranslate nohighlight">\(t-1\)</span>.</p>
+<p>Observe that the residual is also the derivative of the <span class="math notranslate nohighlight">\(L2\)</span> loss</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{2}(y^{(i)} - f_{t-1}(x^{(i)}))^2
+\]</div>
+<p>with respect to <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(f_{t-1}(x^{(i)})\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}
+\]</div>
+<p>Thus, at step <span class="math notranslate nohighlight">\(t,\)</span> we are minimizing</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n \left( \underbrace{\left(y^{(i)} - f_{t-1}(x^{(i)})\right)}_\text{derivative of $L$ at $f_{t-1}(x^{(i)})$} - g(x^{(i)}; \phi_t)\right)^2. 
+\]</div>
 <p>That is, we are trying to select the parameters <span class="math notranslate nohighlight">\(\phi_t\)</span> that are closest to the residuals, which we are now viewing as the gradient with respect to <span class="math notranslate nohighlight">\(f_{t-1}(x^{(i)})\)</span>.</p>
 <p>In the coming sections, we will try to explain why in L2Boost we are fitting the derivatives of the L2 loss?</p>
 </section>
@@ -1199,11 +1255,17 @@ $<span class="math notranslate nohighlight">\(\sum_{i=1}^n \left( \underbrace{\l
 <p>Let’s first recap classical supervised learning, and then contrast it against the gradient boosting approach to which we are building up.</p>
 <section id="supervised-learning-the-model">
 <h3>16.6.3.1. Supervised Learning: The Model<a class="headerlink" href="#supervised-learning-the-model" title="Permalink to this headline">¶</a></h3>
-<p>Recall that a machine learning model is a function
-$<span class="math notranslate nohighlight">\( f_\theta : \mathcal{X} \to \mathcal{Y} \)</span><span class="math notranslate nohighlight">\(
-that maps inputs \)</span>x \in \mathcal{X}<span class="math notranslate nohighlight">\( to targets \)</span>y \in \mathcal{Y}<span class="math notranslate nohighlight">\(. 
-The model has a \)</span>d<span class="math notranslate nohighlight">\(-dimensional set of parameters \)</span>\theta<span class="math notranslate nohighlight">\(:
-\)</span><span class="math notranslate nohighlight">\(\theta = (\theta_1, \theta_2, ..., \theta_d). \)</span>$</p>
+<p>Recall that a machine learning model is a function</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta : \mathcal{X} \to \mathcal{Y} 
+\]</div>
+<p>that maps inputs <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span> to targets <span class="math notranslate nohighlight">\(y \in \mathcal{Y}\)</span>.
+The model has a <span class="math notranslate nohighlight">\(d\)</span>-dimensional set of parameters <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta = (\theta_1, \theta_2, ..., \theta_d). 
+\]</div>
 </section>
 <section id="supervised-learning-the-learning-objective">
 <h3>16.6.3.2. Supervised Learning: The Learning Objective<a class="headerlink" href="#supervised-learning-the-learning-objective" title="Permalink to this headline">¶</a></h3>
@@ -1214,48 +1276,62 @@ J (\theta) = \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left( y, f_\theta( x \r
 \]</div>
 <p>Here, <span class="math notranslate nohighlight">\(L : \mathcal{X}\times\mathcal{Y} \to \mathbb{R}\)</span> is a performance metric and we take its expectation or average over all the possible samples <span class="math notranslate nohighlight">\( x, y\)</span> from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
 <p>Recall that formally, an expectation <span class="math notranslate nohighlight">\(\mathbb{E}_{x\sim {P}} f(x)\)</span> is <span class="math notranslate nohighlight">\(\sum_{x \in \mathcal{X}} f(x) P(x)\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is discrete and <span class="math notranslate nohighlight">\(\int_{x \in \mathcal{X}} f(x) P(x) dx\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is continuous.</p>
-<p>Intuitively,
-$<span class="math notranslate nohighlight">\(J(\theta) = \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left( y, f_\theta( x) \right) \right]
+<p>Intuitively,</p>
+<div class="math notranslate nohighlight">
+\[
+J(\theta) = \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left( y, f_\theta( x) \right) \right]
 = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} L\left(y, f_\theta(x) \right) \mathbb{P}(x, y)
-\)</span>$
-is the performance on an <em>infinite-sized</em> holdout set, where we have sampled every possible point.</p>
+\]</div>
+<p>is the performance on an <em>infinite-sized</em> holdout set, where we have sampled every possible point.</p>
 </section>
 <section id="supervised-learning-the-optimizer-gradient-descent">
 <h3>16.6.3.3. Supervised Learning: The Optimizer (Gradient Descent)<a class="headerlink" href="#supervised-learning-the-optimizer-gradient-descent" title="Permalink to this headline">¶</a></h3>
 <p>The gradient <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> is the <span class="math notranslate nohighlight">\(d\)</span>-dimensional vector of partial derivatives:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split} \nabla J (\theta) = \begin{bmatrix}
+\[\begin{split} 
+\nabla J (\theta) = \begin{bmatrix}
 \frac{\partial J(\theta)}{\partial \theta_1} \\
 \frac{\partial J(\theta)}{\partial \theta_2} \\
 \vdots \\
 \frac{\partial J(\theta)}{\partial \theta_d}
-\end{bmatrix}.\end{split}\]</div>
+\end{bmatrix}.
+\end{split}\]</div>
 <p>The <span class="math notranslate nohighlight">\(j\)</span>-th entry of the vector <span class="math notranslate nohighlight">\(\nabla J (\theta)\)</span> is the partial derivative <span class="math notranslate nohighlight">\(\frac{\partial J(\theta)}{\partial \theta_j}\)</span> of <span class="math notranslate nohighlight">\(J\)</span> with respect to the <span class="math notranslate nohighlight">\(j\)</span>-th component of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
-<p>We can optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span> using gradient descent via the usual update rule:
-$<span class="math notranslate nohighlight">\(\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1}).\)</span>$</p>
-<p>However, in practice, we cannot measure
-$<span class="math notranslate nohighlight">\(\nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]\)</span>$
-on infinite data.</p>
-<p>We substitute <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> with an approximation <span class="math notranslate nohighlight">\(\hat \nabla J(\theta)\)</span> measured on a dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> sampled from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>:
-$<span class="math notranslate nohighlight">\(
+<p>We can optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span> using gradient descent via the usual update rule:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1}).
+\]</div>
+<p>However, in practice, we cannot measure</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]
+\]</div>
+<p>on infinite data.</p>
+<p>We substitute <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> with an approximation <span class="math notranslate nohighlight">\(\hat \nabla J(\theta)\)</span> measured on a dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> sampled from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
 \hat \nabla J (\theta) = \frac{1}{m} \sum_{i=1}^m \nabla L\left( y^{(i)}, f_\theta( x^{(i)}) \right).
-\)</span><span class="math notranslate nohighlight">\(
-If the number of IID samples \)</span>m$ is large, this approximation holds (we call this a Monte Carlo approximation).</p>
+\]</div>
+<p>If the number of IID samples <span class="math notranslate nohighlight">\(m\)</span> is large, this approximation holds (we call this a Monte Carlo approximation).</p>
 </section>
 </section>
 <section id="supervised-learning-over-functions">
 <h2>16.6.4. Supervised Learning Over Functions<a class="headerlink" href="#supervised-learning-over-functions" title="Permalink to this headline">¶</a></h2>
 <p>Intuitively, the gradient boosting algorithm asks, “what if instead of optimizing over the finite-dimensional parameters <span class="math notranslate nohighlight">\(\theta \in \mathbb{R}^d,\)</span> we try optimizing directly over infinite-dimensional functions?”</p>
 <p>But what do we mean by “infinite-dimensional functions?”
-Letting our model space be the (unrestricted) set of functions <span class="math notranslate nohighlight">\(f: \mathcal{X} \to \mathcal{Y},\)</span> each function is an infinite-dimensional <em>vector</em> indexed by <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span>:
-$<span class="math notranslate nohighlight">\( f = \begin{bmatrix}
+Letting our model space be the (unrestricted) set of functions <span class="math notranslate nohighlight">\(f: \mathcal{X} \to \mathcal{Y},\)</span> each function is an infinite-dimensional <em>vector</em> indexed by <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+f = \begin{bmatrix}
 \vdots \\
 f(x) \\
 \vdots
-\end{bmatrix}.\)</span><span class="math notranslate nohighlight">\(
-The \)</span>x<span class="math notranslate nohighlight">\(-th component of the vector \)</span>f<span class="math notranslate nohighlight">\( is \)</span>f(x)<span class="math notranslate nohighlight">\(.
+\end{bmatrix}.
+\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(x\)</span>-th component of the vector <span class="math notranslate nohighlight">\(f\)</span> is <span class="math notranslate nohighlight">\(f(x)\)</span>.
 So rather than uniquely characterizing a function by some finite dimensional vector of parameters, a point in function space can be uniquely characterized by the values that it takes on every possible input, of which there can be infinitely many.
-It's as if we choose infinite parameters \)</span>\theta=(…, f(x), …)$ that specify function values, and we optimize over that.</p>
+It’s as if we choose infinite parameters <span class="math notranslate nohighlight">\(\theta=(..., f(x), ...)\)</span> that specify function values, and we optimize over that.</p>
 <section id="the-learning-objective">
 <h3>The Learning Objective<a class="headerlink" href="#the-learning-objective" title="Permalink to this headline">¶</a></h3>
 <p>Our learning objective <span class="math notranslate nohighlight">\(J(f)\)</span> is now defined over <span class="math notranslate nohighlight">\(f\)</span>.
@@ -1270,13 +1346,18 @@ J (f) = \mathbb{E}_{( x,  y)\sim \mathbb{P}} \left[ L\left( y, f( x \right)) \ri
 <h3>Functional Gradients<a class="headerlink" href="#functional-gradients" title="Permalink to this headline">¶</a></h3>
 <p>We would like to again optimize <span class="math notranslate nohighlight">\(J(f)\)</span> using gradient descent:</p>
 <div class="math notranslate nohighlight">
-\[\min_f J(f) = \min_f \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left(y, f(x \right)) \right].\]</div>
-<p>We may define the functional gradient of this loss at <span class="math notranslate nohighlight">\(f\)</span> as an infinite-dimensional vector <span class="math notranslate nohighlight">\(\nabla J(f) : \mathcal{X} \to \mathbb{R}\)</span> “indexed” by <span class="math notranslate nohighlight">\(x\)</span>:
-$<span class="math notranslate nohighlight">\( \nabla J (f) = \begin{bmatrix}
+\[
+\min_f J(f) = \min_f \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left(y, f(x \right)) \right].
+\]</div>
+<p>We may define the functional gradient of this loss at <span class="math notranslate nohighlight">\(f\)</span> as an infinite-dimensional vector <span class="math notranslate nohighlight">\(\nabla J(f) : \mathcal{X} \to \mathbb{R}\)</span> “indexed” by <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\nabla J (f) = \begin{bmatrix}
 \vdots \\
 \frac{\partial J(f)}{\partial f(x)} \\
 \vdots \\
-\end{bmatrix}.\)</span>$</p>
+\end{bmatrix}.
+\end{split}\]</div>
 <p>Let’s compare the parametric and the functional gradients.</p>
 <ul class="simple">
 <li><p>The parametric gradient <span class="math notranslate nohighlight">\(\nabla J(\theta) \in \mathbb{R}^d\)</span> is a vector of the same shape as <span class="math notranslate nohighlight">\(\theta  \in \mathbb{R}^d\)</span>. Both <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span> are indexed by <span class="math notranslate nohighlight">\(j=1,2,...,d\)</span>.</p></li>
@@ -1295,26 +1376,39 @@ We can think of this as the functional gradient telling us how to change the out
 <center><img width=100% src="../slides/img/functional_gradient.png"></center><p>The functional gradient is a function that tells us how much we “move” <span class="math notranslate nohighlight">\(f(x)\)</span> at each point <span class="math notranslate nohighlight">\(x\)</span>.
 Given a good step size, the resulting new function will be closer to minimizing <span class="math notranslate nohighlight">\(J\)</span>.</p>
 <p>Recall that we are taking the perspective that <span class="math notranslate nohighlight">\(f\)</span> is a vector indexed by <span class="math notranslate nohighlight">\(x.\)</span>
-Thus the <span class="math notranslate nohighlight">\(x\)</span>-th entry of the vector <span class="math notranslate nohighlight">\(\nabla J (f)\)</span> is the partial derivative <span class="math notranslate nohighlight">\(\frac{\partial J(f)}{\partial f(x)}\)</span> of <span class="math notranslate nohighlight">\(J\)</span> with respect to <span class="math notranslate nohighlight">\(f(x)\)</span>, the <span class="math notranslate nohighlight">\(x\)</span>-th component of <span class="math notranslate nohighlight">\(f\)</span>.
-$<span class="math notranslate nohighlight">\(
+Thus the <span class="math notranslate nohighlight">\(x\)</span>-th entry of the vector <span class="math notranslate nohighlight">\(\nabla J (f)\)</span> is the partial derivative <span class="math notranslate nohighlight">\(\frac{\partial J(f)}{\partial f(x)}\)</span> of <span class="math notranslate nohighlight">\(J\)</span> with respect to <span class="math notranslate nohighlight">\(f(x)\)</span>, the <span class="math notranslate nohighlight">\(x\)</span>-th component of <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
 \frac{\partial J(f)}{\partial f(x)} = \frac{\partial}{\partial f(x)} \left( \mathbb{E}_{( x,  y)\sim \mathbb{P}} \left[ L\left( y, f( x \right)) \right] \right) = \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)}
-\)</span>$</p>
-<p>So the functional gradient is
-$<span class="math notranslate nohighlight">\( \nabla J (f) = \begin{bmatrix}
+\]</div>
+<p>So the functional gradient is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\nabla J (f) = \begin{bmatrix}
 \vdots \\
 \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)} \\
 \vdots \\
-\end{bmatrix}.\)</span><span class="math notranslate nohighlight">\(
-This is an infinite-dimensional vector indexed by \)</span>x$.</p>
+\end{bmatrix}.
+\end{split}\]</div>
+<p>This is an infinite-dimensional vector indexed by <span class="math notranslate nohighlight">\(x\)</span>.</p>
 </section>
 <section id="functional-gradient-descent">
 <h3>Functional Gradient Descent<a class="headerlink" href="#functional-gradient-descent" title="Permalink to this headline">¶</a></h3>
-<p>Previously, we optimized <span class="math notranslate nohighlight">\(J(\theta)\)</span> using gradient descent via the update rule:
-$<span class="math notranslate nohighlight">\(\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1})\)</span>$</p>
-<p>We can now optimize our objective using gradient descent in functional space via the same update:
-$<span class="math notranslate nohighlight">\(f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1}).\)</span>$</p>
-<p>After <span class="math notranslate nohighlight">\(T\)</span> steps of <span class="math notranslate nohighlight">\(f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1})\)</span>, we get a model of the form
-$<span class="math notranslate nohighlight">\(f_T = f_0-\sum_{t=0}^{T-1} \alpha_t \nabla J(f_{t})\)</span>$</p>
+<p>Previously, we optimized <span class="math notranslate nohighlight">\(J(\theta)\)</span> using gradient descent via the update rule:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1})
+\]</div>
+<p>We can now optimize our objective using gradient descent in functional space via the same update:</p>
+<div class="math notranslate nohighlight">
+\[
+f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1}).
+\]</div>
+<p>After <span class="math notranslate nohighlight">\(T\)</span> steps of <span class="math notranslate nohighlight">\(f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1})\)</span>, we get a model of the form</p>
+<div class="math notranslate nohighlight">
+\[
+f_T = f_0-\sum_{t=0}^{T-1} \alpha_t \nabla J(f_{t})
+\]</div>
 </section>
 <section id="the-challenge-of-supervised-learning-over-functions">
 <h3>The Challenge of Supervised Learning Over Functions<a class="headerlink" href="#the-challenge-of-supervised-learning-over-functions" title="Permalink to this headline">¶</a></h3>
@@ -1323,10 +1417,11 @@ $<span class="math notranslate nohighlight">\(f_T = f_0-\sum_{t=0}^{T-1} \alpha_
 <p>Recall that each <span class="math notranslate nohighlight">\(\nabla J(f_{t})\)</span> is a function of <span class="math notranslate nohighlight">\(x.\)</span>
 Therefore <span class="math notranslate nohighlight">\(f_T\)</span> is a function of <span class="math notranslate nohighlight">\(x\)</span> as well, and as a function that is found through gradient descent, <span class="math notranslate nohighlight">\(f_T\)</span> will minimize <span class="math notranslate nohighlight">\(J.\)</span></p>
 <p>But recall as well that in the standard supervised learning approach that we reviewed above, we were not able to compute <span class="math notranslate nohighlight">\(\nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]\)</span>
-on infinite data and instead we used:
-$<span class="math notranslate nohighlight">\(
+on infinite data and instead we used:</p>
+<div class="math notranslate nohighlight">
+\[
 \hat \nabla J (\theta) = \frac{1}{m} \sum_{i=1}^m \nabla L\left( y^{(i)}, f_\theta( x^{(i)}) \right).
-\)</span>$</p>
+\]</div>
 <p>In the case of functional gradients, we also need to find an approximation <span class="math notranslate nohighlight">\(\hat \nabla J(f)\)</span>:
 $<span class="math notranslate nohighlight">\(
 \nabla J(f) (x) = \frac{\partial J(f)}{\partial f(x)} = \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)}
@@ -1355,10 +1450,15 @@ $<span class="math notranslate nohighlight">\(
 </ul>
 <p>We can apply the same idea to gradients, learning <span class="math notranslate nohighlight">\(\nabla J(f).\)</span></p>
 <ul class="simple">
-<li><p>We search for a model <span class="math notranslate nohighlight">\(g_{\theta_t} : \mathcal{X} \to R\)</span> within a more restricted function class <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> that can approximate the functional gradient <span class="math notranslate nohighlight">\(\nabla J(f_t)\)</span>.
+<li><p>We search for a model <span class="math notranslate nohighlight">\(g_{\theta_t} : \mathcal{X} \to R\)</span> within a more restricted function class <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> that can approximate the functional gradient <span class="math notranslate nohighlight">\(\nabla J(f_t)\)</span>.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
 \begin{align*}
 g_{\theta_t} \in \mathcal{M} &amp; &amp; g_{\theta_t} \approx \nabla J(f_t)
-\end{align*}</p></li>
+\end{align*}
+\]</div>
+<ul class="simple">
 <li><p>The model extrapolates beyond the training set. Given enough datapoints, <span class="math notranslate nohighlight">\(g_{\theta_t}\)</span> learns <span class="math notranslate nohighlight">\(\nabla J(f_t)\)</span>.</p></li>
 <li><p>Think of <span class="math notranslate nohighlight">\(g_{\theta_t}\)</span> as the <em>projection</em> of <span class="math notranslate nohighlight">\(\nabla J(f_t)\)</span> onto the function class <span class="math notranslate nohighlight">\(\mathcal{M}.\)</span></p></li>
 </ul>
@@ -1369,24 +1469,39 @@ If \)</span>g<span class="math notranslate nohighlight">\( generalizes, this app
 <section id="fitting-functional-gradients">
 <h2>16.6.6. Fitting Functional Gradients<a class="headerlink" href="#fitting-functional-gradients" title="Permalink to this headline">¶</a></h2>
 <p>In practice, what does it mean to approximate a functional gradient <span class="math notranslate nohighlight">\(g \approx \nabla J(f)m\)</span>?
-We can use standard supervised learning. Suppose we have a fixed function <span class="math notranslate nohighlight">\(f\)</span> and we want to estimate the functional gradient of <span class="math notranslate nohighlight">\(L\)</span>
-$<span class="math notranslate nohighlight">\(\frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f(x)}.\)</span><span class="math notranslate nohighlight">\(
-at any \)</span>x \in \mathcal{X}$</p>
+We can use standard supervised learning. Suppose we have a fixed function <span class="math notranslate nohighlight">\(f\)</span> and we want to estimate the functional gradient of <span class="math notranslate nohighlight">\(L\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f(x)}.
+\]</div>
+<p>at any <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span></p>
 <p><strong>Step 1:</strong> We define a loss <span class="math notranslate nohighlight">\(L_g\)</span> (e.g., L2 loss) to measure how well <span class="math notranslate nohighlight">\(g \approx \nabla J(f)\)</span>.</p>
-<p><strong>Step 2:</strong> We compute <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> on the training dataset:
-$<span class="math notranslate nohighlight">\(\mathcal{D}_g = \left\{ \left(x^{(i)}, \underbrace{\frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f(x^{(i)})}}_\text{functional derivative \)</span>\nabla_f J(f)_i<span class="math notranslate nohighlight">\( at \)</span>f(x^{(i)})<span class="math notranslate nohighlight">\(} \right), i=1,2,\ldots,n \right\} \)</span>$</p>
-<p><strong>Step 3:</strong> We train a model <span class="math notranslate nohighlight">\(g : \mathcal{X} \to \mathbb{R}\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span> to predict functional gradients at any <span class="math notranslate nohighlight">\(x\)</span>:
-$<span class="math notranslate nohighlight">\( g(x) \approx \frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f_0(x)}.\)</span>$</p>
+<p><strong>Step 2:</strong> We compute <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> on the training dataset:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{D}_g = \left\{ \left(x^{(i)}, \underbrace{\frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f(x^{(i)})}}_\text{functional derivative $\nabla_f J(f)_i$ at $f(x^{(i)})$} \right), i=1,2,\ldots,n \right\} 
+\]</div>
+<p><strong>Step 3:</strong> We train a model <span class="math notranslate nohighlight">\(g : \mathcal{X} \to \mathbb{R}\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span> to predict functional gradients at any <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+g(x) \approx \frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f_0(x)}.
+\]</div>
 </section>
 <section id="id1">
 <h2>16.6.7. Gradient Boosting<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>We now have the motivation and background needed to define gradient boosting.
 Gradient boosting is a procedure that performs functional gradient descent with approximate gradients.</p>
 <p>Start with <span class="math notranslate nohighlight">\(f(x) = 0\)</span>. Then, at each step <span class="math notranslate nohighlight">\(t&gt;1\)</span>:</p>
-<p><strong>Step 1:</strong> Create a training dataset <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span> and fit <span class="math notranslate nohighlight">\(g_t(x^{(i)})\)</span> using loss <span class="math notranslate nohighlight">\(L_g\)</span>:
-$<span class="math notranslate nohighlight">\( g_t(x) \approx \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}.\)</span>$</p>
-<p><strong>Step 2:</strong> Take a step of gradient descent using approximate gradients with step <span class="math notranslate nohighlight">\(\alpha_t\)</span>:
-$<span class="math notranslate nohighlight">\(f_t(x) = f_{t-1}(x) - \alpha_t \cdot g_t(x).\)</span>$</p>
+<p><strong>Step 1:</strong> Create a training dataset <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span> and fit <span class="math notranslate nohighlight">\(g_t(x^{(i)})\)</span> using loss <span class="math notranslate nohighlight">\(L_g\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+g_t(x) \approx \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}.
+\]</div>
+<p><strong>Step 2:</strong> Take a step of gradient descent using approximate gradients with step <span class="math notranslate nohighlight">\(\alpha_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+f_t(x) = f_{t-1}(x) - \alpha_t \cdot g_t(x).
+\]</div>
 </section>
 <section id="interpreting-gradient-boosting">
 <h2>16.6.8. Interpreting Gradient Boosting<a class="headerlink" href="#interpreting-gradient-boosting" title="Permalink to this headline">¶</a></h2>
@@ -1401,15 +1516,27 @@ This looks like the output of a boosting algorithm!</p>
 </section>
 <section id="returning-to-l2-boosting">
 <h2>16.6.9. Returning to L2 Boosting<a class="headerlink" href="#returning-to-l2-boosting" title="Permalink to this headline">¶</a></h2>
-<p>To better highlight the connections between boosting and gradient boosting, let’s return to the example of L2Boost, which optimizes the L2 loss
-$<span class="math notranslate nohighlight">\( L(y, f) = \frac{1}{2}(y-f)^2\)</span>$</p>
-<p>At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize
-$<span class="math notranslate nohighlight">\(\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, \)</span><span class="math notranslate nohighlight">\(
-where \)</span>r^{(i)}<em>t = y^{(i)} - f</em>{t-1}(x^{(i)})<span class="math notranslate nohighlight">\( is the residual from the model at time \)</span>t-1$.</p>
-<p>Observe that the residual
-$<span class="math notranslate nohighlight">\(r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}\)</span><span class="math notranslate nohighlight">\(
-is also the gradient of the \)</span>L2<span class="math notranslate nohighlight">\( loss with respect to \)</span>f<span class="math notranslate nohighlight">\( at \)</span>f(x^{(i)})<span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\(r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}\)</span>$</p>
+<p>To better highlight the connections between boosting and gradient boosting, let’s return to the example of L2Boost, which optimizes the L2 loss</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = \frac{1}{2}(y-f)^2
+\]</div>
+<p>At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(r^{(i)}_t = y^{(i)} - f_{t-1}(x^{(i)})\)</span> is the residual from the model at time <span class="math notranslate nohighlight">\(t-1\)</span>.</p>
+<p>Observe that the residual</p>
+<div class="math notranslate nohighlight">
+\[
+r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}
+\]</div>
+<p>is also the gradient of the <span class="math notranslate nohighlight">\(L2\)</span> loss with respect to <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(f(x^{(i)})\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}
+\]</div>
 <p>This answers our question from above as to “why in L2Boost we are fitting the derivatives of the L2 loss?”
 The reason is that we are finding an approximation <span class="math notranslate nohighlight">\(g(\cdot; \phi)\)</span> to <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> and to do so we are minimize the square loss between <span class="math notranslate nohighlight">\(\nabla J(f)(x^{(i)}) = r_t^{(i)}\)</span> and <span class="math notranslate nohighlight">\(g(x^{(i)}; \phi)\)</span> at our <span class="math notranslate nohighlight">\(n\)</span> training points.</p>
 <p>Many boosting methods are special cases of gradient boosting in this way.</p>

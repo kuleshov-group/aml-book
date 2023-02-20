@@ -56,6 +56,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 13: Dual Formulation of Support Vector Machines" href="lecture13-svm-dual.html" />
     <link rel="prev" title="Lecture 10: Clustering" href="lecture10-clustering.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -127,6 +128,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
@@ -144,6 +150,26 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture16-boosting.html">
+   Lecture 16: Boosting
   </a>
  </li>
 </ul>
@@ -609,15 +635,21 @@ const thebe_selector_output = ".output, .cell_output"
 <p>In this lecture, we assume <span class="math notranslate nohighlight">\(\mathcal{Y} = \{-1, +1\}\)</span>.</p>
 <section id="linear-model-family">
 <h4>Linear Model Family<a class="headerlink" href="#linear-model-family" title="Permalink to this headline">¶</a></h4>
-<p>In this lecture, we will work with linear models of the form:
+<p>In this lecture, we will work with linear models of the form:</p>
+<div class="math notranslate nohighlight">
+\[
 \begin{align*}
-f_\theta(x) &amp; = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + … + \theta_d \cdot x_d
+f_\theta(x) &amp; = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d
 \end{align*}
-where <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span> is a vector of features and <span class="math notranslate nohighlight">\(y \in \{-1, 1\}\)</span> is the target. The <span class="math notranslate nohighlight">\(\theta_j\)</span> are the <em>parameters</em> of the model.</p>
-<p>We can represent the model in a vectorized form
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span> is a vector of features and <span class="math notranslate nohighlight">\(y \in \{-1, 1\}\)</span> is the target. The <span class="math notranslate nohighlight">\(\theta_j\)</span> are the <em>parameters</em> of the model.</p>
+<p>We can represent the model in a vectorized form</p>
+<div class="math notranslate nohighlight">
+\[
 \begin{align*}
 f_\theta(x) = \theta^\top x + \theta_0.
-\end{align*}</p>
+\end{align*}
+\]</div>
 </section>
 <section id="binary-classification-problem-and-the-iris-dataset">
 <h4>12.1.1.2. Binary Classification Problem and The Iris Dataset<a class="headerlink" href="#binary-classification-problem-and-the-iris-dataset" title="Permalink to this headline">¶</a></h4>
@@ -790,10 +822,13 @@ f_\theta(x) = \theta^\top x + \theta_0.
 <h3>12.1.2.1. Classification Scores<a class="headerlink" href="#classification-scores" title="Permalink to this headline">¶</a></h3>
 <p>Most classification algorithms output not just a class label but a score.</p>
 <ul class="simple">
-<li><p>For example, logistic regression returns the class probability
-$<span class="math notranslate nohighlight">\( p(y=1|\mid x) = \sigma(\theta^\top x) \in [0,1] \)</span><span class="math notranslate nohighlight">\(
-If the class probability is \)</span>&gt;0.5<span class="math notranslate nohighlight">\(, the model outputs class \)</span>1$.</p></li>
+<li><p>For example, logistic regression returns the class probability</p></li>
 </ul>
+<div class="math notranslate nohighlight">
+\[ 
+p(y=1|\mid x) = \sigma(\theta^\top x) \in [0,1] 
+\]</div>
+<p>If the class probability is <span class="math notranslate nohighlight">\(&gt;0.5\)</span>, the model outputs class <span class="math notranslate nohighlight">\(1\)</span>.</p>
 <p>The score is an estimate of confidence; it also represents how far we are from the decision boundary.</p>
 </section>
 <section id="the-max-margin-principle">
@@ -873,11 +908,17 @@ If the class probability is \)</span>&gt;0.5<span class="math notranslate nohigh
 <section id="the-functional-classification-margin">
 <h2>12.1.3. The Functional Classification Margin<a class="headerlink" href="#the-functional-classification-margin" title="Permalink to this headline">¶</a></h2>
 <p>How can we define the concept of margin more formally?</p>
-<p>We can try to define the margin <span class="math notranslate nohighlight">\(\tilde \gamma^{(i)}\)</span> with respect to a training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as
-$<span class="math notranslate nohighlight">\( \tilde \gamma^{(i)} = y^{(i)} \cdot f(x^{(i)}) = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right). \)</span>$</p>
+<p>We can try to define the margin <span class="math notranslate nohighlight">\(\tilde \gamma^{(i)}\)</span> with respect to a training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[ 
+\tilde \gamma^{(i)} = y^{(i)} \cdot f(x^{(i)}) = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right). 
+\]</div>
 <p>We call this the <em>functional</em> margin. Let’s analyze it.</p>
-<p>We defined the functional margin as
-$<span class="math notranslate nohighlight">\( \tilde\gamma^{(i)} = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right).\)</span>$</p>
+<p>We defined the functional margin as</p>
+<div class="math notranslate nohighlight">
+\[ 
+\tilde\gamma^{(i)} = y^{(i)} \cdot \left( \theta^\top x^{(i)} + \theta_0 \right).
+\]</div>
 <ul class="simple">
 <li><p>If <span class="math notranslate nohighlight">\(y^{(i)}=1\)</span>, then the margin <span class="math notranslate nohighlight">\(\tilde\gamma^{(i)}\)</span> is large when the model score <span class="math notranslate nohighlight">\(f(x^{(i)}) = \theta^\top x^{(i)} + \theta_0\)</span> is positive and large.</p></li>
 </ul>
@@ -900,15 +941,21 @@ $<span class="math notranslate nohighlight">\( \tilde\gamma^{(i)} = y^{(i)} \cdo
 </section>
 <section id="the-geometric-classification-margin">
 <h2>12.1.4. The Geometric Classification Margin<a class="headerlink" href="#the-geometric-classification-margin" title="Permalink to this headline">¶</a></h2>
-<p>We define the <em>geometric</em> margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> with respect to a training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as
-$<span class="math notranslate nohighlight">\( \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). \)</span><span class="math notranslate nohighlight">\(
-We call it geomtric because \)</span>\gamma^{(i)}<span class="math notranslate nohighlight">\( equals the distance between \)</span>x^{(i)}$ and the hyperplane.</p>
+<p>We define the <em>geometric</em> margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> with respect to a training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[ 
+\gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). 
+\]</div>
+<p>We call it geomtric because <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> equals the distance between <span class="math notranslate nohighlight">\(x^{(i)}\)</span> and the hyperplane.</p>
 <ul class="simple">
 <li><p>We normalize the functional margin by <span class="math notranslate nohighlight">\(||\theta||\)</span></p></li>
 <li><p>Rescaling the weights does not make the margin arbitrarily large.</p></li>
 </ul>
-<p>Let’s make sure our intuition about the margin holds.
-$<span class="math notranslate nohighlight">\( \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). \)</span>$</p>
+<p>Let’s make sure our intuition about the margin holds.</p>
+<div class="math notranslate nohighlight">
+\[ 
+\gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). 
+\]</div>
 <ul class="simple">
 <li><p>If <span class="math notranslate nohighlight">\(y^{(i)}=1\)</span>, then the margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> is large when the model score <span class="math notranslate nohighlight">\(f(x^{(i)}) = \theta^\top x^{(i)} + \theta_0\)</span> is positive and large.</p></li>
 </ul>
@@ -931,17 +978,26 @@ $<span class="math notranslate nohighlight">\( \gamma^{(i)} = y^{(i)}\left( \fra
 <center><img width=40% src="img/margin.png"></center>
 <ol class="simple">
 <li><p>Let <span class="math notranslate nohighlight">\(x_0\)</span> be the point on the boundary closest to <span class="math notranslate nohighlight">\(x^{(i)}\)</span>. Then by definition of the margin
-<span class="math notranslate nohighlight">\(x^{(i)} = x_0 + \gamma^{(i)} \frac{\theta}{||\theta||}\)</span> or
-$<span class="math notranslate nohighlight">\( x_0 = x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||}. \)</span>$</p></li>
+<span class="math notranslate nohighlight">\(x^{(i)} = x_0 + \gamma^{(i)} \frac{\theta}{||\theta||}\)</span> or</p></li>
 </ol>
+<div class="math notranslate nohighlight">
+\[ 
+x_0 = x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||}. 
+\]</div>
 <ol class="simple">
-<li><p>Since <span class="math notranslate nohighlight">\(x_0\)</span> is on the hyperplane, <span class="math notranslate nohighlight">\(\theta^\top x_0 + \theta_0 = 0\)</span>, or
-$<span class="math notranslate nohighlight">\(\theta^\top \left(x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||} \right) + \theta_0 = 0.\)</span>$</p></li>
+<li><p>Since <span class="math notranslate nohighlight">\(x_0\)</span> is on the hyperplane, <span class="math notranslate nohighlight">\(\theta^\top x_0 + \theta_0 = 0\)</span>, or</p></li>
 </ol>
+<div class="math notranslate nohighlight">
+\[
+\theta^\top \left(x^{(i)} - \gamma^{(i)} \frac{\theta}{||\theta||} \right) + \theta_0 = 0.
+\]</div>
 <ol class="simple">
-<li><p>Solving for <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> and using the fact that <span class="math notranslate nohighlight">\(\theta^\top \theta = ||\theta||^2\)</span>, we obtain
-$<span class="math notranslate nohighlight">\( \gamma^{(i)} =  \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||}. \)</span>$</p></li>
+<li><p>Solving for <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> and using the fact that <span class="math notranslate nohighlight">\(\theta^\top \theta = ||\theta||^2\)</span>, we obtain</p></li>
 </ol>
+<div class="math notranslate nohighlight">
+\[ 
+\gamma^{(i)} =  \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||}. 
+\]</div>
 <p>Which is our geometric margin. The case of <span class="math notranslate nohighlight">\(y^{(i)}=-1\)</span> can also be proven in a similar way.</p>
 <p>We can use our formula for <span class="math notranslate nohighlight">\(\gamma\)</span> to precisely plot the margins on our earlier plot.</p>
 <div class="cell docutils container">
@@ -983,37 +1039,55 @@ $<span class="math notranslate nohighlight">\( \gamma^{(i)} =  \frac{\theta^\top
 Next, we are going to see how to maximize the margin of linear classifiers.</p>
 <section id="maximizing-the-margin">
 <h2>12.2.1. Maximizing the Margin<a class="headerlink" href="#maximizing-the-margin" title="Permalink to this headline">¶</a></h2>
-<p>We want to define an objective that will result in maximizing the margin. As a first attempt, consider the following optimization problem.
+<p>We want to define an objective that will result in maximizing the margin. As a first attempt, consider the following optimization problem.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\max_{\theta,\theta_0,\gamma} \gamma ; &amp;  \
-\text{subject to } ; &amp; y^{(i)}\frac{(x^{(i)})^\top\theta+\theta_0}{||\theta||}\geq \gamma ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
+\max_{\theta,\theta_0,\gamma} \gamma \; &amp;  \\
+\text{subject to } \; &amp; y^{(i)}\frac{(x^{(i)})^\top\theta+\theta_0}{||\theta||}\geq \gamma \; \text{for all $i$} 
+\end{align*}
+\end{split}\]</div>
 <p>This is maximies the smallest margin over the <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span>. It guarantees each point has margin at least <span class="math notranslate nohighlight">\(\gamma\)</span>.</p>
-<p>This problem is difficult to optimize because of the division by <span class="math notranslate nohighlight">\(||\theta||\)</span> and we would like to simplify it. First, consider the equivalent problem:
+<p>This problem is difficult to optimize because of the division by <span class="math notranslate nohighlight">\(||\theta||\)</span> and we would like to simplify it. First, consider the equivalent problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\max_{\theta,\theta_0,\gamma} \gamma ; &amp;  \
-\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq \gamma ||\theta|| ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
+\max_{\theta,\theta_0,\gamma} \gamma \; &amp;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq \gamma ||\theta|| \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
 <p>Note that this problem has an extra degree of freedom:</p>
 <ul class="simple">
 <li><p>Suppose we multiply <span class="math notranslate nohighlight">\(\theta, \theta_0\)</span> by some constant <span class="math notranslate nohighlight">\(c &gt;0\)</span>.</p></li>
 <li><p>This yields another valid solution!</p></li>
 </ul>
-<p>To enforce uniqueness, we add another constraint that doesn’t change the minimizer:
-$<span class="math notranslate nohighlight">\( ||\theta|| \cdot \gamma = 1. \)</span>$</p>
-<p>This ensures we cannot rescale <span class="math notranslate nohighlight">\(\theta\)</span> and also asks our linear model to assign each <span class="math notranslate nohighlight">\(x^{(i)}\)</span> a score of at least <span class="math notranslate nohighlight">\(\pm 1\)</span>:
-$<span class="math notranslate nohighlight">\( y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all \)</span>i<span class="math notranslate nohighlight">\(} \)</span>$</p>
-<p>If we constraint <span class="math notranslate nohighlight">\(||\theta|| \cdot \gamma = 1\)</span> holds, then we know that <span class="math notranslate nohighlight">\(\gamma = 1/||\theta||\)</span> and we can replace <span class="math notranslate nohighlight">\(\gamma\)</span> in the optimization problem to obtain:
+<p>To enforce uniqueness, we add another constraint that doesn’t change the minimizer:</p>
+<div class="math notranslate nohighlight">
+\[ 
+||\theta|| \cdot \gamma = 1. 
+\]</div>
+<p>This ensures we cannot rescale <span class="math notranslate nohighlight">\(\theta\)</span> and also asks our linear model to assign each <span class="math notranslate nohighlight">\(x^{(i)}\)</span> a score of at least <span class="math notranslate nohighlight">\(\pm 1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$} 
+\]</div>
+<p>If we constraint <span class="math notranslate nohighlight">\(||\theta|| \cdot \gamma = 1\)</span> holds, then we know that <span class="math notranslate nohighlight">\(\gamma = 1/||\theta||\)</span> and we can replace <span class="math notranslate nohighlight">\(\gamma\)</span> in the optimization problem to obtain:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\max_{\theta,\theta_0} \frac{1}{||\theta||} ; &amp;  \
-\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
+\max_{\theta,\theta_0} \frac{1}{||\theta||} \; &amp;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
 <p>The solution of this problem is still the same.</p>
-<p>Finally, instead of maximizing <span class="math notranslate nohighlight">\(1/||\theta||\)</span>, we can minimize <span class="math notranslate nohighlight">\(||\theta||\)</span>, or equvalently we can minimize <span class="math notranslate nohighlight">\(\frac{1}{2}||\theta||^2\)</span>.
+<p>Finally, instead of maximizing <span class="math notranslate nohighlight">\(1/||\theta||\)</span>, we can minimize <span class="math notranslate nohighlight">\(||\theta||\)</span>, or equvalently we can minimize <span class="math notranslate nohighlight">\(\frac{1}{2}||\theta||^2\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 ; &amp;  \
-\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
+\min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &amp;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
 <p>This is now a quadratic program that can be solved using off-the-shelf optimization algorithms!</p>
 </section>
 </section>
@@ -1035,47 +1109,66 @@ $<span class="math notranslate nohighlight">\( y^{(i)}((x^{(i)})^\top\theta+\the
 <section id="non-separable-problems">
 <h2>12.3.1. Non-Separable Problems<a class="headerlink" href="#non-separable-problems" title="Permalink to this headline">¶</a></h2>
 <p>So far, we have assume that a linear hyperplane exists. However, what if the classes are non-separable? Then our optimization problem does not have a solution and we need to modify it.</p>
-<p>Our solution is going to be to make each constraint “soft”, by introducing “slack” variables, which allow the constraint to be violated.
-$<span class="math notranslate nohighlight">\(
+<p>Our solution is going to be to make each constraint “soft”, by introducing “slack” variables, which allow the constraint to be violated.</p>
+<div class="math notranslate nohighlight">
+\[
 y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i.
-\)</span>$</p>
+\]</div>
 <ul class="simple">
 <li><p>If we can classify each point with a perfect score of <span class="math notranslate nohighlight">\(\geq 1\)</span>, the <span class="math notranslate nohighlight">\(\xi_i=0\)</span>.</p></li>
 <li><p>If we cannot assign a perfect score, we assign a score of <span class="math notranslate nohighlight">\(1-\xi_i\)</span>.</p></li>
 <li><p>We define optimization such that the <span class="math notranslate nohighlight">\(\xi_i\)</span> are chosen to be as small as possible.</p></li>
 </ul>
-<p>In the optimization problem, we assign a penalty <span class="math notranslate nohighlight">\(C\)</span> to these slack variables to obtain:
+<p>In the optimization problem, we assign a penalty <span class="math notranslate nohighlight">\(C\)</span> to these slack variables to obtain:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
-\text{subject to } ; &amp; y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\geq 1 - \xi_i ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>} \
+\min_{\theta,\theta_0, \xi}\; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
+\text{subject to } \; &amp; y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\geq 1 - \xi_i \; \text{for all $i$} \\
 &amp; \xi_i \geq 0
-\end{align*}</p>
+\end{align*}
+\end{split}\]</div>
 </section>
 <section id="towards-an-unconstrained-objective">
 <h2>12.3.2. Towards an Unconstrained Objective<a class="headerlink" href="#towards-an-unconstrained-objective" title="Permalink to this headline">¶</a></h2>
-<p>Let’s further modify things. Moving around terms in the inequality we get:
+<p>Let’s further modify things. Moving around terms in the inequality we get:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
-\text{subject to } ; &amp; \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) ; \xi_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
+\min_{\theta,\theta_0, \xi}\; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
+\text{subject to } \; &amp; \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) \; \xi_i \geq 0 \; \text{for all $i$} 
+\end{align*}
+\end{split}\]</div>
 <p>If <span class="math notranslate nohighlight">\(0 \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\)</span>, we classified <span class="math notranslate nohighlight">\(x^{(i)}\)</span> perfectly and <span class="math notranslate nohighlight">\(\xi_i = 0\)</span></p>
 <p>If <span class="math notranslate nohighlight">\(0 &lt; 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\)</span>, then <span class="math notranslate nohighlight">\(\xi_i = 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\)</span></p>
 <p>Thus, <span class="math notranslate nohighlight">\(\xi_i = \max\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right), 0 \right)\)</span>.</p>
 <p>We simplify notation a bit by using the notation <span class="math notranslate nohighlight">\((x)^+ = \max(x,0)\)</span>.</p>
-<p>This yields:
-$<span class="math notranslate nohighlight">\(\xi_i = \max\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right), 0 \right) := \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+\)</span>$</p>
-<p>Since <span class="math notranslate nohighlight">\(\xi_i = \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+\)</span>, we can take
+<p>This yields:</p>
+<div class="math notranslate nohighlight">
+\[
+\xi_i = \max\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right), 0 \right) := \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+
+\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\xi_i = \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+\)</span>, we can take</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
-\text{subject to } ; &amp; \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) ; \xi_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
-<p>And we turn it into the following by plugging in the definition of <span class="math notranslate nohighlight">\(\xi_i\)</span>:
-$<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0}\; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ \)</span>$</p>
+\min_{\theta,\theta_0, \xi}\; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
+\text{subject to } \; &amp; \xi_i \geq 1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right) \; \xi_i \geq 0 \; \text{for all $i$} 
+\end{align*}
+\end{split}\]</div>
+<p>And we turn it into the following by plugging in the definition of <span class="math notranslate nohighlight">\(\xi_i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\min_{\theta,\theta_0}\; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ 
+\]</div>
 <p>Since it doesn’t matter which term we multiply by <span class="math notranslate nohighlight">\(C&gt;0\)</span>, this is equivalent to
 $<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+ + \frac{\lambda}{2}||\theta||^2 \)</span><span class="math notranslate nohighlight">\(
 for some \)</span>\lambda &gt; 0$.</p>
-<p>We have now turned our optimizatin problem into an unconstrained form:
-$<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} \)</span>$</p>
+<p>We have now turned our optimizatin problem into an unconstrained form:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\min_{\theta,\theta_0}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} 
+\]</div>
 <ul class="simple">
 <li><p>The hinge loss penalizes incorrect predictions.</p></li>
 <li><p>The L2 regularizer ensures the weights are small and well-behaved.</p></li>
@@ -1083,8 +1176,11 @@ $<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0}\; \sum_{i=
 </section>
 <section id="the-hinge-loss">
 <h2>12.3.3. The Hinge Loss<a class="headerlink" href="#the-hinge-loss" title="Permalink to this headline">¶</a></h2>
-<p>Consider again our new loss term for a label <span class="math notranslate nohighlight">\(y\)</span> and a prediction <span class="math notranslate nohighlight">\(f\)</span>:
-$<span class="math notranslate nohighlight">\( L(y, f) = \max\left(1 - y \cdot f, 0\right). \)</span>$</p>
+<p>Consider again our new loss term for a label <span class="math notranslate nohighlight">\(y\)</span> and a prediction <span class="math notranslate nohighlight">\(f\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = \max\left(1 - y \cdot f, 0\right). 
+\]</div>
 <ul class="simple">
 <li><p>If prediction <span class="math notranslate nohighlight">\(f\)</span> has same class as <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(|f| \geq 1\)</span>, the loss is zero.</p>
 <ul>
@@ -1158,8 +1254,11 @@ $<span class="math notranslate nohighlight">\( L(y, f) = \max\left(1 - y \cdot f
 <p>We have seen a new way to formulate the SVM objective. Let’s now see how to optimize it.</p>
 <section id="review-svm-objective">
 <h2>Review: SVM Objective<a class="headerlink" href="#review-svm-objective" title="Permalink to this headline">¶</a></h2>
-<p>Maximizing the margin can be done in the following form:
-$<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} \)</span>$</p>
+<p>Maximizing the margin can be done in the following form:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\min_{\theta,\theta_0, \xi}\; \sum_{i=1}^n \underbrace{\left(1 - y^{(i)}\left((x^{(i)})^\top\theta+\theta_0\right)\right)^+}_\text{hinge loss} + \underbrace{\frac{\lambda}{2}||\theta||^2}_\text{regularizer} 
+\]</div>
 <ul class="simple">
 <li><p>The hinge loss penalizes incorrect predictions.</p></li>
 <li><p>The L2 regularizer ensures the weights are small and well-behaved.</p></li>
@@ -1202,8 +1301,11 @@ $<span class="math notranslate nohighlight">\( \min_{\theta,\theta_0, \xi}\; \su
 </section>
 <section id="review-gradient-descent">
 <h2>Review: Gradient Descent<a class="headerlink" href="#review-gradient-descent" title="Permalink to this headline">¶</a></h2>
-<p>If we want to optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span>, we start with an initial guess <span class="math notranslate nohighlight">\(\theta_0\)</span> for the parameters and repeat the following update:
-$<span class="math notranslate nohighlight">\( \theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). \)</span>$</p>
+<p>If we want to optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span>, we start with an initial guess <span class="math notranslate nohighlight">\(\theta_0\)</span> for the parameters and repeat the following update:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\theta_i := \theta_{i-1} - \alpha \cdot \nabla_\theta J(\theta_{i-1}). 
+\]</div>
 <p>As code, this method may look as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span><span class="p">,</span> <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">random_initialization</span><span class="p">()</span>
 <span class="k">while</span> <span class="n">norm</span><span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">theta_prev</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">convergence_threshold</span><span class="p">:</span>
@@ -1214,8 +1316,11 @@ $<span class="math notranslate nohighlight">\( \theta_i := \theta_{i-1} - \alpha
 </section>
 <section id="a-gradient-for-the-hinge-loss">
 <h2>12.4.1.  A Gradient for the Hinge Loss?<a class="headerlink" href="#a-gradient-for-the-hinge-loss" title="Permalink to this headline">¶</a></h2>
-<p>What is the gradient for the hinge loss with a linear <span class="math notranslate nohighlight">\(f\)</span>?
-$<span class="math notranslate nohighlight">\( J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). \)</span>$</p>
+<p>What is the gradient for the hinge loss with a linear <span class="math notranslate nohighlight">\(f\)</span>?</p>
+<div class="math notranslate nohighlight">
+\[ 
+J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). 
+\]</div>
 <p>Here, you see the linear part of <span class="math notranslate nohighlight">\(J\)</span> that behaves like <span class="math notranslate nohighlight">\(1 - y \cdot f_\theta(x)\)</span> (when <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &lt; 1\)</span>) in orange:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1234,23 +1339,35 @@ $<span class="math notranslate nohighlight">\( J(\theta) = \max\left(1 - y \cdot
 <p>When <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &lt; 1\)</span>, we are in the “orange line” part and <span class="math notranslate nohighlight">\(J(\theta)\)</span> behaves like <span class="math notranslate nohighlight">\(1 - y \cdot f_\theta(x)\)</span>.</p>
 <!-- Our objective is
 $$ J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). $$ -->
-<p>Hence the gradient in this regime is:
-$<span class="math notranslate nohighlight">\(\nabla_\theta J(\theta) = -y \cdot \nabla f_\theta(x) = -y \cdot x\)</span><span class="math notranslate nohighlight">\(
-where we used \)</span>\nabla_\theta \theta^\top x = x$.</p>
+<p>Hence the gradient in this regime is:</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla_\theta J(\theta) = -y \cdot \nabla f_\theta(x) = -y \cdot x
+\]</div>
+<p>where we used <span class="math notranslate nohighlight">\(\nabla_\theta \theta^\top x = x\)</span>.</p>
 <p>When <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) \geq 1\)</span>, we are in the “flat” part and <span class="math notranslate nohighlight">\(J(\theta) = 0\)</span>.
 Hence the gradient is also just zero!</p>
-<p>What is the gradient for the hinge loss with a linear <span class="math notranslate nohighlight">\(f\)</span>?
-$<span class="math notranslate nohighlight">\( J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). \)</span>$</p>
+<p>What is the gradient for the hinge loss with a linear <span class="math notranslate nohighlight">\(f\)</span>?</p>
+<div class="math notranslate nohighlight">
+\[ 
+J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). 
+\]</div>
 <p>When <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) = 1\)</span>, we are in the “kink”, and the gradient is not defined!</p>
 <ul class="simple">
 <li><p>In practice, we can either take the gradient when <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &gt; 1\)</span> or the gradient when <span class="math notranslate nohighlight">\(y \cdot f_\theta(x) &lt; 1\)</span> or anything in between. This is called the <em>subgradient</em>.</p></li>
 </ul>
 <section id="a-steepest-descent-direction-for-the-hinge-loss">
 <h3>12.4.1.1.  A Steepest Descent Direction for the Hinge Loss<a class="headerlink" href="#a-steepest-descent-direction-for-the-hinge-loss" title="Permalink to this headline">¶</a></h3>
-<p>We can define a “gradient” like function <span class="math notranslate nohighlight">\(\tilde \nabla_\theta J(\theta)\)</span> for the hinge loss
-$<span class="math notranslate nohighlight">\( J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). \)</span><span class="math notranslate nohighlight">\(
-It equals:
-\)</span><span class="math notranslate nohighlight">\(\tilde \nabla_\theta J(\theta) = \begin{cases} -y \cdot x &amp; \text{ if \)</span>y \cdot f_\theta(x) &lt; 1<span class="math notranslate nohighlight">\(} \\ 0 &amp; \text{ otherwise} \end{cases} \)</span>$</p>
+<p>We can define a “gradient” like function <span class="math notranslate nohighlight">\(\tilde \nabla_\theta J(\theta)\)</span> for the hinge loss</p>
+<div class="math notranslate nohighlight">
+\[ 
+J(\theta) = \max\left(1 - y \cdot f_\theta(x), 0\right) = \max\left(1 - y \cdot \theta^\top x, 0\right). 
+\]</div>
+<p>It equals:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\tilde \nabla_\theta J(\theta) = \begin{cases} -y \cdot x &amp; \text{ if $y \cdot f_\theta(x) &lt; 1$} \\ 0 &amp; \text{ otherwise} \end{cases} 
+\end{split}\]</div>
 </section>
 </section>
 <section id="sub-gradient-descent-for-svm">
@@ -1405,6 +1522,13 @@ Iteration 21000. J: 0.304293
             <p class="prev-next-subtitle">previous</p>
             <p class="prev-next-title">Lecture 10: Clustering</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="lecture13-svm-dual.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 13: Dual Formulation of Support Vector Machines</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             

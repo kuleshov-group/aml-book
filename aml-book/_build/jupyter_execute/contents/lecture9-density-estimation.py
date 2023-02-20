@@ -34,18 +34,27 @@
 # ### 9.1.2.1. Data Distribution and Outliers
 # 
 # Formally, we assume that the dataset $\mathcal{D}$ is sampled IID from the *data distribution* $P_\text{data}$. We denote this as
-# $$x \sim P_\text{data}.$$
+# 
+# $$
+# x \sim P_\text{data}.
+# $$
 
 # Outlier detection can be thought of as answering the question:
 # 
-# $$ \text{Does the new point $x'$ originate from $P_\text{data}$?} $$
+# $$ 
+# \text{Does the new point $x'$ originate from $P_\text{data}$?} 
+# $$
 
 # ## 9.1.3. Density Estimation
 # 
 # So how can we detect outliers? We can use density estimation to help us do that!
 # 
 # Definition: An unsupervised probabilistic model is a probability distribution that maps datapoints to probabilities:
-# $$P_\theta(x) : \mathcal{X} \to [0,1].$$
+# 
+# $$
+# P_\theta(x) : \mathcal{X} \to [0,1].
+# $$
+# 
 # Probabilistic models often have *parameters* $\theta \in \Theta$. 
 # 
 # (For 9.1, we will assume our interested probabilistic models do have a set of finite parameters $\theta$ that nicely describe the behavior of the probabilistic model, i.e., they are "parametric". This means choosing a good model is a matter of choosing a good $\theta$)
@@ -82,6 +91,7 @@
 # 
 # One way we can do that is by optimizing
 # the *maximum log-likelihood* objective
+# 
 # $$
 # \max_\theta \ell(\theta) = \max_{\theta} \frac{1}{n}\sum_{i=1}^n \log P_\theta({x}^{(i)}).
 # $$
@@ -89,6 +99,7 @@
 # This asks that $P_\theta$ assign a high probability to the training instances in the dataset $\mathcal{D}$.
 
 # Maximizing likelihood is closely related to minimizing the Kullback-Leibler (KL) divergence $D(\cdot\|\cdot)$ between the model distribution and the data distribution.
+# 
 # $$
 # D(P_\text{data} \| P_\theta) = \sum_{{\bf x}} P_\text{data}({\bf x}) \log \frac{P_\text{data}({\bf x})}{P_\theta({\bf x})}.
 # $$
@@ -139,7 +150,10 @@ plt.plot(theta_vals, coin_likelihood(theta_vals))
 # ## 9.2.1. Review: Density Estimation
 # 
 # Recall that the problem of density estimation is to approximate the data distribution $P_\text{data}$ with the model $P$.
-# $$ P \approx P_\text{data}. $$
+# 
+# $$ 
+# P \approx P_\text{data}. 
+# $$
 # 
 # (Notice that the probabilistic model $P$ needs not be nicely characterized by a set of parameters $\theta$. They can be "non-parametric")
 
@@ -163,7 +177,9 @@ plt.plot(theta_vals, coin_likelihood(theta_vals))
 # 
 # Let's start by creating a simple 1D dataset coming from a mixture of two Gaussians:
 # 
-# $$P_\text{data}(x) = 0.3 \cdot \mathcal{N}(x ; \mu=0, \sigma=1) + 0.7 \cdot \mathcal{N}(x ; \mu=5, \sigma=1)$$
+# $$
+# P_\text{data}(x) = 0.3 \cdot \mathcal{N}(x ; \mu=0, \sigma=1) + 0.7 \cdot \mathcal{N}(x ; \mu=5, \sigma=1)
+# $$
 
 # In[23]:
 
@@ -232,11 +248,15 @@ for axi in ax.ravel():
 # 
 # * In histogram density estimation, the density is proportional to:
 # 
-# $$ P_\theta(x) \propto \text{\# of points in the bin where $x$ falls} $$
+# $$ 
+# P_\theta(x) \propto \text{\# of points in the bin where $x$ falls} 
+# $$
 # 
 # * In kernel density estimation, the density is proportional to:
 # 
-# $$ P_\theta(x) \propto \text{\# of points in $\mathcal{D}$ "near" $x$} $$
+# $$ 
+# P_\theta(x) \propto \text{\# of points in $\mathcal{D}$ "near" $x$} 
+# $$
 # 
 # Here, $\propto$ means "proportional to" (up to a normalizing constant).
 
@@ -251,9 +271,17 @@ for axi in ax.ravel():
 # ### 9.2.3.1 Tophat Kernel Density Estimation
 # 
 # The simplest form of this strategy (Tophat KDE) assumes a model of the form
-# $$P_\delta(x) = \frac{N(x; \delta)}{n},$$
+# 
+# $$
+# P_\delta(x) = \frac{N(x; \delta)}{n},
+# $$
+# 
 # where
-# $$ N(x; \delta) = |\{x^{(i)} : ||x^{(i)} - x || \leq \delta/2\}|, $$
+# 
+# $$ 
+# N(x; \delta) = |\{x^{(i)} : ||x^{(i)} - x || \leq \delta/2\}|, 
+# $$
+# 
 # is the number of points that are within a bin of with $\delta$ centered at $x$.
 
 # This is best understood via a picture. Below we fit Tophat KDE on the 1D mixture of two Gaussians dataset from 9.2.2.1. and visualize it.
@@ -278,11 +306,14 @@ plt.ylim(-0.02, 0.32)
 # However, it still has the problem of producing a density estimate that is not smooth.
 
 # We are going to resolve this by replacing histogram counts with weighted averages:
+# 
+# $$
 # \begin{align*}
 # P_\theta(x) 
 # & \propto \text{\# of points in $\mathcal{D}$ "near" $x$, weighted by distance from $x$} \\
 # & = \sum_{i=1}^n \text{weight}(x^{(i)}, x).
 # \end{align*}
+# $$
 
 # We count all points $x^{(i)}$, but each gets a $\text{weight}(x^{(i)}, x)$ that is large if $x^{(i)}$ and $x$ are "similar". We will talk about this "similarity" in the following section.
 
@@ -295,7 +326,11 @@ plt.ylim(-0.02, 0.32)
 # * We will see many ways of defining "similarity"; they will all fit the framework that follows.
 
 # A kernelized density model $P$ takes the form:
-# $$P(x) \propto \sum_{i=1}^n K(x, x^{(i)}).$$
+# 
+# $$
+# P(x) \propto \sum_{i=1}^n K(x, x^{(i)}).
+# $$
+# 
 # This can be interpreted in several ways:
 # 
 # * We count the number of points "near" $x$, but each $x^{(i)}$ has a weight $K(x, x^{(i)})$ that depends on similarity between $x, x^{(i)}$.
@@ -362,7 +397,11 @@ ax[0, 1].set_title('Available Kernels')
 # Let's look at an example in the context of the 1D points (mixture of two Gaussians) we have seen earlier.
 # 
 # We will fit a model of the form
-# $$P(x) = \sum_{i=1}^n K(x, x^{(i)})$$
+# 
+# $$
+# P(x) = \sum_{i=1}^n K(x, x^{(i)})
+# $$
+# 
 # with a Gaussian kernel $K(x,z; \delta) \propto \exp(-||x-z||^2/2\delta^2)$.
 # 
 # Below we plot the density estimate as blue line, the datapoints as black dots, and example kernels as red dotted line.
@@ -596,7 +635,11 @@ plt.ylabel('Sepal Width')
 # 
 # Suppose that the output $y'$ of KNN is the average target in the neighborhood $\mathcal{N}(x')$ around the query $x'$.
 # Observe that we can write:
-# $$y' = \frac{1}{K} \sum_{(x, y) \in \mathcal{N}(x')} y \approx \mathbb{E}[y \mid x'].$$
+# 
+# $$
+# y' = \frac{1}{K} \sum_{(x, y) \in \mathcal{N}(x')} y \approx \mathbb{E}[y \mid x'].
+# $$
+# 
 
 # * When $x \approx x'$ and when $\mathbb{P}$ is reasonably smooth, each $y$ for $(x,y) \in \mathcal{N}(x')$ is approximately a sample from $\mathbb{P}(y\mid x')$ (since $\mathbb{P}$ doesn't change much around $x'$, $\mathbb{P}(y\mid x') \approx \mathbb{P}(y\mid x)$).
 
@@ -621,7 +664,11 @@ plt.ylabel('Sepal Width')
 # Nearest neighbors is an example of a *non-parametric* model. Parametric vs. non-parametric are is a key distinguishing characteristic for machine learning models.
 
 # A parametric model $f_\theta(x) : \mathcal{X} \times \Theta \to \mathcal{Y}$ is defined by a finite set of parameters $\theta \in \Theta$ whose dimensionality is constant with respect to the dataset. Linear models of the form
-# $$ f_\theta(x) = \theta^\top x $$
+# 
+# $$ 
+# f_\theta(x) = \theta^\top x 
+# $$
+# 
 # are an example of a parametric model.
 
 # On the other hand, for a non-parametric model, the function $f$ uses the entire training dataset (or a post-proccessed version of it) to make predictions, as in $K$-Nearest Neighbors. In other words, the complexity of the model increases with dataset size. Because of this, non-parametric models have the advantage of not losing any information at training time. Nevertheless, they are also computationally less tractable and may easily overfit the training set.

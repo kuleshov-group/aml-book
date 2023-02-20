@@ -32,7 +32,11 @@
 #     * A simple clustering algorithm we have looked at is $K$-Means
 # 
 # * __Density Estimation__ is the problem of learning $P_\theta$
-#     $$P_\theta(x) : \mathcal{X} \to [0,1].$$
+#     
+#     $$
+#     P_\theta(x) : \mathcal{X} \to [0,1].
+#     $$
+#     
 #     on an unsupervised dataset $\mathcal{D}$ to approximate the true data distribution $P_\text{data}$.
 # 
 #     * If we successfully learn $P_\theta \approx P_\text{data}$, then we can use $P_\theta$ to solve many downstream tasks, including generation, outlier detection, and also __clustering__.
@@ -42,7 +46,10 @@
 # ## 10.1.2. Gaussian Mixture Models (GMM)
 # 
 # Gaussian mixtures is a probabilistic model of the form:
-# $$P_\theta (x,z) = P_\theta (x | z) P_\theta (z)$$
+# 
+# $$
+# P_\theta (x,z) = P_\theta (x | z) P_\theta (z)
+# $$
 # 
 # * $z \in \mathcal{Z} = \{1,2,\ldots,K\}$ is discrete and follows a categorical distribution $P_\theta(z=k) = \phi_k$.
 # 
@@ -60,11 +67,13 @@
 
 # And to get the marginal distribution $P_\theta (x)$, we can sum over the joint distribution as follows:
 # 
+# $$
 # \begin{align}
 # P_\theta (x) 
 # & = \sum_{k=1}^K P_\theta (z=k) P_\theta (x|z=k)\\
 # & = \phi_1 \mathcal{N}(x; \mu_1, \Sigma_1)  +  \ldots + \phi_K \mathcal{N}(x; \mu_K, \Sigma_K)
 # \end{align}
+# $$
 
 # ## 10.1.3. Clustering With Known Cluster Assignments
 # 
@@ -215,6 +224,7 @@ plt.show()
 # ### 10.1.4.1. Maximum Marginal Likelihood Learning
 # 
 # Maximum marginal (log-)likelihood is a way of learning a probabilistic model on an unsupervised dataset $\mathcal{D}$ by maximizing:
+# 
 # $$
 # \frac{1}{n}\sum_{i=1}^n \log P_\theta({x}^{(i)}) = \frac{1}{n}\sum_{i=1}^n \log \left(\sum_{z \in \mathcal{Z}} P_\theta({x}^{(i)}, z)\right).
 # $$
@@ -224,7 +234,10 @@ plt.show()
 # * However, we need to use $P(x) = \sum_{z \in \mathcal{Z}} P(x,z)$ to compute this probability because $z$ is not observed.
 
 # Since our objective is
-# $$\max_\theta \frac{1}{n}\sum_{i=1}^n \log \left(\sum_{z \in \mathcal{Z}} P_\theta({x}^{(i)}, z)\right)$$
+# 
+# $$
+# \max_\theta \frac{1}{n}\sum_{i=1}^n \log \left(\sum_{z \in \mathcal{Z}} P_\theta({x}^{(i)}, z)\right)
+# $$
 
 # * Our intuition of assigning high probability to data still holds
 
@@ -233,6 +246,7 @@ plt.show()
 # * We are  still minimizing KL divergence between $P_\theta$ and $P_\text{data}$
 
 # Recall that the Kullback-Leibler (KL) divergence $D(\cdot\|\cdot)$ between the model distribution and the data distribution is:
+# 
 # $$
 # D(P_\text{data} \| P_\theta) = \sum_{{\bf x}} P_\text{data}({\bf x}) \log \frac{P_\text{data}({\bf x})}{P_\theta({\bf x})}.
 # $$
@@ -245,7 +259,9 @@ plt.show()
 # 
 # Given a trained GMM model $P_\theta (x,z) = P_\theta (x | z) P_\theta (z)$, it's easy to compute the *posterior* probability
 # 
-# $$P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}$$
+# $$
+# P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}
+# $$
 # 
 # of a point $x$ belonging to class $k$.
 
@@ -279,13 +295,21 @@ plt.show()
 # ## 10.2.1. Expectation Maximization: Intuition
 # 
 # Expectation maximization (EM) is an algorithm for maximizing marginal log-likelihood 
-# $$\max_\theta \sum_{x^{(i)}\in \mathcal{D}} \log \left( \sum_{z \in \mathcal{Z}}P_\theta(x^{(i)}, z) \right)$$
+# 
+# $$
+# \max_\theta \sum_{x^{(i)}\in \mathcal{D}} \log \left( \sum_{z \in \mathcal{Z}}P_\theta(x^{(i)}, z) \right)
+# $$
+# 
 # that can also be used to learn Gaussian mixtures.
 
 # The idea behind expectation maximization is:
 # 
 # * If we know the true $z^{(i)}$ for each $x^{(i)}$, we maximize
-# $$\max_\theta \sum_{x^{(i)}, z^{(i)}\in \mathcal{D}} \log \left( P_\theta(x^{(i)}, z^{(i)}) \right).$$ 
+# 
+# $$
+# \max_\theta \sum_{x^{(i)}, z^{(i)}\in \mathcal{D}} \log \left( P_\theta(x^{(i)}, z^{(i)}) \right).
+# $$ 
+# 
 # and it's easy to find the best $\theta$ (use solution for supervised learning).
 # 
 # * If we know $\theta$, we can estimate the cluster assignments $z^{(i)}$ for each $i$ by computing $P_\theta(z | x^{(i)})$.
@@ -307,10 +331,13 @@ plt.show()
 # 1. (__E-Step__) For each $x^{(i)} \in \mathcal{D}$ compute $P_{\theta_t}(z|x^{(i)})$
 # 
 # 2. (__M-Step__) Compute new weights $\theta_{t+1}$ as
+# 
+# $$
 # \begin{align*}
 # \theta_{t+1} & = \arg\max_{\theta} \sum_{i=1}^n \mathbb{E}_{z^{(i)} \sim P_{\theta_t}(z|x^{(i)})} \log P_{\theta}(x^{(i)}, z^{(i)}) \\
 # & = \arg\max_{\theta} \sum_{i=1}^n \sum_{k=1}^K P_{\theta_t}(z=k|x^{(i)}) \log P_{\theta}(x^{(i)}, z=k)
 # \end{align*}
+# $$
 # 
 # Since assignments $P_{\theta_t}(z|x^{(i)})$ are "soft", M-step involves an expectation. For many interesting models, this expectation is tractable.
 
@@ -335,39 +362,55 @@ plt.show()
 # ## 10.3.1. Deriving the E-Step
 # 
 # In the E-step, we compute the posterior for each data point $x$ as follows
-#  $$P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}= \frac{\mathcal{N}(x; \mu_k, \Sigma_k) \cdot \phi_k}{\sum_{l=1}^K \mathcal{N}(x; \mu_l, \Sigma_l) \cdot \phi_l}$$
+#  
+#  $$
+#  P_\theta(z = k\mid x) = \frac{P_\theta(z=k, x)}{P_\theta(x)} = \frac{P_\theta(x | z=k) P_\theta(z=k)}{\sum_{l=1}^K P_\theta(x | z=l) P_\theta(z=l)}= \frac{\mathcal{N}(x; \mu_k, \Sigma_k) \cdot \phi_k}{\sum_{l=1}^K \mathcal{N}(x; \mu_l, \Sigma_l) \cdot \phi_l}
+#  $$
+#  
 # $P_\theta(z = k\mid x)$ defines a vector of probabilities that $x$ originates from component $k$ given the current set of parameters $\theta$
 
 # ## 10.3.2. Deriving the M-Step
 # 
 # At the M-step, we optimize the expected log-likelihood of our model.
 # 
+# $$
 # \begin{align*}
 # &\max_\theta \sum_{x \in D} \mathbb{E}_{z \sim P_{\theta_t}(z|x)} \log P_\theta(x,z) = \\
 # & \max_\theta \left( \sum_{k=1}^K \sum_{x \in D} P_{\theta_t}(z = k|x) \log P_\theta(x|z = k) + \sum_{k=1}^K \sum_{x \in D} P_{\theta_t}(z = k|x) \log P_\theta(z = k) \right)
 # \end{align*}
+# $$
 # 
 # As in supervised learning, we can optimize the two terms above separately.
 
 # We will start with $P_\theta(x\mid z=k) = \mathcal{N}(x; \mu_k, \Sigma_k)$. We have to find $\mu_k^*, \Sigma_k^*$ that optimize
+# 
 # $$
 # \max_\theta \sum_{x^{(i)} \in D} P(z=k|x^{(i)}) \log P_\theta(x^{(i)}|z=k)
 # $$
+# 
 # Note that this corresponds to fitting a Gaussian to a dataset whose elements $x^{(i)}$ each have a weight $P(z=k|x^{(i)})$.
 
 # Similar to how we did this in the supervised regime, we compute the derivative, set it to zero, and obtain closed form solutions:
+# 
+# $$
 # \begin{align*}
 # \mu_k^* & = \frac{\sum_{i=1}^n P(z=k|x^{(i)}) x^{(i)}}{n_k} \\
 # \Sigma_k^* & = \frac{\sum_{i=1}^n P(z=k|x^{(i)}) (x^{(i)} - \mu_k^*)(x^{(i)} - \mu_k^*)^\top}{n_k} \\
 # \end{align*}
+# $$
+# 
 # where $n_k = \sum_{i=1}^n P(z=k|x^{(i)})$
 # 
 # Intuitively, the optimal mean and covariance are the __empirical__ mean and convaraince of the dataset $\mathcal{D}$ when each element $x^{(i)}$ has a weight $P(z=k|x^{(i)})$.
 
 # Similarly, we can show that the optimal class priors $\phi_k^*$ are
+# 
+# $$
 # \begin{align*}
 # \phi_k^* & = \frac{n_k}{n} \\
 # \end{align*}
+# $$
+# 
 # Intuitively, the optimal $\phi_k^*$ is just the proportion of data points with class $k$
 
 # ## 10.3.3. Summary: EM in Gaussian Mixture Models
@@ -387,7 +430,10 @@ plt.show()
 # ## 10.4.1. Review: Data Distribution
 # 
 # We will assume that the dataset is sampled from a probability distribution $\mathbb{P}$, which we will call the *data distribution*. We will denote this as
-# $$x \sim \mathbb{P}.$$
+# 
+# $$
+# x \sim \mathbb{P}.
+# $$
 # 
 # The dataset $\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}$ consists of *independent and identicaly distributed* (IID) samples from $\mathbb{P}$.
 

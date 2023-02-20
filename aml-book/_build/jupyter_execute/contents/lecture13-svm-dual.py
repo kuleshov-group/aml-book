@@ -16,25 +16,35 @@
 
 # Large margins are good, since data should be far from the decision boundary. Maximizing the margin of a linear model amounts to solving the following optimization problem:
 # 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
-# \end{align*} 
+# \end{align*}
+# $$
 # 
 # We are now going to look at a different way of optimizing this objective. But first, we need to define Lagrange duality.
 
 # ## 13.1.2. Lagrange Duality in Constrained Optimization
 # 
 # We start by introducing the definition of a constrained optimization problem. We will look at constrained optimization problems of the form
+# 
+# $$
 # \begin{align*}
 # \min_{\theta \in \mathbb{R}^d} \; & J(\theta) \\
 # \text{such that } \; & c_k(\theta) \leq 0 \text{ for $k =1,2,\ldots,K$}
 # \end{align*}
+# $$
+# 
 # where $J(\theta)$ is the optimization objective and each $c_k(\theta) : \mathbb{R}^d \to \mathbb{R}$ is a constraint.
 
 # Our goal is to find a small value of $J(\theta)$ such that the $c_k(\theta)$ are negative.
 # Rather than solving the above problem, we can solve the following related optimization problem, which contains additional penalty terms: 
-# $$\min_\theta \mathcal{L}(\theta, \lambda) = J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta)$$
+# 
+# $$
+# \min_\theta \mathcal{L}(\theta, \lambda) = J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta)
+# $$
+# 
 # This new objective includes an additional vector of *Lagrange multipliers* $\lambda \in [0, \infty)^K$, which are positive weights that we place on the constraint terms. We call $\mathcal{L}(\theta, \lambda)$ the *Lagrangian*. Observe that:
 # 
 # * If $\lambda_k \geq 0$, then we penalize large values of $c_k$
@@ -45,30 +55,44 @@
 # ### 13.1.2.1. The Primal Lagrange Form
 # 
 # Consider again our constrained optimization problem:
+# 
+# $$
 # \begin{align*}
 # \min_{\theta \in \mathbb{R}^d} \; & J(\theta) \\
 # \text{such that } \; & c_k(\theta) \leq 0 \text{ for $k =1,2,\ldots,K$}
 # \end{align*}
+# $$
 
 # We define its *primal Lagrange form* to be
-# $$\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right)$$
+# 
+# $$
+# \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right)
+# $$
+# 
 
 # These two forms have the same optimum $\theta^*$! The reason for this to be true can be proved consideringg the following:
-# $$\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right)$$
+# 
+# $$
+# \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right)
+# $$
 
 # Observe that:
 # * If a $c_k$ is violated ($c_k > 0$) then $\max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda)$ is $\infty$ as $\lambda_k \to \infty$.
 
 # * If no $c_k$ is violated and $c_k < 0$ then the optimal $\lambda_k = 0$ (any bigger value makes the inner objective smaller).
 #     * If $c_k < 0$ for all $k$ then $\lambda_k=0$ for all $k$ and
-#     $$\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} J(\theta)$$
+#     $$
+#     \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} J(\theta)
+#     $$
 
 # Thus, $\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)$ is the solution to our original optimization problem.
 
 # ### 13.1.2.2. The Dual Lagrange Form
 # 
 # Now consider the following problem over $\lambda\geq 0$:
-# $$\max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right).$$
+# $$
+# \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right).
+# $$
 # 
 # We call this the *Lagrange dual* of the primal optimization problem $\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)$. We can always construct a dual for the primal.
 
@@ -78,7 +102,9 @@
 # $$ \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) \leq \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)$$
 
 # Moreover, in many cases, we have
-# $$ \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta).$$
+# $$ 
+# \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta).
+# $$
 # Thus, the primal and the dual are equivalent! This is very imporant and we will use this feature for moving into the next steps of solving SVMs.
 
 # ## 13.1.3. An Aside: Constrained Regularization
@@ -87,10 +113,14 @@
 # $$ \min_{\theta \in \Theta} L(\theta) + \gamma \cdot R(\theta). $$
 
 # We may also enforce an explicit constraint on the complexity of the model:
+# 
+# $$
 # \begin{align*}
 # \min_{\theta \in \Theta} \; & L(\theta) \\
 # \text{such that } \; & R(\theta) \leq \gamma'
 # \end{align*}
+# $$
+# 
 # We will not prove this, but solving this problem is equivalent so solving the penalized problem for some $\gamma > 0$ that's different from $\gamma'$. In other words, we can regularize by explicitly enforcing $R(\theta)$ to be less than a value or we can penalize $R(\theta)$.
 
 # # 13.2. Dual Formulation of SVMs
@@ -107,33 +137,45 @@
 # 2. __Binary Classification__: The target variable $y$ is discrete and takes on one of $K=2$ possible values.
 
 # In this lecture, we assume $\mathcal{Y} = \{-1, +1\}$. We will also work with linear models of the form:
+# 
+# $$
 # \begin{align*}
 # f_\theta(x) & = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d
 # \end{align*}
+# $$
+# 
 # where $x \in \mathbb{R}^d$ is a vector of features and $y \in \{-1, 1\}$ is the target. The $\theta_j$ are the *parameters* of the model.
 # 
 # We can represent the model in a vectorized form
+# 
+# $$
 # \begin{align*}
 # f_\theta(x) = \theta^\top x + \theta_0.
 # \end{align*}
+# $$
 
 # We define the *geometric* margin $\gamma^{(i)}$ with respect to a training example $(x^{(i)}, y^{(i)})$ as
 # $$ \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). $$
 # This also corresponds to the distance from $x^{(i)}$ to the hyperplane.
 
 # We saw that maximizing the margin of a linear model amounts to solving the following optimization problem.
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # ## 13.2.2. The Dual of the SVM Problem
 # 
 # Let's now derive the SVM dual. Consider the following objective, the Langrangian of the max-margin optimization problem.
 # 
+# $$
 # \begin{align*}
 # L(\theta, \theta_0, \lambda) = \frac{1}{2}||\theta||^2 + \sum_{i=1}^n \lambda_i \left(1-y^{(i)}((x^{(i)})^\top\theta+\theta_0)\right)
 # \end{align*}
+# $$
 # 
 # We have put each constraint inside the objective function and added a penalty $\lambda_i$ to it.
 
@@ -141,36 +183,56 @@
 # $$\max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right).$$
 
 # It is easy to write out the dual form of the max-margin problem. Consider optimizing the above Lagrangian over $\theta, \theta_0$ for any value of $\lambda$.
-# $$\min_{\theta, \theta_0} L(\theta, \theta_0, \lambda) = \min_{\theta, \theta_0} \left( \frac{1}{2}||\theta||^2 + \sum_{i=1}^n \lambda_i \left(1-y^{(i)}((x^{(i)})^\top\theta+\theta_0)\right)\right)$$
+# 
+# $$
+# \min_{\theta, \theta_0} L(\theta, \theta_0, \lambda) = \min_{\theta, \theta_0} \left( \frac{1}{2}||\theta||^2 + \sum_{i=1}^n \lambda_i \left(1-y^{(i)}((x^{(i)})^\top\theta+\theta_0)\right)\right)
+# $$
+# 
 # This objective is quadratic in $\theta$; hence it has a single minimum in $\theta$.
 
 # We can find it by setting the derivative to zero and solving for $\theta, \theta_0$:
+# 
+# $$
 # \begin{align*}
 # \theta & = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)} \\
 # 0 & = \sum_{i=1}^n \lambda_i y^{(i)}
 # \end{align*}
+# $$
 
 # Substituting this into the Langrangian we obtain the following expression for the dual $\max_{\lambda\geq 0} \mathcal{D}(\lambda) = \max_{\lambda\geq 0} \min_{\theta, \theta_0} L(\theta, \theta_0, \lambda)$:
+# 
+# $$
 # \begin{align*}
 # \max_{\lambda} & \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
 # \text{subject to } \; & \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
 # & \lambda_i \geq 0 \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # ## 13.2.3. Properties of SVM Duals
 # 
 # Recall that in general, we have:
-# $$ \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) \leq \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)$$
+# 
+# $$ 
+# \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) \leq \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)
+# $$
 
 # In the case of the SVM problem, one can show that
-# $$ \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta).$$
+# 
+# $$ 
+# \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta).
+# $$
+# 
 # Thus, the primal and the dual are equivalent!
 
 # We can also make several other observations about this dual:
+# 
+# $$
 # \begin{align*}
 # \max_{\lambda} & \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
 # \text{subject to } \; & \sum_{i=1}^n \lambda_i y^{(i)} = 0 \;\text{and}\; \lambda_i \geq 0 \; \text{for all $i$}
 # \end{align*}
+# $$
 # 
 # * This is a constrainted quadratic optimization problem.
 # * The number of variables $\lambda_i$ equals $n$, the number of data points.
@@ -190,48 +252,66 @@
 # In this part, we will continue our discussion of the dual formulation of the SVM with additional practical details.
 
 # Recall that the the max-margin hyperplane can be formualted as the solution to the following *primal* optimization problem.
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # The solution to this problem also happens to be given by the following *dual* problem:
+# 
+# $$
 # \begin{align*}
 # \max_{\lambda} & \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
 # \text{subject to } \; & \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
 # & \lambda_i \geq 0 \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # ## 13.3.1. Non-Separable Problems
 # 
 # Our dual problem assumes that a separating hyperplane exists. If it doesn't, our optimization problem does not have a solution, and we need to modify it.
 # Our approach is going to be to make each constraint "soft", by introducing "slack" variables, which allow the constraint to be violated.
+# 
 # $$
 # y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i.
 # $$
 
 # In the optimization problem, we assign a penalty $C$ to these slack variables to obtain:
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0, \xi}\; & \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i \; \text{for all $i$} \\
 # & \xi_i \geq 0
 # \end{align*}
+# $$
 # 
 # This is the primal problem. Let's now form its dual. First, the Lagrangian $L(\lambda, \mu,\theta,\theta_0,\xi)$ equals
+# 
+# $$
 # \begin{align*}
 # \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i - \sum_{i=1}^n \lambda_i \left(y^{(i)}((x^{(i)})^\top\theta+\theta_0)- 1\right) - \sum_{i=1}^n \mu_i\xi_i.
 # \end{align*}
+# $$
 # 
 # The dual objective of this problem will equal 
-# $$\mathcal{D}(\lambda, \mu) = \min_{\theta,\theta_0,\xi} L(\lambda, \mu,\theta,\theta_0,\xi).$$
+# 
+# $$
+# \mathcal{D}(\lambda, \mu) = \min_{\theta,\theta_0,\xi} L(\lambda, \mu,\theta,\theta_0,\xi).$$
 
 # As earlier, we can solve for the optimal $\theta, \theta_0$ in closed form and plug back the resulting values into the objective. 
 # We can then show that the dual takes the following form:
+# 
+# $$
 # \begin{align*}
 # \max_{\lambda} & \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
 # \text{subject to } \; & \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
 # & C \geq \lambda_i \geq 0 \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # ## 13.3.2. Sequential Minimal Optimization and Coordinate Descent
 # 
@@ -245,10 +325,13 @@
 # The red line shows the trajectory of coordinate descent. Each "step" in the trajectory is an iteration of the algorithm. Image from Wikipedia.
 
 # We can apply a form of coordinate descent to solve the dual:
+# 
+# $$
 # \begin{align*}
 # \max_{\lambda} & \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
 # \text{subject to } \; & \sum_{i=1}^n \lambda_i y^{(i)} = 0 \;\text{and}\; C \geq \lambda_i \geq 0 \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # A popular, efficient algorithm is Sequential Minimal Optimization (SMO), which executes as:
 # * Take a pair $\lambda_i, \lambda_j$, possibly using heuristics to guide choice of $i,j$.
@@ -260,11 +343,13 @@
 # Next, assuming we can solve the dual, how do we find a separating hyperplane $\theta, \theta_0$?
 
 # Recall that we already found an expression for the optimal $\theta^*$ (in the separable case) as a function of $\lambda$:
+# 
 # $$
 # \theta^* = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)}.
 # $$
 
 # Once we know $\theta^*$ it easy to check that the solution to $\theta_0$ is given by
+# 
 # $$
 # \theta_0^* = -\frac{\max_{i:y^{(i)}=-1} (\theta^*)^\top x^{(i)} + \min_{i:y^{(i)}=-1} (\theta^*)^\top x^{(i)}}{2}.
 # $$
@@ -272,6 +357,7 @@
 # ## 13.3.4. Support Vectors
 # 
 # A powerful property of the SVM dual is that at the optimum, most variables $\lambda_i$ are zero! Thus, $\theta$ is a sum of a small number of points:
+# 
 # $$
 # \theta^* = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)}.
 # $$
@@ -365,9 +451,11 @@ plt.show()
 # The data points that fall on the margin are the support vectors. Notice that only these vectors determine the position of the hyperplane. If we "wiggle" any of the other points, the margin remains unchanged---therefore the max-margin hyperplane also remains unchanged. However, moving the support vectors changes both the optimal margin and the optimal hyperplane. 
 # 
 # This observation provides an intuitive explanation for the formula
+# 
 # $$
 # \theta^* = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)}.
 # $$
+# 
 # In this formula, $\lambda_i > 0$ only for the $x^{(i)}$ that are support vectors. Hence, only these $x^{(i)}$ influence the position of the hyperplane, which matches our earlier intuition.
 
 # ## 13.3.6. Algorithm: Support Vector Machine Classification (Dual Form)

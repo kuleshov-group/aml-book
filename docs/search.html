@@ -28,8 +28,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
@@ -45,7 +44,14 @@
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
     <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script src="_static/searchtools.js"></script>
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -98,43 +104,73 @@
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture2-supervised-learning.html">
+  <a class="reference internal" href="contents/lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture3-linear-regression.html">
+  <a class="reference internal" href="contents/lecture3-linear-regression.html">
    Lecture 3: Linear Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture4-classification.html">
+  <a class="reference internal" href="contents/lecture4-classification.html">
    Lecture 4: Classification and Logistic Regression
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture5-regularization.html">
+  <a class="reference internal" href="contents/lecture5-regularization.html">
    Lecture 5: Regularization
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture6-naive-bayes.html">
+  <a class="reference internal" href="contents/lecture6-naive-bayes.html">
    Lecture 6: Generative Models and Naive Bayes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+  <a class="reference internal" href="contents/lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture9-density-estimation.html">
+  <a class="reference internal" href="contents/lecture9-density-estimation.html">
    Lecture 9: Density Estimation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="lecture10-clustering.html">
+  <a class="reference internal" href="contents/lecture10-clustering.html">
    Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/lecture16-boosting.html">
+   Lecture 16: Boosting
   </a>
  </li>
 </ul>
@@ -265,7 +301,7 @@
     
       By Cornell University<br/>
     
-        &copy; Copyright 2021.<br/>
+        &copy; Copyright 2022.<br/>
   </p>
 </footer>
 </main>

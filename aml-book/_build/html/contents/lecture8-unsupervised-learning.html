@@ -57,7 +57,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Lecture 9: Density Estimation" href="lecture9-density-estimation.html" />
-    <link rel="prev" title="Lecture 6: Generative Models and Naive Bayes" href="lecture6-naive-bayes.html" />
+    <link rel="prev" title="Lecture 7: Gaussian Discriminant Analysis" href="lecture7-gaussian-discriminant-analysis.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -127,6 +127,11 @@ const thebe_selector_output = ".output, .cell_output"
    Lecture 6: Generative Models and Naive Bayes
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Lecture 8: Unsupervised Learning
@@ -145,6 +150,26 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="lecture12-suppor-vector-machines.html">
    Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture16-boosting.html">
+   Lecture 16: Boosting
   </a>
  </li>
 </ul>
@@ -635,7 +660,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p>In unsupervised learning, we also define a dataset and a learning algorithm.</p>
 <div class="math notranslate nohighlight">
-\[ \text{Dataset} + \text{Learning Algorithm} \to \text{Unsupervised Model} \]</div>
+\[ 
+\text{Dataset} + \text{Learning Algorithm} \to \text{Unsupervised Model} 
+\]</div>
 <p>The unsupervised model describes interesting structures in the data. For instance, it can identify interesting hidden clusters.</p>
 <section id="unsupervised-learning-example">
 <h2>8.1.1. Unsupervised Learning - Example<a class="headerlink" href="#unsupervised-learning-example" title="Permalink to this headline">¶</a></h2>
@@ -848,8 +875,11 @@ latter are NOT linearly separable from each other.
 <p>Once again, at a high level, an unsupervised machine learning problem has the following structure:</p>
 <div class="math notranslate nohighlight">
 \[ \underbrace{\text{Dataset}}_\text{Attributes, Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Unsupervised Model} \]</div>
-<p>We define a dataset of size <span class="math notranslate nohighlight">\(n\)</span> for unsupervised learning as
-$<span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}\)</span>$</p>
+<p>We define a dataset of size <span class="math notranslate nohighlight">\(n\)</span> for unsupervised learning as</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}
+\]</div>
 <p>Each <span class="math notranslate nohighlight">\(x^{(i)} \in \mathbb{R}^d\)</span> denotes an input, a vector of <span class="math notranslate nohighlight">\(d\)</span> attributes or features.</p>
 <p>We can think of an unsupervised learning algorithm as consisting of three components:</p>
 <ul class="simple">
@@ -859,29 +889,41 @@ $<span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1
 </ul>
 <section id="model-notation">
 <h3>8.2.1.1. Model: Notation<a class="headerlink" href="#model-notation" title="Permalink to this headline">¶</a></h3>
-<p>We’ll say that a model is a function
-$<span class="math notranslate nohighlight">\( f_\theta : \mathcal{X} \to \mathcal{S} \)</span><span class="math notranslate nohighlight">\(
-that maps inputs \)</span>x \in \mathcal{X}<span class="math notranslate nohighlight">\( to some notion of structure \)</span>s \in \mathcal{S}<span class="math notranslate nohighlight">\(. Models may have *parameters* \)</span>\theta \in \Theta<span class="math notranslate nohighlight">\( living in a set \)</span>\Theta$</p>
+<p>We’ll say that a model is a function</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta : \mathcal{X} \to \mathcal{S} 
+\]</div>
+<p>that maps inputs <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span> to some notion of structure <span class="math notranslate nohighlight">\(s \in \mathcal{S}\)</span>. Models may have <em>parameters</em> <span class="math notranslate nohighlight">\(\theta \in \Theta\)</span> living in a set <span class="math notranslate nohighlight">\(\Theta\)</span></p>
 <p>Structures can take many forms (clusters, low-dimensional representations, etc.), and we will see many examples.</p>
 </section>
 <section id="model-class-notation">
 <h3>8.2.1.2. Model Class: Notation<a class="headerlink" href="#model-class-notation" title="Permalink to this headline">¶</a></h3>
-<p>Formally, the model class is a set
-$<span class="math notranslate nohighlight">\(\mathcal{M} = \{f_\theta \mid f_\theta : \mathcal{X} \to \mathcal{S}; \; \theta \in \Theta \}.\)</span>$
-of possible models (models with different parameters) that map input features to structural elements.</p>
+<p>Formally, the model class is a set</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{M} = \{f_\theta \mid f_\theta : \mathcal{X} \to \mathcal{S}; \; \theta \in \Theta \}.
+\]</div>
+<p>of possible models (models with different parameters) that map input features to structural elements.</p>
 </section>
 <section id="objective-notation">
 <h3>8.2.1.3. Objective: Notation<a class="headerlink" href="#objective-notation" title="Permalink to this headline">¶</a></h3>
-<p>We again define an <em>objective function</em> (also called a <em>loss function</em>)
-$<span class="math notranslate nohighlight">\(J(\theta) : \Theta \to [0, \infty), \)</span><span class="math notranslate nohighlight">\(
-which describes the extent to which \)</span>f_\theta<span class="math notranslate nohighlight">\( &quot;fits&quot; the data \)</span>\mathcal{D} = {x^{(i)} \mid i = 1,2,…,n}$.</p>
+<p>We again define an <em>objective function</em> (also called a <em>loss function</em>)</p>
+<div class="math notranslate nohighlight">
+\[
+J(\theta) : \Theta \to [0, \infty), 
+\]</div>
+<p>which describes the extent to which <span class="math notranslate nohighlight">\(f_\theta\)</span> “fits” the data <span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}\)</span>.</p>
 </section>
 <section id="optimizer-notation">
 <h3>8.2.1.4. Optimizer: Notation<a class="headerlink" href="#optimizer-notation" title="Permalink to this headline">¶</a></h3>
-<p>An optimizer finds a model <span class="math notranslate nohighlight">\(f_\theta \in \mathcal{M}\)</span> with the smallest value of the objective <span class="math notranslate nohighlight">\(J\)</span>.
+<p>An optimizer finds a model <span class="math notranslate nohighlight">\(f_\theta \in \mathcal{M}\)</span> with the smallest value of the objective <span class="math notranslate nohighlight">\(J\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
 \begin{align*}
 \min_{\theta \in \Theta} J(\theta)
-\end{align*}</p>
+\end{align*}
+\]</div>
 <p>Intuitively, this is the function that bests “fits” the data on the training dataset.</p>
 </section>
 </section>
@@ -896,9 +938,12 @@ which describes the extent to which \)</span>f_\theta<span class="math notransla
 <section id="the-k-means-model">
 <h3>8.2.2.1. The <span class="math notranslate nohighlight">\(K\)</span>-Means Model<a class="headerlink" href="#the-k-means-model" title="Permalink to this headline">¶</a></h3>
 <p>The parameters <span class="math notranslate nohighlight">\(\theta\)</span> of the model are <span class="math notranslate nohighlight">\(K\)</span> <em>centroids</em> <span class="math notranslate nohighlight">\(c_1, c_2, \ldots c_K \in \mathcal{X}\)</span>. The class of <span class="math notranslate nohighlight">\(x\)</span> is <span class="math notranslate nohighlight">\(k\)</span> if <span class="math notranslate nohighlight">\(c_k\)</span> is the closest centroid to <span class="math notranslate nohighlight">\(x\)</span> (for this lecture, let’s assume the distance metric in use is Euclidean distance, although the algorithm works with any distance metric of your choice).</p>
-<p>We can think of the model returned by <span class="math notranslate nohighlight">\(K\)</span>-Means as a function
-$<span class="math notranslate nohighlight">\(f_\theta : \mathcal{X} \to \mathcal{S}\)</span><span class="math notranslate nohighlight">\(
-that assigns each input \)</span>x<span class="math notranslate nohighlight">\( to a cluster \)</span>s \in \mathcal{S} = {1,2,\ldots,K}$.</p>
+<p>We can think of the model returned by <span class="math notranslate nohighlight">\(K\)</span>-Means as a function</p>
+<div class="math notranslate nohighlight">
+\[
+f_\theta : \mathcal{X} \to \mathcal{S}
+\]</div>
+<p>that assigns each input <span class="math notranslate nohighlight">\(x\)</span> to a cluster <span class="math notranslate nohighlight">\(s \in \mathcal{S} = \{1,2,\ldots,K\}\)</span>.</p>
 </section>
 <section id="k-means-at-a-high-level">
 <h3>8.2.2.2. K-Means at a High Level<a class="headerlink" href="#k-means-at-a-high-level" title="Permalink to this headline">¶</a></h3>
@@ -913,9 +958,12 @@ that assigns each input \)</span>x<span class="math notranslate nohighlight">\( 
 <section id="the-k-means-objective">
 <h3>8.2.2.3. The <span class="math notranslate nohighlight">\(K\)</span>-Means Objective<a class="headerlink" href="#the-k-means-objective" title="Permalink to this headline">¶</a></h3>
 <p>How do we determine whether <span class="math notranslate nohighlight">\(f_\theta\)</span> is a good clustering of the dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>?</p>
-<p>We seek centroids <span class="math notranslate nohighlight">\(c_k\)</span> such that the distance between the points and their closest centroid is minimized:
-$<span class="math notranslate nohighlight">\(J(\theta) = \sum_{i=1}^n || x^{(i)} - \text{centroid}(f_\theta(x^{(i)})) ||,\)</span><span class="math notranslate nohighlight">\(
-where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight">\( denotes the centroid for cluster \)</span>k$.</p>
+<p>We seek centroids <span class="math notranslate nohighlight">\(c_k\)</span> such that the distance between the points and their closest centroid is minimized:</p>
+<div class="math notranslate nohighlight">
+\[
+J(\theta) = \sum_{i=1}^n || x^{(i)} - \text{centroid}(f_\theta(x^{(i)})) ||,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\text{centroid}(k) = c_k\)</span> denotes the centroid for cluster <span class="math notranslate nohighlight">\(k\)</span>.</p>
 </section>
 <section id="the-k-means-optimizer">
 <h3>8.2.2.4. The <span class="math notranslate nohighlight">\(K\)</span>-Means Optimizer<a class="headerlink" href="#the-k-means-optimizer" title="Permalink to this headline">¶</a></h3>
@@ -1091,8 +1139,11 @@ where \)</span>\text{centroid}(k) = c_k<span class="math notranslate nohighlight
 </section>
 <section id="generalization-in-unsupervised-learning">
 <h2>8.3.5. Generalization in Unsupervised Learning<a class="headerlink" href="#generalization-in-unsupervised-learning" title="Permalink to this headline">¶</a></h2>
-<p>To talk about generalization, we usually assume that the dataset is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as
-$<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
+<p>To talk about generalization, we usually assume that the dataset is sampled from a probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>, which we will call the <em>data distribution</em>. We will denote this as</p>
+<div class="math notranslate nohighlight">
+\[
+x \sim \mathbb{P}.
+\]</div>
 <p>Moreover, we assume the dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{x^{(i)} \mid i = 1,2,...,n\}\)</span> consists of <em>independent and identicaly distributed</em> (IID) samples from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
 <p>What <em>independent and identically distributed</em> (IID) means is:</p>
 <ul class="simple">
@@ -1217,11 +1268,11 @@ $<span class="math notranslate nohighlight">\(x \sim \mathbb{P}.\)</span>$</p>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="lecture6-naive-bayes.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="lecture7-gaussian-discriminant-analysis.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Lecture 6: Generative Models and Naive Bayes</p>
+            <p class="prev-next-title">Lecture 7: Gaussian Discriminant Analysis</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="lecture9-density-estimation.html" title="next page">

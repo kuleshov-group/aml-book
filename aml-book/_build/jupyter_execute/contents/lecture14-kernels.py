@@ -16,25 +16,35 @@
 # We are interested in binary classification, in which the target variable $y$ is discrete and takes on one of $K=2$ possible values. In this lecture, we assume that $\mathcal{Y} = \{-1, +1\}$. 
 # 
 # Linear models for this binary classification can take the form
+# 
+# $$
 # \begin{align*}
 # f_\theta(x) = \theta^\top \phi(x) + \theta_0,
 # \end{align*}
+# $$
+# 
 # where $x$ is the input and $y \in \{-1, 1\}$ is the target. Support vector machines are a machine learning algorithm that fits a linear model by finding the maximum margin separating hyperplane between the two classes.
 # 
 
 # Recall that the the max-margin hyperplane can be formualted as the solution to the following *primal* optimization problem.
+# 
+# $$
 # \begin{align*}
 # \min_{\theta,\theta_0, \xi}\; & \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
 # \text{subject to } \; & y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i \; \text{for all $i$} \\
 # & \xi_i \geq 0
 # \end{align*}
+# $$
 
 # The solution to this problem also happens to be given by the following *dual* problem:
+# 
+# $$
 # \begin{align*}
 # \max_{\lambda} & \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
 # \text{subject to } \; & \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
 # & C \geq \lambda_i \geq 0 \; \text{for all $i$}
 # \end{align*}
+# $$
 
 # We can obtain a primal solution from the dual via the following equation:
 # $$
@@ -55,6 +65,7 @@
 # 
 # In an earlier lecture, we have seen one important example of a non-linear algorithm: polynomial regression. 
 # Let's start with a quick recap of this algorthim. Recall that a $p$-th degree polynomial is a function of the form
+# 
 # $$
 # a_p x^p + a_{p-1} x^{p-1} + ... + a_{1} x + a_0.
 # $$
@@ -62,7 +73,9 @@
 # A polynomial is a non-linear function in $x$. Nonetheless, we can use techniques we developed earlier for linear regression to fit polynomial models to data.
 # 
 # Specifically, given a one-dimensional continuous variable $x$, we can define a feature function $\phi : \mathbb{R} \to \mathbb{R}^p$ as
-# $$\phi(x) = \begin{bmatrix}
+# 
+# $$
+# \phi(x) = \begin{bmatrix}
 # 1 \\
 # x \\
 # x^2 \\
@@ -72,7 +85,11 @@
 # $$
 
 # Then the class of models of the form
-# $$ f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x) $$
+# 
+# $$ 
+# f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x) 
+# $$
+# 
 # with parameters $\theta$ encompasses the set of $p$-degree polynomials.
 # 
 # Crucially, observe that $f_\theta$ is a linear model with input features $\phi(x)$ and parameters $\theta$. The parameters $\theta$ are the coefficients of the polynomial. 
@@ -86,10 +103,14 @@
 # Our approach for making SVMs non-linear will be analagous to the idea we used in polynomial regression. We will apply the SVM algorithm not over $x$, but over non-linear (e.g., polynomial) features $x$.
 # 
 # When $x$ is replaced by features $\phi(x)$, the SVM algorithm is defined as follows:
+# 
+# $$
 # \begin{align*}
 # J(\lambda) &= \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} \phi(x^{(i)})^\top \phi(x^{(k)})  \\
 # (\theta^*)^\top \phi(x') & = \sum_{i=1}^n \lambda_i^* y^{(i)}\phi(x^{(i)})^\top \phi(x').
 # \end{align*}
+# $$
+# 
 # Notice that in both equations, the features $\phi(x)$ are never used directly. Only their *dot product* is used.
 # If we can compute the dot product efficiently, we can potentially use very complex features.
 
@@ -97,10 +118,15 @@
 # Let's look at an example.
 # 
 # To start, consider pairwise polynomial features $\phi : \mathbb{R}^d \to \mathbb{R}^{d^2}$ of the form
-# $$ \phi(x)_{ij} = x_i x_j \;\text{ for $i,j \in \{1,2,\ldots,d\}$}. $$
+# 
+# $$ 
+# \phi(x)_{ij} = x_i x_j \;\text{ for $i,j \in \{1,2,\ldots,d\}$}. 
+# $$
 
 # These features consist of all the pairwise products among all the entries of $x$. For $d=3$ this looks like
-# $$ \small \phi(x) = \begin{bmatrix}
+# 
+# $$ 
+# \small \phi(x) = \begin{bmatrix}
 # x_1 x_1 \\
 # x_1 x_2 \\
 # x_1 x_3 \\
@@ -115,24 +141,39 @@
 # $$
 
 # The product of $x$ and $z$ in feature space equals:
-# $$ \phi(x)^\top \phi(z) = \sum_{i=1}^d \sum_{j=1}^d x_i x_j z_i z_j $$
+# 
+# $$ 
+# \phi(x)^\top \phi(z) = \sum_{i=1}^d \sum_{j=1}^d x_i x_j z_i z_j 
+# $$
+# 
 # Normally, computing this dot product involves a sum over $d^2$ terms and takes $O(d^2)$ time.
 
 # An altenative way of computing the dot product $\phi(x)^\top \phi(z)$ is to instead compute $(x^\top z)^2$. One can check that this has the same result:
+# 
+# $$
 # \begin{align*}
 # (x^\top z)^2 & = (\sum_{i=1}^d x_i z_i)^2 \\
 # & = (\sum_{i=1}^d x_i z_i) \cdot (\sum_{j=1}^d x_j z_j) \\
 # & = \sum_{i=1}^d \sum_{j=1}^d x_i z_i x_j z_j \\
 # & = \phi(x)^\top \phi(z)
 # \end{align*}
+# $$
+# 
 # But computing $(x^\top z)^2$ can be done in only $O(d)$ time: we simply compute the dot product $x^\top z$ in $O(d)$ time, and then square the resulting scalar. This is much faster than the naive $O(d^2)$ procedure.
 
 # More generally, polynomial features $\phi_p$ of degree $p$ when $x \in \mathbb{R}^d$ are defined as follows:
-# $$ \phi_p(x)_{i_1, i_2, \ldots, i_p} = x_{i_1} x_{i_2} \cdots x_{i_p} \;\text{ for $i_1, i_2,  \ldots, i_p \in \{1,2,\ldots,d\}$} $$
+# 
+# $$ 
+# \phi_p(x)_{i_1, i_2, \ldots, i_p} = x_{i_1} x_{i_2} \cdots x_{i_p} \;\text{ for $i_1, i_2,  \ldots, i_p \in \{1,2,\ldots,d\}$} 
+# $$
+# 
 # The number of these features scales as $O(d^p)$. The straightforward way of computing their dot product also takes $O(d^p)$ time.
 # 
 # However, using a version of the above argument, we can compute the dot product $\phi_p(x)^\top \phi_p(z)$ in this feature space in only $O(d)$ time for any $p$ as follows:
-# $$\phi_p(x)^\top \phi_p(z) = (x^\top z)^p.$$
+# 
+# $$
+# \phi_p(x)^\top \phi_p(z) = (x^\top z)^p.
+# $$
 
 # This is a very powerful idea:
 # * We can compute the dot product between $O(d^p)$ features in only $O(d)$ time.
@@ -142,20 +183,33 @@
 # 
 # More generally, given features $\phi(x)$, suppose that we have a function $K : \mathcal{X} \times \mathcal{X} \to [0, \infty]$ that outputs dot products between vectors in $\mathcal{X}$
 # 
-# $$ K(x, z) = \phi(x)^\top \phi(z). $$
+# $$ 
+# K(x, z) = \phi(x)^\top \phi(z). 
+# $$
 # 
 # We will call $K$ the *kernel function*. Recall that an example of a useful kernel function is
-# $$K(x,z) = (x \cdot z)^p$$
+# 
+# $$
+# K(x,z) = (x \cdot z)^p
+# $$
+# 
 # because it computes the dot product of polynomial features of degree $p$.
 
 # Notice that we can rewrite the dual of the SVM as
+# 
+# $$
 # \begin{align*}
 # \max_{\lambda} & \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} K(x^{(i)}, x^{(k)})  \\
 # \text{subject to } \; & \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
 # & C \geq \lambda_i \geq 0 \; \text{for all $i$}
 # \end{align*}
+# $$
 
-# Also, the predictions at a new point $x'$ are given by $$\sum_{i=1}^n \lambda_i^* y^{(i)} K(x^{(i)}, x').$$
+# Also, the predictions at a new point $x'$ are given by 
+# 
+# $$
+# \sum_{i=1}^n \lambda_i^* y^{(i)} K(x^{(i)}, x').
+# $$
 
 # We can efficiently use any features $\phi(x)$ (e.g., polynomial features of any degree $p$) as long as the kernel functions computes the dot products of the $\phi(x)$ efficiently. We will see several examples of kernel functions below.
 
@@ -179,13 +233,21 @@
 # ## 14.2.1. Review: Ridge Regression
 # 
 # Recall that a linear model has the form
-# $$ f_\theta(x) = \theta^\top \phi(x). $$
+# 
+# $$ 
+# f_\theta(x) = \theta^\top \phi(x). 
+# $$
+# 
 # where $\phi(x)$ is a vector of features. We pick $\theta$ to minimize the (L2-regularized) mean squared error (MSE):
-# $$J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)} - \theta^\top \phi(x^{(i)}))^2 + \frac{\lambda}{2}\sum_{j=1}^d \theta_j^2$$
+# 
+# $$
+# J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)} - \theta^\top \phi(x^{(i)}))^2 + \frac{\lambda}{2}\sum_{j=1}^d \theta_j^2
+# $$
 
 # It is useful to represent the featurized dataset as a matrix $\Phi \in \mathbb{R}^{n \times p}$:
 # 
-# $$ \Phi = \begin{bmatrix}
+# $$ 
+# \Phi = \begin{bmatrix}
 # \phi(x^{(1)})_1 & \phi(x^{(1)})_2 & \ldots & \phi(x^{(1)})_p \\
 # \phi(x^{(2)})_1 & \phi(x^{(2)})_2 & \ldots & \phi(x^{(2)})_p \\
 # \vdots \\
@@ -198,19 +260,28 @@
 # & \vdots & \\
 # - & \phi(x^{(n)})^\top & - \\
 # \end{bmatrix}
-# .$$
+# .
+# $$
 
 # The normal equations provide a closed-form solution for $\theta$:
-# $$ \theta = (X^\top X  + \lambda I)^{-1} X^\top y.$$
+# 
+# $$ 
+# \theta = (X^\top X  + \lambda I)^{-1} X^\top y.
+# $$
 
 # When the vectors of attributes $x^{(i)}$ are featurized, we can write this as
-# $$ \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y.$$
+# 
+# $$ 
+# \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y.
+# $$
 
 # ## 14.2.2. A Dual Formulation for Ridge Regression
 # 
 # We can modify this expression by using a version of the [push-through matrix identity](https://en.wikipedia.org/wiki/Woodbury_matrix_identity#Discussion):
 # 
-# $$ (\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1} $$
+# $$ 
+# (\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1} 
+# $$
 # 
 # where $U \in \mathbb{R}^{n \times m}$ and $V \in \mathbb{R}^{m \times n}$ and $\lambda \neq 0$
 
@@ -218,37 +289,62 @@
 
 # We can apply the identity $(\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1}$ to the normal equations with $U=\Phi^\top$ and $V=\Phi$.
 # 
-# $$ \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y$$
+# $$ 
+# \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y
+# $$
 
 # to obtain the *dual* form:
 # 
-# $$ \theta = \Phi^\top (\Phi \Phi^\top + \lambda I)^{-1} y.$$
+# $$ 
+# \theta = \Phi^\top (\Phi \Phi^\top + \lambda I)^{-1} y.
+# $$
 # 
 # The first approach takes $O(p^3)$ time; the second is $O(n^3)$ and is faster when $p > n$.
 
 # ## 14.2.3. Kernelized Ridge Regression
 # 
 # An interesting corollary of the dual form
-# $$ \theta = \Phi^\top \underbrace{(\Phi \Phi^\top + \lambda I)^{-1} y}_\text{call this vector $\alpha$} = \Phi^T \alpha$$
+# 
+# $$ 
+# \theta = \Phi^\top \underbrace{(\Phi \Phi^\top + \lambda I)^{-1} y}_\text{call this vector $\alpha$} = \Phi^T \alpha
+# $$
+# 
 # is that the optimal $\theta$ is a linear combination of the $n$ training set features:
-# $$ \theta = \sum_{i=1}^n \alpha_i \phi(x^{(i)}). $$
+# 
+# $$ 
+# \theta = \sum_{i=1}^n \alpha_i \phi(x^{(i)}). 
+# $$
 
 # Here, the weights $\alpha_i$ are derived from $(\Phi \Phi^\top + \lambda I)^{-1} y$ and equal
-# $$\alpha_i = \sum_{j=1}^n L_{ij} y_j$$
+# 
+# $$
+# \alpha_i = \sum_{j=1}^n L_{ij} y_j
+# $$
+# 
 # where $L = (\Phi \Phi^\top + \lambda I)^{-1}.$
 
 # Consider now a prediction $\phi(x')^\top \theta$ at a new input $x'$:
-# $$\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).$$
+# 
+# $$
+# \phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).
+# $$
 # 
 # The crucial observation is that the features $\phi(x)$ are never used directly in this equation. Only their dot product is used!
 
 # We also don't need features $\phi$ for learning $\theta$, just their dot product! 
 # First, recall that each row $i$ of $\Phi$ is the $i$-th featurized input $\phi(x^{(i)})^\top$.
 # Thus $K = \Phi \Phi^\top$ is a matrix of all dot products between all the $\phi(x^{(i)})$
-# $$K_{ij} = \phi(x^{(i)})^\top \phi(x^{(j)}).$$
+# 
+# $$
+# K_{ij} = \phi(x^{(i)})^\top \phi(x^{(j)}).
+# $$
 
 # We can compute $\alpha = (K+\lambda I)^{-1}y$ and use it for predictions
-# $$\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).$$
+# 
+# $$
+# \phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).
+# $$
+# 
 # and all this only requires dot products, not features $\phi$!
 
 # # 14.3. More on Kernels
@@ -258,7 +354,10 @@
 # ## 14.3.1. Definition: Kernels
 # 
 # The *kernel* corresponding to features $\phi(x)$ is a function $K : \mathcal{X} \times \mathcal{X} \to [0, \infty]$ that outputs dot products between vectors in $\mathcal{X}$
-# $$ K(x, z) = \phi(x)^\top \phi(z). $$
+# 
+# $$ 
+# K(x, z) = \phi(x)^\top \phi(z). 
+# $$
 # 
 # We will also consider general functions $K : \mathcal{X} \times \mathcal{X} \to [0, \infty]$ and call these *kernel functions*.
 # Kernels have multiple intepreations:
@@ -295,7 +394,10 @@ plt.ylim(y_min, y_max)
 # 
 # The simplest kind of kernel that exists is called the linear kernel.
 # This simply corresponds to dot product multiplication of the features:
-# $$K(x,z) = x^\top z$$
+# 
+# $$
+# K(x,z) = x^\top z
+# $$
 # 
 # Applied to an SVM, this corresponds to a linear decision boundary.
 
@@ -328,12 +430,17 @@ plt.ylim(y_min, y_max)
 # ### 14.3.2.2. Polynomial Kernel
 # 
 # A more interesting example is the polynomial kernel of degree $p$, of which we have already seen a simple example:
-# $$K(x,z) = (x^\top z + c)^p.$$
+# 
+# $$
+# K(x,z) = (x^\top z + c)^p.
+# $$
 # 
 # This corresponds to a mapping to a feature space of dimension $d+p \choose p$ that has all monomials $x_{i_1}x_{i_2}\cdots x_{i_p}$ of degree at most $p$.
 
 # For $d=3$ this feature map looks like
-# $$ \small \phi(x) = \begin{bmatrix}
+# 
+# $$ 
+# \small \phi(x) = \begin{bmatrix}
 # x_1 x_1 \\
 # x_1 x_2 \\
 # x_1 x_3 \\
@@ -380,7 +487,11 @@ plt.ylim(y_min, y_max)
 # ### 14.3.2.3. Radial Basis Function Kernel
 # 
 # Another example is the Radial Basis Function (RBF; sometimes called Gaussian) kernel
-# $$K(x,z) = \exp \left(-\frac{||x - z||^2}{2\sigma^2}\right),$$
+# 
+# $$
+# K(x,z) = \exp \left(-\frac{||x - z||^2}{2\sigma^2}\right),
+# $$
+# 
 # where $\sigma$ is a hyper-parameter. It's easiest to understand this kernel by viewing it as a similarity measure.
 
 # We can show that this kernel corresponds to an *infinite-dimensional* feature map and the limit of the polynomial kernel as $p \to \infty$. 
@@ -431,6 +542,7 @@ plt.ylim(y_min, y_max)
 # Consider the matrix $L \in \mathbb{R}^{n\times n}$ defined as $L_{ij} = K(x^{(i)}, x^{(j)}) = \phi(x^{(i)})^\top \phi(x^{(j)})$. We claim that $L$ must be symmetric and positive semidefinite.
 # Indeed, $L$ is symmetric because the dot product $\phi(x^{(i)})^\top \phi(x^{(j)})$ is symmetric. Moreover, for any $z$,
 # 
+# $$
 # \begin{align*}
 # z^\top L z
 # & = \sum_{i=1}^n \sum_{j=1}^n z_i L_{ij} z_j 
@@ -439,6 +551,7 @@ plt.ylim(y_min, y_max)
 # & = \sum_{k=1}^n \sum_{i=1}^n \sum_{j=1}^n z_i \phi(x^{(i)})_k \phi(x^{(j)})_k z_j \\
 # & = \sum_{k=1}^n \sum_{i=1}^n \left( z_i \phi(x^{(i)})_k \right)^2 \geq 0
 # \end{align*}
+# $$
 # 
 # Thus if $K$ is a kernel, $L$ must be positive semidefinite for any $n$ points $x^{(i)}$.
 

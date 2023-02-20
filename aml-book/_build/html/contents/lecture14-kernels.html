@@ -558,23 +558,32 @@ const thebe_selector_output = ".output, .cell_output"
 <h2>14.1.1. Review: Support Vector Machines.<a class="headerlink" href="#review-support-vector-machines" title="Permalink to this headline">¶</a></h2>
 <p>We are given a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>.
 We are interested in binary classification, in which the target variable <span class="math notranslate nohighlight">\(y\)</span> is discrete and takes on one of <span class="math notranslate nohighlight">\(K=2\)</span> possible values. In this lecture, we assume that <span class="math notranslate nohighlight">\(\mathcal{Y} = \{-1, +1\}\)</span>.</p>
-<p>Linear models for this binary classification can take the form
+<p>Linear models for this binary classification can take the form</p>
+<div class="math notranslate nohighlight">
+\[
 \begin{align*}
 f_\theta(x) = \theta^\top \phi(x) + \theta_0,
 \end{align*}
-where <span class="math notranslate nohighlight">\(x\)</span> is the input and <span class="math notranslate nohighlight">\(y \in \{-1, 1\}\)</span> is the target. Support vector machines are a machine learning algorithm that fits a linear model by finding the maximum margin separating hyperplane between the two classes.</p>
-<p>Recall that the the max-margin hyperplane can be formualted as the solution to the following <em>primal</em> optimization problem.
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(x\)</span> is the input and <span class="math notranslate nohighlight">\(y \in \{-1, 1\}\)</span> is the target. Support vector machines are a machine learning algorithm that fits a linear model by finding the maximum margin separating hyperplane between the two classes.</p>
+<p>Recall that the the max-margin hyperplane can be formualted as the solution to the following <em>primal</em> optimization problem.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\min_{\theta,\theta_0, \xi}; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i ;  \
-\text{subject to } ; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>} \
+\min_{\theta,\theta_0, \xi}\; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i \; \text{for all $i$} \\
 &amp; \xi_i \geq 0
-\end{align*}</p>
-<p>The solution to this problem also happens to be given by the following <em>dual</em> problem:
+\end{align*}
+\end{split}\]</div>
+<p>The solution to this problem also happens to be given by the following <em>dual</em> problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \
-\text{subject to } ; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \
-&amp; C \geq \lambda_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
+\text{subject to } \; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
+&amp; C \geq \lambda_i \geq 0 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
 <p>We can obtain a primal solution from the dual via the following equation:
 $<span class="math notranslate nohighlight">\(
 \theta^* = \sum_{i=1}^n \lambda_i^* y^{(i)} x^{(i)}.
@@ -590,23 +599,29 @@ $<span class="math notranslate nohighlight">\(
 <section id="review-polynomial-regression">
 <h3>14.1.2.1. Review: Polynomial Regression<a class="headerlink" href="#review-polynomial-regression" title="Permalink to this headline">¶</a></h3>
 <p>In an earlier lecture, we have seen one important example of a non-linear algorithm: polynomial regression.
-Let’s start with a quick recap of this algorthim. Recall that a <span class="math notranslate nohighlight">\(p\)</span>-th degree polynomial is a function of the form
-$<span class="math notranslate nohighlight">\(
+Let’s start with a quick recap of this algorthim. Recall that a <span class="math notranslate nohighlight">\(p\)</span>-th degree polynomial is a function of the form</p>
+<div class="math notranslate nohighlight">
+\[
 a_p x^p + a_{p-1} x^{p-1} + ... + a_{1} x + a_0.
-\)</span>$</p>
+\]</div>
 <p>A polynomial is a non-linear function in <span class="math notranslate nohighlight">\(x\)</span>. Nonetheless, we can use techniques we developed earlier for linear regression to fit polynomial models to data.</p>
-<p>Specifically, given a one-dimensional continuous variable <span class="math notranslate nohighlight">\(x\)</span>, we can define a feature function <span class="math notranslate nohighlight">\(\phi : \mathbb{R} \to \mathbb{R}^p\)</span> as
-$<span class="math notranslate nohighlight">\(\phi(x) = \begin{bmatrix}
+<p>Specifically, given a one-dimensional continuous variable <span class="math notranslate nohighlight">\(x\)</span>, we can define a feature function <span class="math notranslate nohighlight">\(\phi : \mathbb{R} \to \mathbb{R}^p\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\phi(x) = \begin{bmatrix}
 1 \\
 x \\
 x^2 \\
 \vdots \\
 x^p
 \end{bmatrix}.
-\)</span>$</p>
-<p>Then the class of models of the form
-$<span class="math notranslate nohighlight">\( f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x) \)</span><span class="math notranslate nohighlight">\(
-with parameters \)</span>\theta<span class="math notranslate nohighlight">\( encompasses the set of \)</span>p$-degree polynomials.</p>
+\end{split}\]</div>
+<p>Then the class of models of the form</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta(x) := \sum_{j=0}^p \theta_p x^p = \theta^\top \phi(x) 
+\]</div>
+<p>with parameters <span class="math notranslate nohighlight">\(\theta\)</span> encompasses the set of <span class="math notranslate nohighlight">\(p\)</span>-degree polynomials.</p>
 <p>Crucially, observe that <span class="math notranslate nohighlight">\(f_\theta\)</span> is a linear model with input features <span class="math notranslate nohighlight">\(\phi(x)\)</span> and parameters <span class="math notranslate nohighlight">\(\theta\)</span>. The parameters <span class="math notranslate nohighlight">\(\theta\)</span> are the coefficients of the polynomial.
 Thus, we can use our algorithms for linear regression to learn <span class="math notranslate nohighlight">\(\theta\)</span>. This yields a polynomial model for <span class="math notranslate nohighlight">\(y\)</span> given <span class="math notranslate nohighlight">\(x\)</span> that is non-linear in <span class="math notranslate nohighlight">\(x\)</span> (because <span class="math notranslate nohighlight">\(\phi(x)\)</span> is non-linear in <span class="math notranslate nohighlight">\(x\)</span>).</p>
 <p>The disadvantage of the above approach is that it requires more features and more computation. When <span class="math notranslate nohighlight">\(x\)</span> is a scalar, we need <span class="math notranslate nohighlight">\(O(p)\)</span> features. When applying the normal equations to compute <span class="math notranslate nohighlight">\(\theta\)</span>, we need <span class="math notranslate nohighlight">\(O(p^3)\)</span> time.
@@ -615,19 +630,27 @@ More generally, when <span class="math notranslate nohighlight">\(x\)</span> is 
 <section id="the-kernel-trick-a-first-example">
 <h3>14.1.2.2. The Kernel Trick: A First Example<a class="headerlink" href="#the-kernel-trick-a-first-example" title="Permalink to this headline">¶</a></h3>
 <p>Our approach for making SVMs non-linear will be analagous to the idea we used in polynomial regression. We will apply the SVM algorithm not over <span class="math notranslate nohighlight">\(x\)</span>, but over non-linear (e.g., polynomial) features <span class="math notranslate nohighlight">\(x\)</span>.</p>
-<p>When <span class="math notranslate nohighlight">\(x\)</span> is replaced by features <span class="math notranslate nohighlight">\(\phi(x)\)</span>, the SVM algorithm is defined as follows:
+<p>When <span class="math notranslate nohighlight">\(x\)</span> is replaced by features <span class="math notranslate nohighlight">\(\phi(x)\)</span>, the SVM algorithm is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-J(\lambda) &amp;= \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} \phi(x^{(i)})^\top \phi(x^{(k)})  \
-(\theta^<em>)^\top \phi(x’) &amp; = \sum_{i=1}^n \lambda_i^</em> y^{(i)}\phi(x^{(i)})^\top \phi(x’).
+J(\lambda) &amp;= \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} \phi(x^{(i)})^\top \phi(x^{(k)})  \\
+(\theta^*)^\top \phi(x') &amp; = \sum_{i=1}^n \lambda_i^* y^{(i)}\phi(x^{(i)})^\top \phi(x').
 \end{align*}
-Notice that in both equations, the features <span class="math notranslate nohighlight">\(\phi(x)\)</span> are never used directly. Only their <em>dot product</em> is used.
+\end{split}\]</div>
+<p>Notice that in both equations, the features <span class="math notranslate nohighlight">\(\phi(x)\)</span> are never used directly. Only their <em>dot product</em> is used.
 If we can compute the dot product efficiently, we can potentially use very complex features.</p>
 <p>Can we compute the dot product <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(x')\)</span> of polynomial features <span class="math notranslate nohighlight">\(\phi(x)\)</span> more efficiently than using the standard definition of a dot product? It turns out that we can.
 Let’s look at an example.</p>
-<p>To start, consider pairwise polynomial features <span class="math notranslate nohighlight">\(\phi : \mathbb{R}^d \to \mathbb{R}^{d^2}\)</span> of the form
-$<span class="math notranslate nohighlight">\( \phi(x)_{ij} = x_i x_j \;\text{ for \)</span>i,j \in {1,2,\ldots,d}<span class="math notranslate nohighlight">\(}. \)</span>$</p>
-<p>These features consist of all the pairwise products among all the entries of <span class="math notranslate nohighlight">\(x\)</span>. For <span class="math notranslate nohighlight">\(d=3\)</span> this looks like
-$<span class="math notranslate nohighlight">\( \small \phi(x) = \begin{bmatrix}
+<p>To start, consider pairwise polynomial features <span class="math notranslate nohighlight">\(\phi : \mathbb{R}^d \to \mathbb{R}^{d^2}\)</span> of the form</p>
+<div class="math notranslate nohighlight">
+\[ 
+\phi(x)_{ij} = x_i x_j \;\text{ for $i,j \in \{1,2,\ldots,d\}$}. 
+\]</div>
+<p>These features consist of all the pairwise products among all the entries of <span class="math notranslate nohighlight">\(x\)</span>. For <span class="math notranslate nohighlight">\(d=3\)</span> this looks like</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\small \phi(x) = \begin{bmatrix}
 x_1 x_1 \\
 x_1 x_2 \\
 x_1 x_3 \\
@@ -639,23 +662,35 @@ x_3 x_1 \\
 x_3 x_2 \\
 x_3 x_3 \\
 \end{bmatrix}.
-\)</span>$</p>
-<p>The product of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span> in feature space equals:
-$<span class="math notranslate nohighlight">\( \phi(x)^\top \phi(z) = \sum_{i=1}^d \sum_{j=1}^d x_i x_j z_i z_j \)</span><span class="math notranslate nohighlight">\(
-Normally, computing this dot product involves a sum over \)</span>d^2<span class="math notranslate nohighlight">\( terms and takes \)</span>O(d^2)$ time.</p>
-<p>An altenative way of computing the dot product <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(z)\)</span> is to instead compute <span class="math notranslate nohighlight">\((x^\top z)^2\)</span>. One can check that this has the same result:
+\end{split}\]</div>
+<p>The product of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span> in feature space equals:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\phi(x)^\top \phi(z) = \sum_{i=1}^d \sum_{j=1}^d x_i x_j z_i z_j 
+\]</div>
+<p>Normally, computing this dot product involves a sum over <span class="math notranslate nohighlight">\(d^2\)</span> terms and takes <span class="math notranslate nohighlight">\(O(d^2)\)</span> time.</p>
+<p>An altenative way of computing the dot product <span class="math notranslate nohighlight">\(\phi(x)^\top \phi(z)\)</span> is to instead compute <span class="math notranslate nohighlight">\((x^\top z)^2\)</span>. One can check that this has the same result:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-(x^\top z)^2 &amp; = (\sum_{i=1}^d x_i z_i)^2 \
-&amp; = (\sum_{i=1}^d x_i z_i) \cdot (\sum_{j=1}^d x_j z_j) \
-&amp; = \sum_{i=1}^d \sum_{j=1}^d x_i z_i x_j z_j \
+(x^\top z)^2 &amp; = (\sum_{i=1}^d x_i z_i)^2 \\
+&amp; = (\sum_{i=1}^d x_i z_i) \cdot (\sum_{j=1}^d x_j z_j) \\
+&amp; = \sum_{i=1}^d \sum_{j=1}^d x_i z_i x_j z_j \\
 &amp; = \phi(x)^\top \phi(z)
 \end{align*}
-But computing <span class="math notranslate nohighlight">\((x^\top z)^2\)</span> can be done in only <span class="math notranslate nohighlight">\(O(d)\)</span> time: we simply compute the dot product <span class="math notranslate nohighlight">\(x^\top z\)</span> in <span class="math notranslate nohighlight">\(O(d)\)</span> time, and then square the resulting scalar. This is much faster than the naive <span class="math notranslate nohighlight">\(O(d^2)\)</span> procedure.</p>
-<p>More generally, polynomial features <span class="math notranslate nohighlight">\(\phi_p\)</span> of degree <span class="math notranslate nohighlight">\(p\)</span> when <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span> are defined as follows:
-$<span class="math notranslate nohighlight">\( \phi_p(x)_{i_1, i_2, \ldots, i_p} = x_{i_1} x_{i_2} \cdots x_{i_p} \;\text{ for \)</span>i_1, i_2,  \ldots, i_p \in {1,2,\ldots,d}<span class="math notranslate nohighlight">\(} \)</span><span class="math notranslate nohighlight">\(
-The number of these features scales as \)</span>O(d^p)<span class="math notranslate nohighlight">\(. The straightforward way of computing their dot product also takes \)</span>O(d^p)$ time.</p>
-<p>However, using a version of the above argument, we can compute the dot product <span class="math notranslate nohighlight">\(\phi_p(x)^\top \phi_p(z)\)</span> in this feature space in only <span class="math notranslate nohighlight">\(O(d)\)</span> time for any <span class="math notranslate nohighlight">\(p\)</span> as follows:
-$<span class="math notranslate nohighlight">\(\phi_p(x)^\top \phi_p(z) = (x^\top z)^p.\)</span>$</p>
+\end{split}\]</div>
+<p>But computing <span class="math notranslate nohighlight">\((x^\top z)^2\)</span> can be done in only <span class="math notranslate nohighlight">\(O(d)\)</span> time: we simply compute the dot product <span class="math notranslate nohighlight">\(x^\top z\)</span> in <span class="math notranslate nohighlight">\(O(d)\)</span> time, and then square the resulting scalar. This is much faster than the naive <span class="math notranslate nohighlight">\(O(d^2)\)</span> procedure.</p>
+<p>More generally, polynomial features <span class="math notranslate nohighlight">\(\phi_p\)</span> of degree <span class="math notranslate nohighlight">\(p\)</span> when <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span> are defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\phi_p(x)_{i_1, i_2, \ldots, i_p} = x_{i_1} x_{i_2} \cdots x_{i_p} \;\text{ for $i_1, i_2,  \ldots, i_p \in \{1,2,\ldots,d\}$} 
+\]</div>
+<p>The number of these features scales as <span class="math notranslate nohighlight">\(O(d^p)\)</span>. The straightforward way of computing their dot product also takes <span class="math notranslate nohighlight">\(O(d^p)\)</span> time.</p>
+<p>However, using a version of the above argument, we can compute the dot product <span class="math notranslate nohighlight">\(\phi_p(x)^\top \phi_p(z)\)</span> in this feature space in only <span class="math notranslate nohighlight">\(O(d)\)</span> time for any <span class="math notranslate nohighlight">\(p\)</span> as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+\phi_p(x)^\top \phi_p(z) = (x^\top z)^p.
+\]</div>
 <p>This is a very powerful idea:</p>
 <ul class="simple">
 <li><p>We can compute the dot product between <span class="math notranslate nohighlight">\(O(d^p)\)</span> features in only <span class="math notranslate nohighlight">\(O(d)\)</span> time.</p></li>
@@ -666,17 +701,29 @@ $<span class="math notranslate nohighlight">\(\phi_p(x)^\top \phi_p(z) = (x^\top
 <h3>14.1.2.3. The General Kernel Trick in SVMs<a class="headerlink" href="#the-general-kernel-trick-in-svms" title="Permalink to this headline">¶</a></h3>
 <p>More generally, given features <span class="math notranslate nohighlight">\(\phi(x)\)</span>, suppose that we have a function <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> that outputs dot products between vectors in <span class="math notranslate nohighlight">\(\mathcal{X}\)</span></p>
 <div class="math notranslate nohighlight">
-\[ K(x, z) = \phi(x)^\top \phi(z). \]</div>
-<p>We will call <span class="math notranslate nohighlight">\(K\)</span> the <em>kernel function</em>. Recall that an example of a useful kernel function is
-$<span class="math notranslate nohighlight">\(K(x,z) = (x \cdot z)^p\)</span><span class="math notranslate nohighlight">\(
-because it computes the dot product of polynomial features of degree \)</span>p$.</p>
-<p>Notice that we can rewrite the dual of the SVM as
+\[ 
+K(x, z) = \phi(x)^\top \phi(z). 
+\]</div>
+<p>We will call <span class="math notranslate nohighlight">\(K\)</span> the <em>kernel function</em>. Recall that an example of a useful kernel function is</p>
+<div class="math notranslate nohighlight">
+\[
+K(x,z) = (x \cdot z)^p
+\]</div>
+<p>because it computes the dot product of polynomial features of degree <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>Notice that we can rewrite the dual of the SVM as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \begin{align*}
-\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} K(x^{(i)}, x^{(k)})  \
-\text{subject to } ; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \
-&amp; C \geq \lambda_i \geq 0 ; \text{for all <span class="math notranslate nohighlight">\(i\)</span>}
-\end{align*}</p>
-<p>Also, the predictions at a new point <span class="math notranslate nohighlight">\(x'\)</span> are given by $<span class="math notranslate nohighlight">\(\sum_{i=1}^n \lambda_i^* y^{(i)} K(x^{(i)}, x').\)</span>$</p>
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} K(x^{(i)}, x^{(k)})  \\
+\text{subject to } \; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
+&amp; C \geq \lambda_i \geq 0 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+<p>Also, the predictions at a new point <span class="math notranslate nohighlight">\(x'\)</span> are given by</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n \lambda_i^* y^{(i)} K(x^{(i)}, x').
+\]</div>
 <p>We can efficiently use any features <span class="math notranslate nohighlight">\(\phi(x)\)</span> (e.g., polynomial features of any degree <span class="math notranslate nohighlight">\(p\)</span>) as long as the kernel functions computes the dot products of the <span class="math notranslate nohighlight">\(\phi(x)\)</span> efficiently. We will see several examples of kernel functions below.</p>
 </section>
 </section>
@@ -698,13 +745,20 @@ because it computes the dot product of polynomial features of degree \)</span>p$
 Another algorithm that supports kernels is Ridge regression.</p>
 <section id="review-ridge-regression">
 <h2>14.2.1. Review: Ridge Regression<a class="headerlink" href="#review-ridge-regression" title="Permalink to this headline">¶</a></h2>
-<p>Recall that a linear model has the form
-$<span class="math notranslate nohighlight">\( f_\theta(x) = \theta^\top \phi(x). \)</span><span class="math notranslate nohighlight">\(
-where \)</span>\phi(x)<span class="math notranslate nohighlight">\( is a vector of features. We pick \)</span>\theta<span class="math notranslate nohighlight">\( to minimize the (L2-regularized) mean squared error (MSE):
-\)</span><span class="math notranslate nohighlight">\(J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)} - \theta^\top \phi(x^{(i)}))^2 + \frac{\lambda}{2}\sum_{j=1}^d \theta_j^2\)</span>$</p>
+<p>Recall that a linear model has the form</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta(x) = \theta^\top \phi(x). 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\phi(x)\)</span> is a vector of features. We pick <span class="math notranslate nohighlight">\(\theta\)</span> to minimize the (L2-regularized) mean squared error (MSE):</p>
+<div class="math notranslate nohighlight">
+\[
+J(\theta)= \frac{1}{2n} \sum_{i=1}^n(y^{(i)} - \theta^\top \phi(x^{(i)}))^2 + \frac{\lambda}{2}\sum_{j=1}^d \theta_j^2
+\]</div>
 <p>It is useful to represent the featurized dataset as a matrix <span class="math notranslate nohighlight">\(\Phi \in \mathbb{R}^{n \times p}\)</span>:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split} \Phi = \begin{bmatrix}
+\[\begin{split} 
+\Phi = \begin{bmatrix}
 \phi(x^{(1)})_1 &amp; \phi(x^{(1)})_2 &amp; \ldots &amp; \phi(x^{(1)})_p \\
 \phi(x^{(2)})_1 &amp; \phi(x^{(2)})_2 &amp; \ldots &amp; \phi(x^{(2)})_p \\
 \vdots \\
@@ -717,46 +771,77 @@ where \)</span>\phi(x)<span class="math notranslate nohighlight">\( is a vector 
 &amp; \vdots &amp; \\
 - &amp; \phi(x^{(n)})^\top &amp; - \\
 \end{bmatrix}
-.\end{split}\]</div>
-<p>The normal equations provide a closed-form solution for <span class="math notranslate nohighlight">\(\theta\)</span>:
-$<span class="math notranslate nohighlight">\( \theta = (X^\top X  + \lambda I)^{-1} X^\top y.\)</span>$</p>
-<p>When the vectors of attributes <span class="math notranslate nohighlight">\(x^{(i)}\)</span> are featurized, we can write this as
-$<span class="math notranslate nohighlight">\( \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y.\)</span>$</p>
+.
+\end{split}\]</div>
+<p>The normal equations provide a closed-form solution for <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\theta = (X^\top X  + \lambda I)^{-1} X^\top y.
+\]</div>
+<p>When the vectors of attributes <span class="math notranslate nohighlight">\(x^{(i)}\)</span> are featurized, we can write this as</p>
+<div class="math notranslate nohighlight">
+\[ 
+\theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y.
+\]</div>
 </section>
 <section id="a-dual-formulation-for-ridge-regression">
 <h2>14.2.2. A Dual Formulation for Ridge Regression<a class="headerlink" href="#a-dual-formulation-for-ridge-regression" title="Permalink to this headline">¶</a></h2>
 <p>We can modify this expression by using a version of the <a class="reference external" href="https://en.wikipedia.org/wiki/Woodbury_matrix_identity#Discussion">push-through matrix identity</a>:</p>
 <div class="math notranslate nohighlight">
-\[ (\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1} \]</div>
+\[ 
+(\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1} 
+\]</div>
 <p>where <span class="math notranslate nohighlight">\(U \in \mathbb{R}^{n \times m}\)</span> and <span class="math notranslate nohighlight">\(V \in \mathbb{R}^{m \times n}\)</span> and <span class="math notranslate nohighlight">\(\lambda \neq 0\)</span></p>
 <p>The proof sketch is: Start with <span class="math notranslate nohighlight">\(U (\lambda I + V U) = (\lambda I + U V) U\)</span> and multiply both sides by <span class="math notranslate nohighlight">\((\lambda I + V U)^{-1}\)</span> on the right and <span class="math notranslate nohighlight">\((\lambda I + U V)^{-1}\)</span> on the left. If you are interested, you can try to derive in detail by yourself.</p>
 <p>We can apply the identity <span class="math notranslate nohighlight">\((\lambda I + U V)^{-1} U = U (\lambda I + V U)^{-1}\)</span> to the normal equations with <span class="math notranslate nohighlight">\(U=\Phi^\top\)</span> and <span class="math notranslate nohighlight">\(V=\Phi\)</span>.</p>
 <div class="math notranslate nohighlight">
-\[ \theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y\]</div>
+\[ 
+\theta = (\Phi^\top \Phi + \lambda I)^{-1} \Phi^\top y
+\]</div>
 <p>to obtain the <em>dual</em> form:</p>
 <div class="math notranslate nohighlight">
-\[ \theta = \Phi^\top (\Phi \Phi^\top + \lambda I)^{-1} y.\]</div>
+\[ 
+\theta = \Phi^\top (\Phi \Phi^\top + \lambda I)^{-1} y.
+\]</div>
 <p>The first approach takes <span class="math notranslate nohighlight">\(O(p^3)\)</span> time; the second is <span class="math notranslate nohighlight">\(O(n^3)\)</span> and is faster when <span class="math notranslate nohighlight">\(p &gt; n\)</span>.</p>
 </section>
 <section id="id2">
 <h2>14.2.3. Kernelized Ridge Regression<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>An interesting corollary of the dual form
-$<span class="math notranslate nohighlight">\( \theta = \Phi^\top \underbrace{(\Phi \Phi^\top + \lambda I)^{-1} y}_\text{call this vector \)</span>\alpha<span class="math notranslate nohighlight">\(} = \Phi^T \alpha\)</span><span class="math notranslate nohighlight">\(
-is that the optimal \)</span>\theta<span class="math notranslate nohighlight">\( is a linear combination of the \)</span>n<span class="math notranslate nohighlight">\( training set features:
-\)</span><span class="math notranslate nohighlight">\( \theta = \sum_{i=1}^n \alpha_i \phi(x^{(i)}). \)</span>$</p>
-<p>Here, the weights <span class="math notranslate nohighlight">\(\alpha_i\)</span> are derived from <span class="math notranslate nohighlight">\((\Phi \Phi^\top + \lambda I)^{-1} y\)</span> and equal
-$<span class="math notranslate nohighlight">\(\alpha_i = \sum_{j=1}^n L_{ij} y_j\)</span><span class="math notranslate nohighlight">\(
-where \)</span>L = (\Phi \Phi^\top + \lambda I)^{-1}.$</p>
-<p>Consider now a prediction <span class="math notranslate nohighlight">\(\phi(x')^\top \theta\)</span> at a new input <span class="math notranslate nohighlight">\(x'\)</span>:
-$<span class="math notranslate nohighlight">\(\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).\)</span>$</p>
+<p>An interesting corollary of the dual form</p>
+<div class="math notranslate nohighlight">
+\[ 
+\theta = \Phi^\top \underbrace{(\Phi \Phi^\top + \lambda I)^{-1} y}_\text{call this vector $\alpha$} = \Phi^T \alpha
+\]</div>
+<p>is that the optimal <span class="math notranslate nohighlight">\(\theta\)</span> is a linear combination of the <span class="math notranslate nohighlight">\(n\)</span> training set features:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\theta = \sum_{i=1}^n \alpha_i \phi(x^{(i)}). 
+\]</div>
+<p>Here, the weights <span class="math notranslate nohighlight">\(\alpha_i\)</span> are derived from <span class="math notranslate nohighlight">\((\Phi \Phi^\top + \lambda I)^{-1} y\)</span> and equal</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha_i = \sum_{j=1}^n L_{ij} y_j
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(L = (\Phi \Phi^\top + \lambda I)^{-1}.\)</span></p>
+<p>Consider now a prediction <span class="math notranslate nohighlight">\(\phi(x')^\top \theta\)</span> at a new input <span class="math notranslate nohighlight">\(x'\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).
+\]</div>
 <p>The crucial observation is that the features <span class="math notranslate nohighlight">\(\phi(x)\)</span> are never used directly in this equation. Only their dot product is used!</p>
 <p>We also don’t need features <span class="math notranslate nohighlight">\(\phi\)</span> for learning <span class="math notranslate nohighlight">\(\theta\)</span>, just their dot product!
 First, recall that each row <span class="math notranslate nohighlight">\(i\)</span> of <span class="math notranslate nohighlight">\(\Phi\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>-th featurized input <span class="math notranslate nohighlight">\(\phi(x^{(i)})^\top\)</span>.
-Thus <span class="math notranslate nohighlight">\(K = \Phi \Phi^\top\)</span> is a matrix of all dot products between all the <span class="math notranslate nohighlight">\(\phi(x^{(i)})\)</span>
-$<span class="math notranslate nohighlight">\(K_{ij} = \phi(x^{(i)})^\top \phi(x^{(j)}).\)</span>$</p>
-<p>We can compute <span class="math notranslate nohighlight">\(\alpha = (K+\lambda I)^{-1}y\)</span> and use it for predictions
-$<span class="math notranslate nohighlight">\(\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).\)</span><span class="math notranslate nohighlight">\(
-and all this only requires dot products, not features \)</span>\phi$!</p>
+Thus <span class="math notranslate nohighlight">\(K = \Phi \Phi^\top\)</span> is a matrix of all dot products between all the <span class="math notranslate nohighlight">\(\phi(x^{(i)})\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+K_{ij} = \phi(x^{(i)})^\top \phi(x^{(j)}).
+\]</div>
+<p>We can compute <span class="math notranslate nohighlight">\(\alpha = (K+\lambda I)^{-1}y\)</span> and use it for predictions</p>
+<div class="math notranslate nohighlight">
+\[
+\phi(x')^\top \theta = \sum_{i=1}^n \alpha_i \phi(x')^\top \phi(x^{(i)}).
+\]</div>
+<p>and all this only requires dot products, not features <span class="math notranslate nohighlight">\(\phi\)</span>!</p>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="more-on-kernels">
@@ -764,8 +849,11 @@ and all this only requires dot products, not features \)</span>\phi$!</p>
 <p>We have seen two examples of kernelized algorithms: SVM and ridge regression. Let’s now look at some additional examples of kernels.</p>
 <section id="definition-kernels">
 <h2>14.3.1. Definition: Kernels<a class="headerlink" href="#definition-kernels" title="Permalink to this headline">¶</a></h2>
-<p>The <em>kernel</em> corresponding to features <span class="math notranslate nohighlight">\(\phi(x)\)</span> is a function <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> that outputs dot products between vectors in <span class="math notranslate nohighlight">\(\mathcal{X}\)</span>
-$<span class="math notranslate nohighlight">\( K(x, z) = \phi(x)^\top \phi(z). \)</span>$</p>
+<p>The <em>kernel</em> corresponding to features <span class="math notranslate nohighlight">\(\phi(x)\)</span> is a function <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> that outputs dot products between vectors in <span class="math notranslate nohighlight">\(\mathcal{X}\)</span></p>
+<div class="math notranslate nohighlight">
+\[ 
+K(x, z) = \phi(x)^\top \phi(z). 
+\]</div>
 <p>We will also consider general functions <span class="math notranslate nohighlight">\(K : \mathcal{X} \times \mathcal{X} \to [0, \infty]\)</span> and call these <em>kernel functions</em>.
 Kernels have multiple intepreations:</p>
 <ul class="simple">
@@ -807,8 +895,11 @@ Kernels have multiple intepreations:</p>
 <section id="linear-kernel">
 <h3>14.3.2.1. Linear Kernel<a class="headerlink" href="#linear-kernel" title="Permalink to this headline">¶</a></h3>
 <p>The simplest kind of kernel that exists is called the linear kernel.
-This simply corresponds to dot product multiplication of the features:
-$<span class="math notranslate nohighlight">\(K(x,z) = x^\top z\)</span>$</p>
+This simply corresponds to dot product multiplication of the features:</p>
+<div class="math notranslate nohighlight">
+\[
+K(x,z) = x^\top z
+\]</div>
 <p>Applied to an SVM, this corresponds to a linear decision boundary.</p>
 <p>Below is an example of how we can use the SVM implementation in <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> with a linear kernel.
 Internally, this solves the dual SVM optimization problem.</p>
@@ -844,11 +935,16 @@ Internally, this solves the dual SVM optimization problem.</p>
 </section>
 <section id="polynomial-kernel">
 <h3>14.3.2.2. Polynomial Kernel<a class="headerlink" href="#polynomial-kernel" title="Permalink to this headline">¶</a></h3>
-<p>A more interesting example is the polynomial kernel of degree <span class="math notranslate nohighlight">\(p\)</span>, of which we have already seen a simple example:
-$<span class="math notranslate nohighlight">\(K(x,z) = (x^\top z + c)^p.\)</span>$</p>
+<p>A more interesting example is the polynomial kernel of degree <span class="math notranslate nohighlight">\(p\)</span>, of which we have already seen a simple example:</p>
+<div class="math notranslate nohighlight">
+\[
+K(x,z) = (x^\top z + c)^p.
+\]</div>
 <p>This corresponds to a mapping to a feature space of dimension <span class="math notranslate nohighlight">\(d+p \choose p\)</span> that has all monomials <span class="math notranslate nohighlight">\(x_{i_1}x_{i_2}\cdots x_{i_p}\)</span> of degree at most <span class="math notranslate nohighlight">\(p\)</span>.</p>
-<p>For <span class="math notranslate nohighlight">\(d=3\)</span> this feature map looks like
-$<span class="math notranslate nohighlight">\( \small \phi(x) = \begin{bmatrix}
+<p>For <span class="math notranslate nohighlight">\(d=3\)</span> this feature map looks like</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\small \phi(x) = \begin{bmatrix}
 x_1 x_1 \\
 x_1 x_2 \\
 x_1 x_3 \\
@@ -864,7 +960,7 @@ x_3 x_3 \\
 \sqrt{2}c x_3 \\
 c
 \end{bmatrix}.
-\)</span>$</p>
+\end{split}\]</div>
 <p>The polynomial kernel allows us to compute dot products in a <span class="math notranslate nohighlight">\(O(d^p)\)</span>-dimensional space in time <span class="math notranslate nohighlight">\(O(d)\)</span>.
 The following code shows how it would be implemented in <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
 <div class="cell docutils container">
@@ -899,9 +995,12 @@ The following code shows how it would be implemented in <code class="docutils li
 </section>
 <section id="radial-basis-function-kernel">
 <h3>14.3.2.3. Radial Basis Function Kernel<a class="headerlink" href="#radial-basis-function-kernel" title="Permalink to this headline">¶</a></h3>
-<p>Another example is the Radial Basis Function (RBF; sometimes called Gaussian) kernel
-$<span class="math notranslate nohighlight">\(K(x,z) = \exp \left(-\frac{||x - z||^2}{2\sigma^2}\right),\)</span><span class="math notranslate nohighlight">\(
-where \)</span>\sigma$ is a hyper-parameter. It’s easiest to understand this kernel by viewing it as a similarity measure.</p>
+<p>Another example is the Radial Basis Function (RBF; sometimes called Gaussian) kernel</p>
+<div class="math notranslate nohighlight">
+\[
+K(x,z) = \exp \left(-\frac{||x - z||^2}{2\sigma^2}\right),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma\)</span> is a hyper-parameter. It’s easiest to understand this kernel by viewing it as a similarity measure.</p>
 <p>We can show that this kernel corresponds to an <em>infinite-dimensional</em> feature map and the limit of the polynomial kernel as <span class="math notranslate nohighlight">\(p \to \infty\)</span>.</p>
 <p>To see why that’s intuitively the case, consider the Taylor expansion</p>
 <div class="math notranslate nohighlight">
@@ -950,14 +1049,17 @@ Suppose now that we use some kernel function <span class="math notranslate nohig
 Suppose that <span class="math notranslate nohighlight">\(K\)</span> is a kernel for some feature map <span class="math notranslate nohighlight">\(\phi\)</span>, and consider an arbitrary set of <span class="math notranslate nohighlight">\(n\)</span> points <span class="math notranslate nohighlight">\(\{x^{(1)}, x^{(2)}, \ldots, x^{(n)}\}\)</span>.</p>
 <p>Consider the matrix <span class="math notranslate nohighlight">\(L \in \mathbb{R}^{n\times n}\)</span> defined as <span class="math notranslate nohighlight">\(L_{ij} = K(x^{(i)}, x^{(j)}) = \phi(x^{(i)})^\top \phi(x^{(j)})\)</span>. We claim that <span class="math notranslate nohighlight">\(L\)</span> must be symmetric and positive semidefinite.
 Indeed, <span class="math notranslate nohighlight">\(L\)</span> is symmetric because the dot product <span class="math notranslate nohighlight">\(\phi(x^{(i)})^\top \phi(x^{(j)})\)</span> is symmetric. Moreover, for any <span class="math notranslate nohighlight">\(z\)</span>,</p>
-<p>\begin{align*}
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
 z^\top L z
-&amp; = \sum_{i=1}^n \sum_{j=1}^n z_i L_{ij} z_j
-= \sum_{i=1}^n \sum_{j=1}^n z_i \phi(x^{(i)})^\top \phi(x^{(j)}) z_j \
-&amp; = \sum_{i=1}^n \sum_{j=1}^n z_i (\sum_{k=1}^n \phi(x^{(i)})<em>k \phi(x^{(j)})<em>k ) z_j \
-&amp; = \sum</em>{k=1}^n \sum</em>{i=1}^n \sum_{j=1}^n z_i \phi(x^{(i)})<em>k \phi(x^{(j)})<em>k z_j \
-&amp; = \sum</em>{k=1}^n \sum</em>{i=1}^n \left( z_i \phi(x^{(i)})_k \right)^2 \geq 0
-\end{align*}</p>
+&amp; = \sum_{i=1}^n \sum_{j=1}^n z_i L_{ij} z_j 
+ = \sum_{i=1}^n \sum_{j=1}^n z_i \phi(x^{(i)})^\top \phi(x^{(j)}) z_j \\
+&amp; = \sum_{i=1}^n \sum_{j=1}^n z_i (\sum_{k=1}^n \phi(x^{(i)})_k \phi(x^{(j)})_k ) z_j \\
+&amp; = \sum_{k=1}^n \sum_{i=1}^n \sum_{j=1}^n z_i \phi(x^{(i)})_k \phi(x^{(j)})_k z_j \\
+&amp; = \sum_{k=1}^n \sum_{i=1}^n \left( z_i \phi(x^{(i)})_k \right)^2 \geq 0
+\end{align*}
+\end{split}\]</div>
 <p>Thus if <span class="math notranslate nohighlight">\(K\)</span> is a kernel, <span class="math notranslate nohighlight">\(L\)</span> must be positive semidefinite for any <span class="math notranslate nohighlight">\(n\)</span> points <span class="math notranslate nohighlight">\(x^{(i)}\)</span>.</p>
 <section id="mercer-s-theorem">
 <h3>14.3.3.1. Mercer’s Theorem<a class="headerlink" href="#mercer-s-theorem" title="Permalink to this headline">¶</a></h3>
