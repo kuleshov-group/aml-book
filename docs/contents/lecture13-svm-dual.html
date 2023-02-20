@@ -1,0 +1,1102 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 13: Dual Formulation of Support Vector Machines &#8212; Applied Machine Learning</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 14: Kernels" href="lecture14-kernels.html" />
+    <link rel="prev" title="Lecture 12: Support Vector Machines" href="lecture12-suppor-vector-machines.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Applied Machine Learning</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture2-supervised-learning.html">
+   Lecture 2: Supervised Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture3-linear-regression.html">
+   Lecture 3: Linear Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture4-classification.html">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture5-regularization.html">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture6-naive-bayes.html">
+   Lecture 6: Generative Models and Naive Bayes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+   Lecture 8: Unsupervised Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture9-density-estimation.html">
+   Lecture 9: Density Estimation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture10-clustering.html">
+   Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture16-boosting.html">
+   Lecture 16: Boosting
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/lecture13-svm-dual.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontents/lecture13-svm-dual.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/contents/lecture13-svm-dual.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lagrange-duality">
+   13.1. Lagrange Duality
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-classification-margins">
+     13.1.1. Review: Classification Margins
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lagrange-duality-in-constrained-optimization">
+     13.1.2. Lagrange Duality in Constrained Optimization
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-primal-lagrange-form">
+       13.1.2.1. The Primal Lagrange Form
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-dual-lagrange-form">
+       13.1.2.2. The Dual Lagrange Form
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       13.1.2.3. Lagrange Duality
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#an-aside-constrained-regularization">
+     13.1.3. An Aside: Constrained Regularization
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dual-formulation-of-svms">
+   13.2. Dual Formulation of SVMs
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-max-margin-classification">
+     13.2.1. Review: Max-Margin Classification
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-dual-of-the-svm-problem">
+     13.2.2. The Dual of the SVM Problem
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#properties-of-svm-duals">
+     13.2.3. Properties of SVM Duals
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#when-to-solve-the-dual">
+       13.2.3.1. When to Solve the Dual
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#practical-considerations-for-svm-duals">
+   13.3. Practical Considerations for SVM Duals
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-separable-problems">
+     13.3.1. Non-Separable Problems
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sequential-minimal-optimization-and-coordinate-descent">
+     13.3.2. Sequential Minimal Optimization and Coordinate Descent
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#obtaining-a-primal-solution-from-the-dual">
+     13.3.3. Obtaining a Primal Solution from the Dual
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#support-vectors">
+     13.3.4. Support Vectors
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-hands-on-example">
+     13.3.5. A Hands-On Example
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-support-vector-machine-classification-dual-form">
+     13.3.6. Algorithm: Support Vector Machine Classification (Dual Form)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Lecture 13: Dual Formulation of Support Vector Machines</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lagrange-duality">
+   13.1. Lagrange Duality
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-classification-margins">
+     13.1.1. Review: Classification Margins
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lagrange-duality-in-constrained-optimization">
+     13.1.2. Lagrange Duality in Constrained Optimization
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-primal-lagrange-form">
+       13.1.2.1. The Primal Lagrange Form
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-dual-lagrange-form">
+       13.1.2.2. The Dual Lagrange Form
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       13.1.2.3. Lagrange Duality
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#an-aside-constrained-regularization">
+     13.1.3. An Aside: Constrained Regularization
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dual-formulation-of-svms">
+   13.2. Dual Formulation of SVMs
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-max-margin-classification">
+     13.2.1. Review: Max-Margin Classification
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-dual-of-the-svm-problem">
+     13.2.2. The Dual of the SVM Problem
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#properties-of-svm-duals">
+     13.2.3. Properties of SVM Duals
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#when-to-solve-the-dual">
+       13.2.3.1. When to Solve the Dual
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#practical-considerations-for-svm-duals">
+   13.3. Practical Considerations for SVM Duals
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-separable-problems">
+     13.3.1. Non-Separable Problems
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sequential-minimal-optimization-and-coordinate-descent">
+     13.3.2. Sequential Minimal Optimization and Coordinate Descent
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#obtaining-a-primal-solution-from-the-dual">
+     13.3.3. Obtaining a Primal Solution from the Dual
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#support-vectors">
+     13.3.4. Support Vectors
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-hands-on-example">
+     13.3.5. A Hands-On Example
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-support-vector-machine-classification-dual-form">
+     13.3.6. Algorithm: Support Vector Machine Classification (Dual Form)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-13-dual-formulation-of-support-vector-machines">
+<h1>Lecture 13: Dual Formulation of Support Vector Machines<a class="headerlink" href="#lecture-13-dual-formulation-of-support-vector-machines" title="Permalink to this headline">¶</a></h1>
+<p>In this lecture, we will see a different formulation of the SVM called the <em>dual</em>. This dual formulation will lead to new types of optimization algorithms with favorable computational properties in scenarios when the number of features is very large (and possibly even infinite!).</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="lagrange-duality">
+<h1>13.1. Lagrange Duality<a class="headerlink" href="#lagrange-duality" title="Permalink to this headline">¶</a></h1>
+<p>Before we define the dual of the SVM problem, we need to introduce some additional concepts from optimization, namely Lagrange duality.</p>
+<section id="review-classification-margins">
+<h2>13.1.1. Review: Classification Margins<a class="headerlink" href="#review-classification-margins" title="Permalink to this headline">¶</a></h2>
+<p>In the previous lecture, we defined the concept of classification margins. Recall that the margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> is the distance between the separating hyperplane and the datapoint <span class="math notranslate nohighlight">\(x^{(i)}\)</span>.</p>
+<center><img width=30% src="img/margin.png"></center><p>Large margins are good, since data should be far from the decision boundary. Maximizing the margin of a linear model amounts to solving the following optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &amp;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+<p>We are now going to look at a different way of optimizing this objective. But first, we need to define Lagrange duality.</p>
+</section>
+<section id="lagrange-duality-in-constrained-optimization">
+<h2>13.1.2. Lagrange Duality in Constrained Optimization<a class="headerlink" href="#lagrange-duality-in-constrained-optimization" title="Permalink to this headline">¶</a></h2>
+<p>We start by introducing the definition of a constrained optimization problem. We will look at constrained optimization problems of the form</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\min_{\theta \in \mathbb{R}^d} \; &amp; J(\theta) \\
+\text{such that } \; &amp; c_k(\theta) \leq 0 \text{ for $k =1,2,\ldots,K$}
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(J(\theta)\)</span> is the optimization objective and each <span class="math notranslate nohighlight">\(c_k(\theta) : \mathbb{R}^d \to \mathbb{R}\)</span> is a constraint.</p>
+<p>Our goal is to find a small value of <span class="math notranslate nohighlight">\(J(\theta)\)</span> such that the <span class="math notranslate nohighlight">\(c_k(\theta)\)</span> are negative.
+Rather than solving the above problem, we can solve the following related optimization problem, which contains additional penalty terms:</p>
+<div class="math notranslate nohighlight">
+\[
+\min_\theta \mathcal{L}(\theta, \lambda) = J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta)
+\]</div>
+<p>This new objective includes an additional vector of <em>Lagrange multipliers</em> <span class="math notranslate nohighlight">\(\lambda \in [0, \infty)^K\)</span>, which are positive weights that we place on the constraint terms. We call <span class="math notranslate nohighlight">\(\mathcal{L}(\theta, \lambda)\)</span> the <em>Lagrangian</em>. Observe that:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(\lambda_k \geq 0\)</span>, then we penalize large values of <span class="math notranslate nohighlight">\(c_k\)</span></p></li>
+<li><p>For large enough <span class="math notranslate nohighlight">\(\lambda_k\)</span>, no <span class="math notranslate nohighlight">\(c_k\)</span> will be positive—a valid solution.</p></li>
+</ul>
+<p>Thus, penalties are another way of enforcing constraints.</p>
+<section id="the-primal-lagrange-form">
+<h3>13.1.2.1. The Primal Lagrange Form<a class="headerlink" href="#the-primal-lagrange-form" title="Permalink to this headline">¶</a></h3>
+<p>Consider again our constrained optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\min_{\theta \in \mathbb{R}^d} \; &amp; J(\theta) \\
+\text{such that } \; &amp; c_k(\theta) \leq 0 \text{ for $k =1,2,\ldots,K$}
+\end{align*}
+\end{split}\]</div>
+<p>We define its <em>primal Lagrange form</em> to be</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right)
+\]</div>
+<p>These two forms have the same optimum <span class="math notranslate nohighlight">\(\theta^*\)</span>! The reason for this to be true can be proved consideringg the following:</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right)
+\]</div>
+<p>Observe that:</p>
+<ul class="simple">
+<li><p>If a <span class="math notranslate nohighlight">\(c_k\)</span> is violated (<span class="math notranslate nohighlight">\(c_k &gt; 0\)</span>) then <span class="math notranslate nohighlight">\(\max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda)\)</span> is <span class="math notranslate nohighlight">\(\infty\)</span> as <span class="math notranslate nohighlight">\(\lambda_k \to \infty\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>If no <span class="math notranslate nohighlight">\(c_k\)</span> is violated and <span class="math notranslate nohighlight">\(c_k &lt; 0\)</span> then the optimal <span class="math notranslate nohighlight">\(\lambda_k = 0\)</span> (any bigger value makes the inner objective smaller).</p>
+<ul>
+<li><p>If <span class="math notranslate nohighlight">\(c_k &lt; 0\)</span> for all <span class="math notranslate nohighlight">\(k\)</span> then <span class="math notranslate nohighlight">\(\lambda_k=0\)</span> for all <span class="math notranslate nohighlight">\(k\)</span> and
+$<span class="math notranslate nohighlight">\(
+\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta) = \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} J(\theta)
+\)</span>$</p></li>
+</ul>
+</li>
+</ul>
+<p>Thus, <span class="math notranslate nohighlight">\(\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)\)</span> is the solution to our original optimization problem.</p>
+</section>
+<section id="the-dual-lagrange-form">
+<h3>13.1.2.2. The Dual Lagrange Form<a class="headerlink" href="#the-dual-lagrange-form" title="Permalink to this headline">¶</a></h3>
+<p>Now consider the following problem over <span class="math notranslate nohighlight">\(\lambda\geq 0\)</span>:
+$<span class="math notranslate nohighlight">\(
+\max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right).
+\)</span>$</p>
+<p>We call this the <em>Lagrange dual</em> of the primal optimization problem <span class="math notranslate nohighlight">\(\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)\)</span>. We can always construct a dual for the primal.</p>
+</section>
+<section id="id1">
+<h3>13.1.2.3. Lagrange Duality<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Once we have constructed a dual for the primal, the dual would be interesting because we always have:
+$<span class="math notranslate nohighlight">\( \max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) \leq \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)\)</span>$</p>
+<p>Moreover, in many cases, we have
+$<span class="math notranslate nohighlight">\( 
+\max_{\lambda \geq 0}\mathcal{D}(\lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta).
+\)</span>$
+Thus, the primal and the dual are equivalent! This is very imporant and we will use this feature for moving into the next steps of solving SVMs.</p>
+</section>
+</section>
+<section id="an-aside-constrained-regularization">
+<h2>13.1.3. An Aside: Constrained Regularization<a class="headerlink" href="#an-aside-constrained-regularization" title="Permalink to this headline">¶</a></h2>
+<p>Before we move on to defining the dual form of SVMs, we want to make a brief side comment on the related topic of constrained regularization. Consider a regularized supervised learning problem with a penalty term:
+$<span class="math notranslate nohighlight">\( \min_{\theta \in \Theta} L(\theta) + \gamma \cdot R(\theta). \)</span>$</p>
+<p>We may also enforce an explicit constraint on the complexity of the model:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\min_{\theta \in \Theta} \; &amp; L(\theta) \\
+\text{such that } \; &amp; R(\theta) \leq \gamma'
+\end{align*}
+\end{split}\]</div>
+<p>We will not prove this, but solving this problem is equivalent so solving the penalized problem for some <span class="math notranslate nohighlight">\(\gamma &gt; 0\)</span> that’s different from <span class="math notranslate nohighlight">\(\gamma'\)</span>. In other words, we can regularize by explicitly enforcing <span class="math notranslate nohighlight">\(R(\theta)\)</span> to be less than a value or we can penalize <span class="math notranslate nohighlight">\(R(\theta)\)</span>.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="dual-formulation-of-svms">
+<h1>13.2. Dual Formulation of SVMs<a class="headerlink" href="#dual-formulation-of-svms" title="Permalink to this headline">¶</a></h1>
+<p>Let’s now apply Lagrange duality to support vector machines.</p>
+<section id="review-max-margin-classification">
+<h2>13.2.1. Review: Max-Margin Classification<a class="headerlink" href="#review-max-margin-classification" title="Permalink to this headline">¶</a></h2>
+<p>First, let’s briefly reintroduce the task of binary classification using a linear model and a max-margin objective.</p>
+<p>Consider a training dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \ldots, (x^{(n)}, y^{(n)})\}\)</span>. We distinguish between two types of supervised learning problems depnding on the targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
+<ol class="simple">
+<li><p><strong>Regression</strong>: The target variable <span class="math notranslate nohighlight">\(y \in \mathcal{Y}\)</span> is continuous:  <span class="math notranslate nohighlight">\(\mathcal{Y} \subseteq \mathbb{R}\)</span>.</p></li>
+<li><p><strong>Binary Classification</strong>: The target variable <span class="math notranslate nohighlight">\(y\)</span> is discrete and takes on one of <span class="math notranslate nohighlight">\(K=2\)</span> possible values.</p></li>
+</ol>
+<p>In this lecture, we assume <span class="math notranslate nohighlight">\(\mathcal{Y} = \{-1, +1\}\)</span>. We will also work with linear models of the form:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+f_\theta(x) &amp; = \theta_0 + \theta_1 \cdot x_1 + \theta_2 \cdot x_2 + ... + \theta_d \cdot x_d
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span> is a vector of features and <span class="math notranslate nohighlight">\(y \in \{-1, 1\}\)</span> is the target. The <span class="math notranslate nohighlight">\(\theta_j\)</span> are the <em>parameters</em> of the model.</p>
+<p>We can represent the model in a vectorized form</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+f_\theta(x) = \theta^\top x + \theta_0.
+\end{align*}
+\]</div>
+<p>We define the <em>geometric</em> margin <span class="math notranslate nohighlight">\(\gamma^{(i)}\)</span> with respect to a training example <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as
+$<span class="math notranslate nohighlight">\( \gamma^{(i)} = y^{(i)}\left( \frac{\theta^\top x^{(i)} + \theta_0}{||\theta||} \right). \)</span><span class="math notranslate nohighlight">\(
+This also corresponds to the distance from \)</span>x^{(i)}$ to the hyperplane.</p>
+<p>We saw that maximizing the margin of a linear model amounts to solving the following optimization problem.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &amp;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+</section>
+<section id="the-dual-of-the-svm-problem">
+<h2>13.2.2. The Dual of the SVM Problem<a class="headerlink" href="#the-dual-of-the-svm-problem" title="Permalink to this headline">¶</a></h2>
+<p>Let’s now derive the SVM dual. Consider the following objective, the Langrangian of the max-margin optimization problem.</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+L(\theta, \theta_0, \lambda) = \frac{1}{2}||\theta||^2 + \sum_{i=1}^n \lambda_i \left(1-y^{(i)}((x^{(i)})^\top\theta+\theta_0)\right)
+\end{align*}
+\]</div>
+<p>We have put each constraint inside the objective function and added a penalty <span class="math notranslate nohighlight">\(\lambda_i\)</span> to it.</p>
+<p>Recall that the following formula is the <em>Lagrange dual</em> of the primal optimization problem <span class="math notranslate nohighlight">\(\min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)\)</span>. We can always construct a dual for the primal.
+$<span class="math notranslate nohighlight">\(\max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \left(J(\theta) + \sum_{k=1}^K \lambda_k c_k(\theta) \right).\)</span>$</p>
+<p>It is easy to write out the dual form of the max-margin problem. Consider optimizing the above Lagrangian over <span class="math notranslate nohighlight">\(\theta, \theta_0\)</span> for any value of <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\theta, \theta_0} L(\theta, \theta_0, \lambda) = \min_{\theta, \theta_0} \left( \frac{1}{2}||\theta||^2 + \sum_{i=1}^n \lambda_i \left(1-y^{(i)}((x^{(i)})^\top\theta+\theta_0)\right)\right)
+\]</div>
+<p>This objective is quadratic in <span class="math notranslate nohighlight">\(\theta\)</span>; hence it has a single minimum in <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>We can find it by setting the derivative to zero and solving for <span class="math notranslate nohighlight">\(\theta, \theta_0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\theta &amp; = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)} \\
+0 &amp; = \sum_{i=1}^n \lambda_i y^{(i)}
+\end{align*}
+\end{split}\]</div>
+<p>Substituting this into the Langrangian we obtain the following expression for the dual <span class="math notranslate nohighlight">\(\max_{\lambda\geq 0} \mathcal{D}(\lambda) = \max_{\lambda\geq 0} \min_{\theta, \theta_0} L(\theta, \theta_0, \lambda)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
+\text{subject to } \; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
+&amp; \lambda_i \geq 0 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+</section>
+<section id="properties-of-svm-duals">
+<h2>13.2.3. Properties of SVM Duals<a class="headerlink" href="#properties-of-svm-duals" title="Permalink to this headline">¶</a></h2>
+<p>Recall that in general, we have:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\max_{\lambda \geq 0}\mathcal{D}(\lambda) = \max_{\lambda \geq 0} \min_{\theta \in \mathbb{R}^d} \mathcal{L}(\theta, \lambda) \leq \min_{\theta \in \mathbb{R}^d} \max_{\lambda \geq 0} \mathcal{L}(\theta, \lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta)
+\]</div>
+<p>In the case of the SVM problem, one can show that</p>
+<div class="math notranslate nohighlight">
+\[ 
+\max_{\lambda \geq 0}\mathcal{D}(\lambda) = \min_{\theta \in \mathbb{R}^d} \mathcal{P}(\theta).
+\]</div>
+<p>Thus, the primal and the dual are equivalent!</p>
+<p>We can also make several other observations about this dual:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
+\text{subject to } \; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \;\text{and}\; \lambda_i \geq 0 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>This is a constrainted quadratic optimization problem.</p></li>
+<li><p>The number of variables <span class="math notranslate nohighlight">\(\lambda_i\)</span> equals <span class="math notranslate nohighlight">\(n\)</span>, the number of data points.</p></li>
+<li><p>Objective only depends on products <span class="math notranslate nohighlight">\((x^{(i)})^\top x^{(j)}\)</span> (keep reading for more on this!)</p></li>
+</ul>
+<section id="when-to-solve-the-dual">
+<h3>13.2.3.1. When to Solve the Dual<a class="headerlink" href="#when-to-solve-the-dual" title="Permalink to this headline">¶</a></h3>
+<p>An interesting question arises when we need to decide which optimization problem to solve: the dual or the primal.
+In short, the deciding factor is the number of features (the dimensionality of <span class="math notranslate nohighlight">\(x\)</span>) relative to the number of datapoints:</p>
+<ul class="simple">
+<li><p>The dimensionality of the primal depends on the number of features. If we have a few features and many datapoints, we should use the primal.</p></li>
+<li><p>Conversely, if we have a lot of features, but fewer datapoints, we want to use the dual.</p></li>
+</ul>
+<p>In the next lecture, we will see how we can use this property to solve machine learning problems with a very large number of features (even possibly infinite!).</p>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="practical-considerations-for-svm-duals">
+<h1>13.3. Practical Considerations for SVM Duals<a class="headerlink" href="#practical-considerations-for-svm-duals" title="Permalink to this headline">¶</a></h1>
+<p>In this part, we will continue our discussion of the dual formulation of the SVM with additional practical details.</p>
+<p>Recall that the the max-margin hyperplane can be formualted as the solution to the following <em>primal</em> optimization problem.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\min_{\theta,\theta_0} \frac{1}{2}||\theta||^2 \; &amp;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+<p>The solution to this problem also happens to be given by the following <em>dual</em> problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
+\text{subject to } \; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
+&amp; \lambda_i \geq 0 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+<section id="non-separable-problems">
+<h2>13.3.1. Non-Separable Problems<a class="headerlink" href="#non-separable-problems" title="Permalink to this headline">¶</a></h2>
+<p>Our dual problem assumes that a separating hyperplane exists. If it doesn’t, our optimization problem does not have a solution, and we need to modify it.
+Our approach is going to be to make each constraint “soft”, by introducing “slack” variables, which allow the constraint to be violated.</p>
+<div class="math notranslate nohighlight">
+\[
+y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i.
+\]</div>
+<p>In the optimization problem, we assign a penalty <span class="math notranslate nohighlight">\(C\)</span> to these slack variables to obtain:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\min_{\theta,\theta_0, \xi}\; &amp; \frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i \;  \\
+\text{subject to } \; &amp; y^{(i)}((x^{(i)})^\top\theta+\theta_0)\geq 1 - \xi_i \; \text{for all $i$} \\
+&amp; \xi_i \geq 0
+\end{align*}
+\end{split}\]</div>
+<p>This is the primal problem. Let’s now form its dual. First, the Lagrangian <span class="math notranslate nohighlight">\(L(\lambda, \mu,\theta,\theta_0,\xi)\)</span> equals</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\frac{1}{2}||\theta||^2 + C \sum_{i=1}^n \xi_i - \sum_{i=1}^n \lambda_i \left(y^{(i)}((x^{(i)})^\top\theta+\theta_0)- 1\right) - \sum_{i=1}^n \mu_i\xi_i.
+\end{align*}
+\]</div>
+<p>The dual objective of this problem will equal</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{D}(\lambda, \mu) = \min_{\theta,\theta_0,\xi} L(\lambda, \mu,\theta,\theta_0,\xi).\]</div>
+<p>As earlier, we can solve for the optimal <span class="math notranslate nohighlight">\(\theta, \theta_0\)</span> in closed form and plug back the resulting values into the objective.
+We can then show that the dual takes the following form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
+\text{subject to } \; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \\
+&amp; C \geq \lambda_i \geq 0 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+</section>
+<section id="sequential-minimal-optimization-and-coordinate-descent">
+<h2>13.3.2. Sequential Minimal Optimization and Coordinate Descent<a class="headerlink" href="#sequential-minimal-optimization-and-coordinate-descent" title="Permalink to this headline">¶</a></h2>
+<p>Coordinate descent is a general way to optimize functions <span class="math notranslate nohighlight">\(f(x)\)</span> of multiple variables <span class="math notranslate nohighlight">\(x \in \mathbb{R}^d\)</span>. It excutes as:</p>
+<ol class="simple">
+<li><p>Choose a dimension <span class="math notranslate nohighlight">\(j \in \{1,2,\ldots,d\}\)</span>.</p></li>
+<li><p>Optimize <span class="math notranslate nohighlight">\(f(x_1, x_2, \ldots, x_j, \ldots, x_d)\)</span> over <span class="math notranslate nohighlight">\(x_j\)</span> while keeping the other variables fixed.</p></li>
+</ol>
+<p>Here, we visualize coordinate descent applied to a 2D quadratic function.</p>
+<center><img width=50% src="img/coordinate_descent.png"></center>
+The red line shows the trajectory of coordinate descent. Each "step" in the trajectory is an iteration of the algorithm. Image from Wikipedia.<p>We can apply a form of coordinate descent to solve the dual:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\max_{\lambda} &amp; \sum_{i=1}^n \lambda_i - \frac{1}{2} \sum_{i=1}^n \sum_{k=1}^n \lambda_i \lambda_k y^{(i)} y^{(k)} (x^{(i)})^\top x^{(k)}  \\
+\text{subject to } \; &amp; \sum_{i=1}^n \lambda_i y^{(i)} = 0 \;\text{and}\; C \geq \lambda_i \geq 0 \; \text{for all $i$}
+\end{align*}
+\end{split}\]</div>
+<p>A popular, efficient algorithm is Sequential Minimal Optimization (SMO), which executes as:</p>
+<ul class="simple">
+<li><p>Take a pair <span class="math notranslate nohighlight">\(\lambda_i, \lambda_j\)</span>, possibly using heuristics to guide choice of <span class="math notranslate nohighlight">\(i,j\)</span>.</p></li>
+<li><p>Reoptimize over <span class="math notranslate nohighlight">\(\lambda_i, \lambda_j\)</span> while keeping the other variables fixed.</p></li>
+<li><p>Repeat the above until convergence.</p></li>
+</ul>
+</section>
+<section id="obtaining-a-primal-solution-from-the-dual">
+<h2>13.3.3. Obtaining a Primal Solution from the Dual<a class="headerlink" href="#obtaining-a-primal-solution-from-the-dual" title="Permalink to this headline">¶</a></h2>
+<p>Next, assuming we can solve the dual, how do we find a separating hyperplane <span class="math notranslate nohighlight">\(\theta, \theta_0\)</span>?</p>
+<p>Recall that we already found an expression for the optimal <span class="math notranslate nohighlight">\(\theta^*\)</span> (in the separable case) as a function of <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta^* = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)}.
+\]</div>
+<p>Once we know <span class="math notranslate nohighlight">\(\theta^*\)</span> it easy to check that the solution to <span class="math notranslate nohighlight">\(\theta_0\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_0^* = -\frac{\max_{i:y^{(i)}=-1} (\theta^*)^\top x^{(i)} + \min_{i:y^{(i)}=-1} (\theta^*)^\top x^{(i)}}{2}.
+\]</div>
+</section>
+<section id="support-vectors">
+<h2>13.3.4. Support Vectors<a class="headerlink" href="#support-vectors" title="Permalink to this headline">¶</a></h2>
+<p>A powerful property of the SVM dual is that at the optimum, most variables <span class="math notranslate nohighlight">\(\lambda_i\)</span> are zero! Thus, <span class="math notranslate nohighlight">\(\theta\)</span> is a sum of a small number of points:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta^* = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)}.
+\]</div>
+<p>The points for which <span class="math notranslate nohighlight">\(\lambda_i &gt; 0\)</span> are precisely the points that lie on the margin (are closest to the hyperplane).</p>
+<p>These are called <em>support vectors</em>, and this is where the SVM algorithm takes its name. We are going to illustrate the concept of an SVM using a figure.</p>
+</section>
+<section id="a-hands-on-example">
+<h2>13.3.5. A Hands-On Example<a class="headerlink" href="#a-hands-on-example" title="Permalink to this headline">¶</a></h2>
+<p>Let’s look at a concrete example of how to use the dual version of the SVM. In this example, we are going to again use the Iris flower dataset. We will merge two of the three classes to make it suitable for binary classification.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="c1"># Load the Iris dataset</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+
+<span class="c1"># subsample to a third of the data points</span>
+<span class="n">iris_X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">loc</span><span class="p">[::</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">iris_y</span> <span class="o">=</span> <span class="n">iris_y</span><span class="o">.</span><span class="n">loc</span><span class="p">[::</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># create a binary classification dataset with labels +/- 1</span>
+<span class="n">iris_y2</span> <span class="o">=</span> <span class="n">iris_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">iris_y2</span><span class="p">[</span><span class="n">iris_y2</span><span class="o">==</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">iris_y2</span><span class="p">[</span><span class="n">iris_y2</span><span class="o">==</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="c1"># print part of the dataset</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal length (cm)</th>
+      <th>sepal width (cm)</th>
+      <th>petal length (cm)</th>
+      <th>petal width (cm)</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.1</td>
+      <td>3.5</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>3.6</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>4.4</td>
+      <td>2.9</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>4.8</td>
+      <td>3.0</td>
+      <td>1.4</td>
+      <td>0.1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>5.4</td>
+      <td>3.9</td>
+      <td>1.3</td>
+      <td>0.4</td>
+      <td>-1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Let’s visualize this dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/neighbors/plot_classification.html</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="c1"># create 2d version of dataset and subsample it</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">.5</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">.5</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">.02</span><span class="p">))</span>
+
+<span class="c1"># Plot also the training points</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Petal Length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Petal Width&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Not Setosa&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f8311ce5550&gt;
+</pre></div>
+</div>
+<img alt="../_images/lecture13-svm-dual_48_1.png" src="../_images/lecture13-svm-dual_48_1.png" />
+</div>
+</div>
+<p>We can run the dual version of the SVM by importing an implementation from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#https://scikit-learn.org/stable/auto_examples/svm/plot_separating_hyperplane.html</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span>
+
+<span class="c1"># fit the model, don&#39;t regularize for illustration purposes</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span> <span class="c1"># this optimizes the dual</span>
+<span class="c1"># clf = svm.LinearSVC() # this optimizes for the primal</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">iris_y2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">decision_function</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># plot decision boundary and margins</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+           <span class="n">linestyles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">clf</span><span class="o">.</span><span class="n">support_vectors_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+           <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">4.6</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">2.25</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture13-svm-dual_50_0.png" src="../_images/lecture13-svm-dual_50_0.png" />
+</div>
+</div>
+<p>We can see that the solid line defines the decision boundary,
+and the two dotted lines are the geometric margin.</p>
+<p>The data points that fall on the margin are the support vectors. Notice that only these vectors determine the position of the hyperplane. If we “wiggle” any of the other points, the margin remains unchanged—therefore the max-margin hyperplane also remains unchanged. However, moving the support vectors changes both the optimal margin and the optimal hyperplane.</p>
+<p>This observation provides an intuitive explanation for the formula</p>
+<div class="math notranslate nohighlight">
+\[
+\theta^* = \sum_{i=1}^n \lambda_i y^{(i)} x^{(i)}.
+\]</div>
+<p>In this formula, <span class="math notranslate nohighlight">\(\lambda_i &gt; 0\)</span> only for the <span class="math notranslate nohighlight">\(x^{(i)}\)</span> that are support vectors. Hence, only these <span class="math notranslate nohighlight">\(x^{(i)}\)</span> influence the position of the hyperplane, which matches our earlier intuition.</p>
+</section>
+<section id="algorithm-support-vector-machine-classification-dual-form">
+<h2>13.3.6. Algorithm: Support Vector Machine Classification (Dual Form)<a class="headerlink" href="#algorithm-support-vector-machine-classification-dual-form" title="Permalink to this headline">¶</a></h2>
+<p>In summary, the SVM algorithm can be succinctly defined by the following key components.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (binary classification)</p></li>
+<li><p><strong>Model family</strong>: Linear decision boundaries.</p></li>
+<li><p><strong>Objective function</strong>: Dual of SVM optimization problem.</p></li>
+<li><p><strong>Optimizer</strong>: Sequential minimial optimization.</p></li>
+<li><p><strong>Probabilistic interpretation</strong>: No simple interpretation!</p></li>
+</ul>
+<p>In the next lecture, we will combine dual SVMs with a new idea called kernels, which enable them to handle a very large number of features (and even an infinite number of features) without any additional computational cost.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="lecture12-suppor-vector-machines.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Lecture 12: Support Vector Machines</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="lecture14-kernels.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 14: Kernels</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Cornell University<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

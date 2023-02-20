@@ -1,0 +1,1748 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 15: Tree-Based Algorithms &#8212; Applied Machine Learning</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 16: Boosting" href="lecture16-boosting.html" />
+    <link rel="prev" title="Lecture 14: Kernels" href="lecture14-kernels.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Applied Machine Learning</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture2-supervised-learning.html">
+   Lecture 2: Supervised Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture3-linear-regression.html">
+   Lecture 3: Linear Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture4-classification.html">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture5-regularization.html">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture6-naive-bayes.html">
+   Lecture 6: Generative Models and Naive Bayes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+   Lecture 8: Unsupervised Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture9-density-estimation.html">
+   Lecture 9: Density Estimation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture10-clustering.html">
+   Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture16-boosting.html">
+   Lecture 16: Boosting
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/lecture15-decision-trees.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontents/lecture15-decision-trees.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/contents/lecture15-decision-trees.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#decision-trees">
+   15.1. Decision Trees
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#intuition">
+     15.1.1. Intuition
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decision-trees-example">
+     15.1.2. Decision Trees: Example
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-components-of-a-supervised-machine-learning-problem">
+       Review: Components of A Supervised Machine Learning Problem
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-uci-diabetes-dataset">
+       The UCI Diabetes Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-sklearn-to-train-a-decision-tree-classifer">
+       15.1.2.1. Using
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         sklearn
+        </span>
+       </code>
+       to train a Decision Tree Classifer
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decision-trees-formal-definition">
+     15.1.3. Decision Trees: Formal Definition
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#decision-rules">
+       15.1.3.1. Decision Rules
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#decision-regions">
+       15.1.3.2. Decision Regions
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       15.1.3.3. Decision Trees
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-decision-trees">
+     15.1.4. Pros and Cons of Decision Trees
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#learning-decision-trees">
+   15.2. Learning Decision Trees
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#learning-new-decision-rules">
+     15.2.1. Learning New Decision Rules
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#objectives-for-trees">
+     15.2.2. Objectives for Trees
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#objectives-for-trees-classification">
+       15.2.2.1. Objectives for Trees: Classification
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#objectives-for-trees-regression">
+       15.2.2.2. Objectives for Trees: Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#other-practical-considerations">
+       15.2.2.3. Other Practical Considerations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-classification-and-regression-trees-cart">
+     15.2.4. Algorithm: Classification and Regression Trees (CART)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bagging">
+   15.3. Bagging
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overfitting-and-high-variance">
+     15.3.1. Overfitting and High-Variance
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#fitting-high-degree-polynomials">
+       15.3.1.1. Fitting High-Degree Polynomials
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#high-variance-models">
+       15.3.1.2 High-Variance Models
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bagging-bootstrap-aggregation">
+     15.3.2. Bagging: Bootstrap Aggregation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-bagged-polynomial-regression">
+       15.3.2.1. Example: Bagged Polynomial Regression
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#random-forests">
+   15.4. Random Forests
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#motivating-random-forests-with-decision-trees">
+     15.4.1. Motivating Random Forests with Decision Trees
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-iris-flowers-classification-dataset">
+       Review: Iris Flowers Classification Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#decision-trees-on-the-flower-dataset">
+       15.4.1. Decision Trees on the Flower Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#high-variance-decision-trees">
+       15.4.1.1. High-Variance Decision Trees
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     15.4.2 Random Forests
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#random-forests-on-the-flower-dataset">
+       15.4.2.1 Random Forests on the Flower Dataset
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-random-forests">
+     15.4.3 Algorithm: Random Forests
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-random-forests">
+     15.4.4 Pros and Cons of Random Forests
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Lecture 15: Tree-Based Algorithms</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#decision-trees">
+   15.1. Decision Trees
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#intuition">
+     15.1.1. Intuition
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decision-trees-example">
+     15.1.2. Decision Trees: Example
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-components-of-a-supervised-machine-learning-problem">
+       Review: Components of A Supervised Machine Learning Problem
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-uci-diabetes-dataset">
+       The UCI Diabetes Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-sklearn-to-train-a-decision-tree-classifer">
+       15.1.2.1. Using
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         sklearn
+        </span>
+       </code>
+       to train a Decision Tree Classifer
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decision-trees-formal-definition">
+     15.1.3. Decision Trees: Formal Definition
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#decision-rules">
+       15.1.3.1. Decision Rules
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#decision-regions">
+       15.1.3.2. Decision Regions
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       15.1.3.3. Decision Trees
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-decision-trees">
+     15.1.4. Pros and Cons of Decision Trees
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#learning-decision-trees">
+   15.2. Learning Decision Trees
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#learning-new-decision-rules">
+     15.2.1. Learning New Decision Rules
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#objectives-for-trees">
+     15.2.2. Objectives for Trees
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#objectives-for-trees-classification">
+       15.2.2.1. Objectives for Trees: Classification
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#objectives-for-trees-regression">
+       15.2.2.2. Objectives for Trees: Regression
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#other-practical-considerations">
+       15.2.2.3. Other Practical Considerations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-classification-and-regression-trees-cart">
+     15.2.4. Algorithm: Classification and Regression Trees (CART)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bagging">
+   15.3. Bagging
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overfitting-and-high-variance">
+     15.3.1. Overfitting and High-Variance
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#fitting-high-degree-polynomials">
+       15.3.1.1. Fitting High-Degree Polynomials
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#high-variance-models">
+       15.3.1.2 High-Variance Models
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bagging-bootstrap-aggregation">
+     15.3.2. Bagging: Bootstrap Aggregation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-bagged-polynomial-regression">
+       15.3.2.1. Example: Bagged Polynomial Regression
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#random-forests">
+   15.4. Random Forests
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#motivating-random-forests-with-decision-trees">
+     15.4.1. Motivating Random Forests with Decision Trees
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#review-iris-flowers-classification-dataset">
+       Review: Iris Flowers Classification Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#decision-trees-on-the-flower-dataset">
+       15.4.1. Decision Trees on the Flower Dataset
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#high-variance-decision-trees">
+       15.4.1.1. High-Variance Decision Trees
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     15.4.2 Random Forests
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#random-forests-on-the-flower-dataset">
+       15.4.2.1 Random Forests on the Flower Dataset
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-random-forests">
+     15.4.3 Algorithm: Random Forests
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-random-forests">
+     15.4.4 Pros and Cons of Random Forests
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <p><left><img width=25% src="../slides/img/cornell_tech2.svg"></left></p>
+<section class="tex2jax_ignore mathjax_ignore" id="lecture-15-tree-based-algorithms">
+<h1>Lecture 15: Tree-Based Algorithms<a class="headerlink" href="#lecture-15-tree-based-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>In this lecture, we will cover a new class of supervised machine learning model, namely <strong>tree-based</strong> models, which can be used for both regression and classification tasks.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="decision-trees">
+<h1>15.1. Decision Trees<a class="headerlink" href="#decision-trees" title="Permalink to this headline">¶</a></h1>
+<p>We start by building some intuition about decision trees and apply this algorithm to a familiar dataset we have already seen.</p>
+<section id="intuition">
+<h2>15.1.1. Intuition<a class="headerlink" href="#intuition" title="Permalink to this headline">¶</a></h2>
+<p>Decision tress are machine learning models that mimic how a human would approach this problem.</p>
+<ol class="simple">
+<li><p>We start by picking a feature (e.g., age)</p></li>
+<li><p>Then we <em>branch</em> on the feature based on its value (e.g, age &gt; 65?)</p></li>
+<li><p>We select and branch on one or more features (e.g., is it a man?)</p></li>
+<li><p>Then we return an output that depends on all the features we’ve seen (e.g., a man over 65)</p></li>
+</ol>
+</section>
+<section id="decision-trees-example">
+<h2>15.1.2. Decision Trees: Example<a class="headerlink" href="#decision-trees-example" title="Permalink to this headline">¶</a></h2>
+<p>Let’s see an example on the diabetes dataset.</p>
+<section id="review-components-of-a-supervised-machine-learning-problem">
+<h3>Review: Components of A Supervised Machine Learning Problem<a class="headerlink" href="#review-components-of-a-supervised-machine-learning-problem" title="Permalink to this headline">¶</a></h3>
+<p>Recall that a supervised machine learning problem has the following structure:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\underbrace{\text{Training Dataset}}_\text{Attributes + Features} + \underbrace{\text{Learning Algorithm}}_\text{Model Class + Objective + Optimizer } \to \text{Predictive Model} \]</div>
+</section>
+<section id="the-uci-diabetes-dataset">
+<h3>The UCI Diabetes Dataset<a class="headerlink" href="#the-uci-diabetes-dataset" title="Permalink to this headline">¶</a></h3>
+<p>To explain what a decision tree is, we are going to use the UCI diabetes dataset that we have been working with earlier.</p>
+<p>Let’s start by loading this dataset and looking at some rows from the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="c1"># Load the diabetes dataset</span>
+<span class="n">diabetes</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">diabetes</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.. _diabetes_dataset:
+
+Diabetes dataset
+----------------
+
+Ten baseline variables, age, sex, body mass index, average blood
+pressure, and six blood serum measurements were obtained for each of n =
+442 diabetes patients, as well as the response of interest, a
+quantitative measure of disease progression one year after baseline.
+
+**Data Set Characteristics:**
+
+  :Number of Instances: 442
+
+  :Number of Attributes: First 10 columns are numeric predictive values
+
+  :Target: Column 11 is a quantitative measure of disease progression one year after baseline
+
+  :Attribute Information:
+      - age     age in years
+      - sex
+      - bmi     body mass index
+      - bp      average blood pressure
+      - s1      tc, total serum cholesterol
+      - s2      ldl, low-density lipoproteins
+      - s3      hdl, high-density lipoproteins
+      - s4      tch, total cholesterol / HDL
+      - s5      ltg, possibly log of serum triglycerides level
+      - s6      glu, blood sugar level
+
+Note: Each of these 10 feature variables have been mean centered and scaled by the standard deviation times `n_samples` (i.e. the sum of squares of each column totals 1).
+
+Source URL:
+https://www4.stat.ncsu.edu/~boos/var.select/diabetes.html
+
+For more information see:
+Bradley Efron, Trevor Hastie, Iain Johnstone and Robert Tibshirani (2004) &quot;Least Angle Regression,&quot; Annals of Statistics (with discussion), 407-499.
+(https://web.stanford.edu/~hastie/Papers/LARS/LeastAngle_2002.pdf)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the diabetes dataset</span>
+<span class="n">diabetes_X</span><span class="p">,</span> <span class="n">diabetes_y</span> <span class="o">=</span> <span class="n">diabetes</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">diabetes</span><span class="o">.</span><span class="n">target</span>
+
+<span class="c1"># create a binary risk feature</span>
+<span class="n">diabetes_y_risk</span> <span class="o">=</span> <span class="n">diabetes_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">diabetes_y_risk</span><span class="p">[:]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">diabetes_y_risk</span><span class="p">[</span><span class="n">diabetes_y</span> <span class="o">&gt;</span> <span class="mi">150</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Print part of the dataset</span>
+<span class="n">diabetes_X</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>sex</th>
+      <th>bmi</th>
+      <th>bp</th>
+      <th>s1</th>
+      <th>s2</th>
+      <th>s3</th>
+      <th>s4</th>
+      <th>s5</th>
+      <th>s6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.038076</td>
+      <td>0.050680</td>
+      <td>0.061696</td>
+      <td>0.021872</td>
+      <td>-0.044223</td>
+      <td>-0.034821</td>
+      <td>-0.043401</td>
+      <td>-0.002592</td>
+      <td>0.019908</td>
+      <td>-0.017646</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.001882</td>
+      <td>-0.044642</td>
+      <td>-0.051474</td>
+      <td>-0.026328</td>
+      <td>-0.008449</td>
+      <td>-0.019163</td>
+      <td>0.074412</td>
+      <td>-0.039493</td>
+      <td>-0.068330</td>
+      <td>-0.092204</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.085299</td>
+      <td>0.050680</td>
+      <td>0.044451</td>
+      <td>-0.005671</td>
+      <td>-0.045599</td>
+      <td>-0.034194</td>
+      <td>-0.032356</td>
+      <td>-0.002592</td>
+      <td>0.002864</td>
+      <td>-0.025930</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.089063</td>
+      <td>-0.044642</td>
+      <td>-0.011595</td>
+      <td>-0.036656</td>
+      <td>0.012191</td>
+      <td>0.024991</td>
+      <td>-0.036038</td>
+      <td>0.034309</td>
+      <td>0.022692</td>
+      <td>-0.009362</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.005383</td>
+      <td>-0.044642</td>
+      <td>-0.036385</td>
+      <td>0.021872</td>
+      <td>0.003935</td>
+      <td>0.015596</td>
+      <td>0.008142</td>
+      <td>-0.002592</td>
+      <td>-0.031991</td>
+      <td>-0.046641</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="using-sklearn-to-train-a-decision-tree-classifer">
+<h3>15.1.2.1. Using <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> to train a Decision Tree Classifer<a class="headerlink" href="#using-sklearn-to-train-a-decision-tree-classifer" title="Permalink to this headline">¶</a></h3>
+<p>We will train a decision tree using its implementation in <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.
+We will import <code class="docutils literal notranslate"><span class="pre">DecisionTreeClassifier</span></code> from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>, fit it on the UCI Diabetes Dataset, and visualize the tree using the <code class="docutils literal notranslate"><span class="pre">plot_tree</span></code> function from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+
+<span class="c1"># create and fit the model</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">diabetes_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="mi">4</span><span class="p">],</span> <span class="n">diabetes_y_risk</span><span class="p">)</span>
+
+<span class="c1"># visualize the model</span>
+<span class="n">plot_tree</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">diabetes_X</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">impurity</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_10_0.png" src="../_images/lecture15-decision-trees_10_0.png" />
+</div>
+</div>
+<p>Let’s breakdown this visualization a bit more.
+The visualized output above depicts the process by which our trained decision tree classifier makes predictions.
+Each of the non-leaf nodes in this diagram corresponds to a decision that the algorithm makes based on the data or alternatively a rule that it applies.
+Namely, for a new data point, starting at the root of this tree, the classifier looks at a specific feature  and asks whether the value for this feature is above or below some threshold.
+If it is below, we proceed down the tree to the left, and if it is above, we proceed to the right.
+We continue this process at each depth of the tree until we reach the leaf nodes (of which we have four in this example).</p>
+<p>Let’s follow these decisions down to one of the terminal leaf nodes to see how this works.
+Starting at the top, the algorithm asks whether a patient has high or low <code class="docutils literal notranslate"><span class="pre">bmi</span></code> (defined by the threshold <code class="docutils literal notranslate"><span class="pre">0.009</span></code>).
+For the <strong>high</strong> bmi patients, we proceed down the right and look at their blood pressure.
+For patients with <strong>high</strong> blood pressure (values exceeding <code class="docutils literal notranslate"><span class="pre">0.017</span></code>), the algorithm has identified a ‘high’ risk sub-population of our dataset, as we see that 76 out the 86 patients that fall into this category have high risk of diabetes.</p>
+</section>
+</section>
+<section id="decision-trees-formal-definition">
+<h2>15.1.3. Decision Trees: Formal Definition<a class="headerlink" href="#decision-trees-formal-definition" title="Permalink to this headline">¶</a></h2>
+<p>Let’s now define a decision tree a bit more formally.</p>
+<section id="decision-rules">
+<h3>15.1.3.1. Decision Rules<a class="headerlink" href="#decision-rules" title="Permalink to this headline">¶</a></h3>
+<p>To do so, we introduce a core concept for decision trees, that of <strong>decision rules</strong>:</p>
+<ul class="simple">
+<li><p>A decision rule <span class="math notranslate nohighlight">\(r : \mathcal{X} \to \{\text{True}, \text{False}\}\)</span> is a partition of the feature space into two disjoint regions, e.g.:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+r(x) = \begin{cases}\text{True} &amp; \text{if } x_\text{bmi} \leq 0.009 \\ \text{False} &amp; \text{if } x_\text{bmi} &gt; 0.009 \end{cases} 
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Normally, a rule applies to only one feature or attribute <span class="math notranslate nohighlight">\(x_j\)</span> of <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(x_j\)</span> is continuous, the rule normally separates inputs <span class="math notranslate nohighlight">\(x_j\)</span> into disjoint intervals (<span class="math notranslate nohighlight">\(-\infty, c], (c, \infty)\)</span>.</p></li>
+</ul>
+<p>In theory, we could have more complex rules with multiple thresholds, but this would add unnecessary complexity to the algorithm, since we can simply break rules with multiple thresholds into several sequential rules.</p>
+<p>With this definition of decision rules, we can now more formally specify decision trees as (usually binary) trees, where:</p>
+<ul class="simple">
+<li><p>Each internal node <span class="math notranslate nohighlight">\(n\)</span> corresponds to a rule <span class="math notranslate nohighlight">\(r_n\)</span></p></li>
+<li><p>The <span class="math notranslate nohighlight">\(j\)</span>-th edge out of <span class="math notranslate nohighlight">\(n\)</span> is associated with a rule value <span class="math notranslate nohighlight">\(v_j\)</span>, and we follow the <span class="math notranslate nohighlight">\(j\)</span>-th edge if <span class="math notranslate nohighlight">\(r_n(x)=v_j\)</span></p></li>
+<li><p>Each leaf node <span class="math notranslate nohighlight">\(l\)</span> contains a prediction <span class="math notranslate nohighlight">\(f(l)\)</span></p></li>
+<li><p>Given input <span class="math notranslate nohighlight">\(x\)</span>, we start at the root, apply its rule, follow the edge that corresponds to the outcome, and repeat recursively.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_tree</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">diabetes_X</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">impurity</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_15_0.png" src="../_images/lecture15-decision-trees_15_0.png" />
+</div>
+</div>
+<p>Returning to the visualization from our diabetes example, we have 3 internal nodes corresponding to the top two layers of the tree and four leaf nodes at the bottom of the tree.</p>
+</section>
+<section id="decision-regions">
+<h3>15.1.3.2. Decision Regions<a class="headerlink" href="#decision-regions" title="Permalink to this headline">¶</a></h3>
+<p>The next important concept in decision tress is that to <strong>decision regions</strong>.</p>
+<p>Decision trees partition the space of features into regions:</p>
+<ul class="simple">
+<li><p>A decision region <span class="math notranslate nohighlight">\(R\subseteq \mathcal{X}\)</span> is a subset of the feature space defined by the application of a set of rules <span class="math notranslate nohighlight">\(r_1, r_2, \ldots, r_m\)</span> and their values <span class="math notranslate nohighlight">\(v_1, v_2, \ldots, v_m \in \{\text{True}, \text{False}\}\)</span>, i.e.:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ 
+R = \{x \in \mathcal{X} \mid r_1(x) = v_1 \text{ and } \ldots \text{ and } r_m(x) = v_m \} 
+\]</div>
+<ul class="simple">
+<li><p>For example, a decision region in the diabetes problem is:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ 
+R = \{x \in \mathcal{X} \mid x_\text{bmi} \leq 0.009 \text{ and } x_\text{bp} &gt; 0.004 \} 
+\]</div>
+<p>These regions correspond to the leaves of a decision tree.</p>
+<p>We can illustrate decision regions via this figure from Hastie et al.</p>
+<center><img width=50% src="../slides/img/decision_tree.png"></center><p>The illustrations are as follows:</p>
+<ul class="simple">
+<li><p>Top left: regions that cannot be represented by a tree</p></li>
+<li><p>Top right: regions that can be represented by a tree</p></li>
+<li><p>Bottom left: tree generating the top right regions</p></li>
+<li><p>Bottom right: function values assigned to the regions</p></li>
+</ul>
+<p>Setting aside the top left image for a moment, the other 3 depictions from Hastie et al. show how we can visualize decision trees.
+For an input space of two features <span class="math notranslate nohighlight">\(X_1, X_2\)</span>, we first have the actual tree, similar to what we’ve seen thus far (bottom left).
+This tree has a maximum depth of 3 and first splits the inputs along the <span class="math notranslate nohighlight">\(X_1\)</span> dimension.
+On the left branch we have one more internal decision node based on values of <span class="math notranslate nohighlight">\(X_2\)</span> resulting in 2 leaf nodes that each correspond to a region of the input space.
+On the right branch of the tree, we see two more decision nodes that result in an additional 3 leaf nodes, each corresponding to a different region.
+Note that as mentioned above, rather than using more complicated decision rules such as <span class="math notranslate nohighlight">\(t_1 &lt; X_1 \leq t_3\)</span>, we can separate this rule into two sequential and simpler decisions, i.e., the root node and the first decision node to its right.</p>
+<p>We can equivalently view this decision tree in terms of how it partitions the input space (top right image).
+Note that each of the partition lines on the <span class="math notranslate nohighlight">\(X_1\)</span> and <span class="math notranslate nohighlight">\(X_2\)</span> axes correspond to our decision nodes and the partitioned regions correspond to the leaf nodes in the tree depicted in the bottom left image.</p>
+<p>Finally, if each region corresponds to a predicted value for our target, then we can draw these decision regions with their corresponding prediction values on a third axis (bottom right image).</p>
+<p>Returning to the top left image, this image actually depicts a partition of the input space that would not be possible using decision trees, which highlights the point that not every partition corresponds to a decision tree.
+Specifically, for this image the central region that is non-rectangular cannot be created from a simple branching procedure of a decision tree.</p>
+</section>
+<section id="id1">
+<h3>15.1.3.3. Decision Trees<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>With the concept of regions, we can define a decision tree as a model <span class="math notranslate nohighlight">\(f : \mathcal{X} \to \mathcal{Y}\)</span> of the form</p>
+<div class="math notranslate nohighlight">
+\[ 
+f(x) = \sum_{R \in \mathcal{R}} y_R \mathbb{I}\{x \in R\}. 
+\]</div>
+<ul class="simple">
+<li><p>The <span class="math notranslate nohighlight">\(\mathbb{I}\{\cdot\}\)</span> is an indicator function (one if <span class="math notranslate nohighlight">\(\{\cdot\}\)</span> is true, else zero) and values <span class="math notranslate nohighlight">\(y_R \in \mathcal{Y}\)</span> are the outputs for that region.</p></li>
+<li><p>The set <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> is a collection of decision regions. They are obtained by a recursive learning procedure (<em>recursive binary splitting</em>).</p></li>
+<li><p>The rules defining the regions <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> can be organized into a tree, with one rule per internal node and regions being the leaves.</p></li>
+</ul>
+</section>
+</section>
+<section id="pros-and-cons-of-decision-trees">
+<h2>15.1.4. Pros and Cons of Decision Trees<a class="headerlink" href="#pros-and-cons-of-decision-trees" title="Permalink to this headline">¶</a></h2>
+<p>Decision trees are important models in machine learning</p>
+<ul class="simple">
+<li><p>They are highly interpretable.</p></li>
+<li><p>Require little data preparation (no rescaling, handle continuous and discrete features).</p></li>
+<li><p>Can be used for classification and regression equally well.</p></li>
+</ul>
+<p>Their main disadvantages are that:</p>
+<ul class="simple">
+<li><p>If they stay small and interpretable, they are not as powerful.</p></li>
+<li><p>If they are large, they easily overfit and are hard to regularize.</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="learning-decision-trees">
+<h1>15.2. Learning Decision Trees<a class="headerlink" href="#learning-decision-trees" title="Permalink to this headline">¶</a></h1>
+<p>We saw how decision trees are represented. How do we now learn them from data?</p>
+<p>At a high level, decision trees are grown by adding nodes one at a time, as shown in the following pseudocode:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_tree</span><span class="p">():</span>
+    <span class="k">while</span> <span class="n">tree</span><span class="o">.</span><span class="n">is_complete</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">leaf</span><span class="p">,</span> <span class="n">leaf_data</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">get_leaf</span><span class="p">()</span>
+        <span class="n">new_rule</span> <span class="o">=</span> <span class="n">create_rule</span><span class="p">(</span><span class="n">leaf_data</span><span class="p">)</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">append_rule</span><span class="p">(</span><span class="n">leaf</span><span class="p">,</span> <span class="n">new_rule</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Most often, we build the tree until it reaches a maximum number of nodes. The crux of the algorithm is in <code class="docutils literal notranslate"><span class="pre">create_rule</span></code>.</p>
+<section id="learning-new-decision-rules">
+<h2>15.2.1. Learning New Decision Rules<a class="headerlink" href="#learning-new-decision-rules" title="Permalink to this headline">¶</a></h2>
+<p>What is the set of possible rules that <code class="docutils literal notranslate"><span class="pre">create_rule</span></code> can add to the tree?</p>
+<p>When <span class="math notranslate nohighlight">\(x\)</span> has continuous features, the rules have the following form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+r(x) = \begin{cases}\text{True} &amp; \text{if } x_j \leq t \\ \text{False} &amp; \text{if } x_j &gt; t \end{cases} 
+\end{split}\]</div>
+<p>for a feature index <span class="math notranslate nohighlight">\(j\)</span> and threshold <span class="math notranslate nohighlight">\(t \in \mathbb{R}\)</span>.</p>
+<p>When <span class="math notranslate nohighlight">\(x\)</span> has categorical features, rules may have the following form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+r(x) = \begin{cases}\text{True} &amp; \text{if } x_j = t_k \\ \text{False} &amp; \text{if } x_j \neq t_k \end{cases} 
+\end{split}\]</div>
+<p>for a feature index <span class="math notranslate nohighlight">\(j\)</span> and possible value <span class="math notranslate nohighlight">\(t_k\)</span> for <span class="math notranslate nohighlight">\(x_j\)</span>.</p>
+<p>Thus each rule <span class="math notranslate nohighlight">\(r: \mathcal{X} \rightarrow \{\text{T}, \text{F}\}\)</span> maps inputs to either true (<span class="math notranslate nohighlight">\(\text{T}\)</span>) or false (<span class="math notranslate nohighlight">\(\text{F}\)</span>) evaluations.</p>
+<p>How does the <code class="docutils literal notranslate"><span class="pre">create_rule</span></code> function choose a new rule <span class="math notranslate nohighlight">\(r\)</span>?
+Given a dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)}\mid i =1,2,\ldots,n\}\)</span>, let’s say that <span class="math notranslate nohighlight">\(R\)</span> is the region of a leaf and <span class="math notranslate nohighlight">\(\mathcal{D}_R = \{(x^{(i)}, y^{(i)}\mid x^{(i)} \in R \}\)</span> is the data for <span class="math notranslate nohighlight">\(R\)</span>.
+We will greedily choose the rule that minimizes a loss function.</p>
+<p>Specifically, we add to the leaf a new rule <span class="math notranslate nohighlight">\(r : \mathcal{X} \to \{\text{T}, \text{F}\}\)</span> that minimizes a loss:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\min_{r \in \mathcal{U}} \left( \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{T}\})}_\text{left subtree} +  \underbrace{L(\{(x, y) \in \mathcal{D}_R \mid r(x) = \text{F}\}}_\text{right subtree})\right) 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is a loss function over a subset of the data flagged by the rule and <span class="math notranslate nohighlight">\(\mathcal{U}\)</span> is the set of possible rules.</p>
+</section>
+<section id="objectives-for-trees">
+<h2>15.2.2. Objectives for Trees<a class="headerlink" href="#objectives-for-trees" title="Permalink to this headline">¶</a></h2>
+<p>What loss functions might we want to use when training a decision tree?</p>
+<section id="objectives-for-trees-classification">
+<h3>15.2.2.1. Objectives for Trees: Classification<a class="headerlink" href="#objectives-for-trees-classification" title="Permalink to this headline">¶</a></h3>
+<p>In classification, we can use the misclassification rate</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(\mathcal{D}_R) = \frac{1}{|\mathcal{D}_R|} \sum_{(x, y) \in \mathcal{D}_R} \mathbb{I} \left\{ y \neq \texttt{most-common-y}(\mathcal{D}_R) \right\}. 
+\]</div>
+<p>At a leaf node with region <span class="math notranslate nohighlight">\(R\)</span>, we predict <span class="math notranslate nohighlight">\(\texttt{most-common-y}(\mathcal{D}_R)\)</span>, the most common class <span class="math notranslate nohighlight">\(y\)</span> in the data.
+Notice that this loss incentivizes the algorithm to cluster together points that have similar class labels.</p>
+<p>A few other perspectives on the classification objective above:</p>
+<ul class="simple">
+<li><p>The above loss measures the resulting misclassification error.</p></li>
+<li><p>For ‘optimal’ leaves, all features have the same class (hence this loss will separate the classes well), and are maximally pure/accurate.</p></li>
+<li><p>This loss can therefore also be seen as a measure of leaf ‘purity’.</p></li>
+</ul>
+<p>Other losses that can be used for classification include entropy or the gini index. These all optimize for a split in which different classes do not mix.</p>
+</section>
+<section id="objectives-for-trees-regression">
+<h3>15.2.2.2. Objectives for Trees: Regression<a class="headerlink" href="#objectives-for-trees-regression" title="Permalink to this headline">¶</a></h3>
+<p>In regression, it is common to minimize the L2 error between the data and the single best prediction we can make on this data:</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(\mathcal{D_R}) = \sum_{(x, y) \in \mathcal{D_R}} \left( y - \texttt{average-y}(\mathcal{D_R}) \right)^2. 
+\]</div>
+<p>If this was a leaf node, we would predict <span class="math notranslate nohighlight">\(\texttt{average-y}(\mathcal{D_R})\)</span>, the average <span class="math notranslate nohighlight">\(y\)</span> in the data. The above loss measures the resulting squared error.</p>
+<p>This yields the following optimization problem for selecting a rule:</p>
+<div class="math notranslate nohighlight">
+\[ 
+\min_{r \in \mathcal{U}} \left[ \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{T}} \left( y - p_\text{true}(r) \right)^2 +  \sum_{(x, y) \in \mathcal{D}_R \,\mid\, r(x) = \text{F}} \left( y - p_\text{false}(r) \right)^2 \right] 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(p_\text{True}(r) = \texttt{average-y}(\{(x, y) \mid (x, y) \in \mathcal{D}_R \text{ and } r(x) = \text{True}\})\)</span> and <span class="math notranslate nohighlight">\(p_\text{False}(r) = \texttt{average-y}(\{(x, y) \mid (x, y) \in \mathcal{D}_R \text{ and } r(x) = \text{False}\})\)</span> are the average predictions on each part of the data split.</p>
+<p>Notice that this loss incentivizes the algorithm to cluster together all the data points that have similar <span class="math notranslate nohighlight">\(y\)</span> values into the same region.</p>
+</section>
+<section id="other-practical-considerations">
+<h3>15.2.2.3. Other Practical Considerations<a class="headerlink" href="#other-practical-considerations" title="Permalink to this headline">¶</a></h3>
+<p>Finally, we conclude this section with a few additional comments on the above training procedure:</p>
+<ul class="simple">
+<li><p>Nodes are added until the tree reaches a maximum depth or the leaves can’t be split anymore.</p></li>
+<li><p>In practice, trees are also often pruned in order to reduce overfitting.</p></li>
+<li><p>There exist alternative algorithms, including ID3, C4.5, C5.0. See Hastie et al. for details.</p></li>
+</ul>
+</section>
+</section>
+<section id="algorithm-classification-and-regression-trees-cart">
+<h2>15.2.4. Algorithm: Classification and Regression Trees (CART)<a class="headerlink" href="#algorithm-classification-and-regression-trees-cart" title="Permalink to this headline">¶</a></h2>
+<p>To summarize and combine our definition of trees with the optimization objective and procedure defined in this section, we have a decision tree algorithm that can be used for both classification and regression and is known as CART.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (regression and classification).</p></li>
+<li><p><strong>Model family</strong>: Decision trees.</p></li>
+<li><p><strong>Objective function</strong>: Squared error, misclassification error, Gini index, etc.</p></li>
+<li><p><strong>Optimizer</strong>: Greedy addition of rules, followed by pruning.</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="bagging">
+<h1>15.3. Bagging<a class="headerlink" href="#bagging" title="Permalink to this headline">¶</a></h1>
+<p>Next, we are going to see a general technique to improve the performance of machine learning algorithms.</p>
+<p>We will then apply it to decision trees to define an improved algorithm.</p>
+<section id="overfitting-and-high-variance">
+<h2>15.3.1. Overfitting and High-Variance<a class="headerlink" href="#overfitting-and-high-variance" title="Permalink to this headline">¶</a></h2>
+<p>Recall that overfitting is one of the most common failure modes of machine learning.</p>
+<ul class="simple">
+<li><p>A very expressive model (e.g., a high degree polynomial) fits the training dataset perfectly.</p></li>
+<li><p>The model also makes wildly incorrect prediction outside this dataset and doesn’t generalize.</p></li>
+</ul>
+<p>To demonstrate overfitting, we return to a previous example, in which we take random samples around some ‘true’ function relationship <span class="math notranslate nohighlight">\(y = f(x).\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="k">def</span> <span class="nf">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_36_0.png" src="../_images/lecture15-decision-trees_36_0.png" />
+</div>
+</div>
+<section id="fitting-high-degree-polynomials">
+<h3>15.3.1.1. Fitting High-Degree Polynomials<a class="headerlink" href="#fitting-high-degree-polynomials" title="Permalink to this headline">¶</a></h3>
+<p>Let’s see what happens if we fit a high degree polynomial to random samples of 20 points from this dataset.
+That is, we fit the same degree polynomial on different random draws of 20 points from our original dataset of 40 points and visualize the resulting trained polynomial model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_plots</span><span class="p">,</span> <span class="n">X_line</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_plots</span><span class="p">):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_plots</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">random_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,))</span>
+    <span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">random_idx</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">random_idx</span><span class="p">]</span>
+
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_random</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y_random</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_line</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_line</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_line</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_line</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Random sample </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_38_0.png" src="../_images/lecture15-decision-trees_38_0.png" />
+</div>
+</div>
+<p>Some things to notice from these plots:</p>
+<ul class="simple">
+<li><p>All of these models perform poorly on regions outside of data on which they were trained.</p></li>
+<li><p>Even though we trained the same class of model with the same hyperparameters on each of these subsampled datasets, we attain very different realizations of trained model for each subsample.</p></li>
+</ul>
+</section>
+<section id="high-variance-models">
+<h3>15.3.1.2 High-Variance Models<a class="headerlink" href="#high-variance-models" title="Permalink to this headline">¶</a></h3>
+<p>This phenomenon seen above is also known as the high variance problem, which can be summarized as follows: each small subset on which we train yields a very different model.</p>
+<p>An algorithm that has a tendency to overfit is also called <em>high-variance</em>, because it outputs a predictive model that varies a lot if we slightly perturb the dataset.</p>
+</section>
+</section>
+<section id="bagging-bootstrap-aggregation">
+<h2>15.3.2. Bagging: Bootstrap Aggregation<a class="headerlink" href="#bagging-bootstrap-aggregation" title="Permalink to this headline">¶</a></h2>
+<p>The idea of <em>bagging</em> is to reduce model variance by averaging many models trained on random subsets of the data.</p>
+<p>The term ‘bagging’ stands for ‘bootstrap aggregation.’
+The data samples that are taken with replacement are known as bootstrap samples.</p>
+<p>The idea of bagging is that the random errors of any given model trained on a specific bootstrapped sample, will ‘cancel out’ if we combine many models trained on different bootstrapped samples and average their outputs, which is known as ensembling in ML terminology.</p>
+<p>In pseudocode, this can be performed as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_models</span><span class="p">):</span>
+    <span class="c1"># collect data samples and fit models</span>
+    <span class="n">X_i</span><span class="p">,</span> <span class="n">y_i</span> <span class="o">=</span> <span class="n">sample_with_replacement</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_i</span><span class="p">,</span> <span class="n">y_i</span><span class="p">)</span>
+    <span class="n">ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># output average prediction at test time:</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">average_prediction</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There exist a few closely related techniques to bagging:</p>
+<ul class="simple">
+<li><p>Pasting is when samples are taken without replacement.</p></li>
+<li><p>Random features are when we randomly sample the features.</p></li>
+<li><p>Random patching is when we do both of the above.</p></li>
+</ul>
+<section id="example-bagged-polynomial-regression">
+<h3>15.3.2.1. Example: Bagged Polynomial Regression<a class="headerlink" href="#example-bagged-polynomial-regression" title="Permalink to this headline">¶</a></h3>
+<p>Let’s apply bagging to our polynomial regression problem.</p>
+<p>We are going to train a large number of polynomial regressions on random subsets of the dataset of points that we created earlier.</p>
+<p>We start by training an ensemble of bagged models, essentially implementing the pseudocode we saw above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_models</span><span class="p">,</span> <span class="n">n_subset</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">30</span>
+<span class="n">ensemble</span><span class="p">,</span> <span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_models</span><span class="p">):</span>
+    <span class="c1"># take a random subset of the data</span>
+    <span class="n">random_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_subset</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_subset</span><span class="p">,))</span>
+    <span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">random_idx</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">random_idx</span><span class="p">]</span>
+
+    <span class="c1"># train a polynomial regression model</span>
+    <span class="n">polynomial_features</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">polynomial_features</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">linear_regression</span><span class="p">)])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_random</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y_random</span><span class="p">)</span>
+
+    <span class="c1"># add it to our set of bagged models</span>
+    <span class="n">ensemble</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pipeline</span><span class="p">]</span>
+    <span class="n">Xs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">X_random</span><span class="p">]</span>
+    <span class="n">ys</span> <span class="o">+=</span> <span class="p">[</span><span class="n">y_random</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s visualize the prediction of the bagged model on each random dataset sample and compare to the predictions from an un-bagged model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_plots</span><span class="p">,</span> <span class="n">X_line</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_plots</span><span class="p">):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_plots</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># generate average predictions</span>
+    <span class="n">y_lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">25</span><span class="p">,</span> <span class="n">n_models</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ensemble</span><span class="p">):</span>
+        <span class="n">y_lines</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_line</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+    <span class="n">y_line</span> <span class="o">=</span> <span class="n">y_lines</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># visualize them</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_line</span><span class="p">,</span> <span class="n">true_fn</span><span class="p">(</span><span class="n">X_line</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True function&quot;</span><span class="p">)</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_line</span><span class="p">,</span> <span class="n">y_lines</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model Trained on Samples&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_line</span><span class="p">,</span> <span class="n">y_line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Bagged Model&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">Xs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Samples&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Random sample </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_48_0.png" src="../_images/lecture15-decision-trees_48_0.png" />
+</div>
+</div>
+<p>Compared to the un-bagged model, we see that our bagged model varies less from one sample to the next and also better generalizes to unseen points in the sample.</p>
+<p>To summarize what we have seen in this section, bagging is a general technique that can be used with high-variance ML algorithms.</p>
+<p>It averages predictions from multiple models trained on random subsets of the data.</p>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="random-forests">
+<h1>15.4. Random Forests<a class="headerlink" href="#random-forests" title="Permalink to this headline">¶</a></h1>
+<p>Next, let’s see how bagging can be applied to decision trees. This will also provide us with a new algorithm.</p>
+<section id="motivating-random-forests-with-decision-trees">
+<h2>15.4.1. Motivating Random Forests with Decision Trees<a class="headerlink" href="#motivating-random-forests-with-decision-trees" title="Permalink to this headline">¶</a></h2>
+<p>To motivate the random forests algorithm, we will see pitfalls of decision trees using the language of high-variance models that we just defined.</p>
+<p>To distinguish random forests from decision trees, we will follow a running example.</p>
+<section id="review-iris-flowers-classification-dataset">
+<h3>Review: Iris Flowers Classification Dataset<a class="headerlink" href="#review-iris-flowers-classification-dataset" title="Permalink to this headline">¶</a></h3>
+<p>We will re-use the Iris flowers dataset, which we have previously seen.</p>
+<p>Recall, that this is a classical dataset originally published by <a class="reference external" href="https://en.wikipedia.org/wiki/Ronald_Fisher">R. A. Fisher</a> in 1936.
+Nowadays, it’s widely used for demonstrating machine learning algorithms.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="c1"># Load the Iris dataset</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.. _iris_dataset:
+
+Iris plants dataset
+--------------------
+
+**Data Set Characteristics:**
+
+    :Number of Instances: 150 (50 in each of three classes)
+    :Number of Attributes: 4 numeric, predictive attributes and the class
+    :Attribute Information:
+        - sepal length in cm
+        - sepal width in cm
+        - petal length in cm
+        - petal width in cm
+        - class:
+                - Iris-Setosa
+                - Iris-Versicolour
+                - Iris-Virginica
+                
+    :Summary Statistics:
+
+    ============== ==== ==== ======= ===== ====================
+                    Min  Max   Mean    SD   Class Correlation
+    ============== ==== ==== ======= ===== ====================
+    sepal length:   4.3  7.9   5.84   0.83    0.7826
+    sepal width:    2.0  4.4   3.05   0.43   -0.4194
+    petal length:   1.0  6.9   3.76   1.76    0.9490  (high!)
+    petal width:    0.1  2.5   1.20   0.76    0.9565  (high!)
+    ============== ==== ==== ======= ===== ====================
+
+    :Missing Attribute Values: None
+    :Class Distribution: 33.3% for each of 3 classes.
+    :Creator: R.A. Fisher
+    :Donor: Michael Marshall (MARSHALL%PLU@io.arc.nasa.gov)
+    :Date: July, 1988
+
+The famous Iris database, first used by Sir R.A. Fisher. The dataset is taken
+from Fisher&#39;s paper. Note that it&#39;s the same as in R, but not as in the UCI
+Machine Learning Repository, which has two wrong data points.
+
+This is perhaps the best known database to be found in the
+pattern recognition literature.  Fisher&#39;s paper is a classic in the field and
+is referenced frequently to this day.  (See Duda &amp; Hart, for example.)  The
+data set contains 3 classes of 50 instances each, where each class refers to a
+type of iris plant.  One class is linearly separable from the other 2; the
+latter are NOT linearly separable from each other.
+
+.. topic:: References
+
+   - Fisher, R.A. &quot;The use of multiple measurements in taxonomic problems&quot;
+     Annual Eugenics, 7, Part II, 179-188 (1936); also in &quot;Contributions to
+     Mathematical Statistics&quot; (John Wiley, NY, 1950).
+   - Duda, R.O., &amp; Hart, P.E. (1973) Pattern Classification and Scene Analysis.
+     (Q327.D83) John Wiley &amp; Sons.  ISBN 0-471-22361-1.  See page 218.
+   - Dasarathy, B.V. (1980) &quot;Nosing Around the Neighborhood: A New System
+     Structure and Classification Rule for Recognition in Partially Exposed
+     Environments&quot;.  IEEE Transactions on Pattern Analysis and Machine
+     Intelligence, Vol. PAMI-2, No. 1, 67-71.
+   - Gates, G.W. (1972) &quot;The Reduced Nearest Neighbor Rule&quot;.  IEEE Transactions
+     on Information Theory, May 1972, 431-433.
+   - See also: 1988 MLC Proceedings, 54-64.  Cheeseman et al&quot;s AUTOCLASS II
+     conceptual clustering system finds 3 classes in the data.
+   - Many, many more ...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print part of the dataset</span>
+<span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">iris_X</span><span class="p">,</span> <span class="n">iris_y</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal length (cm)</th>
+      <th>sepal width (cm)</th>
+      <th>petal length (cm)</th>
+      <th>petal width (cm)</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.1</td>
+      <td>3.5</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4.9</td>
+      <td>3.0</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.7</td>
+      <td>3.2</td>
+      <td>1.3</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.6</td>
+      <td>3.1</td>
+      <td>1.5</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>3.6</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot also the training points</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">iris_y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal Length&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal Width&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Versicolour&#39;</span><span class="p">,</span> <span class="s1">&#39;Virginica&#39;</span><span class="p">,</span> <span class="s1">&#39;Query&#39;</span><span class="p">],</span>
+           <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_56_0.png" src="../_images/lecture15-decision-trees_56_0.png" />
+</div>
+</div>
+</section>
+<section id="decision-trees-on-the-flower-dataset">
+<h3>15.4.1. Decision Trees on the Flower Dataset<a class="headerlink" href="#decision-trees-on-the-flower-dataset" title="Permalink to this headline">¶</a></h3>
+<p>Let’s now consider what happens when we train a decision tree on the Iris flower dataset.</p>
+<p>The code below will be used to visualize predictions from decision trees on this dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/neighbors/plot_classification.html</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">make_grid</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="c1"># Plot the decision boundary. For that, we will assign a color to each</span>
+    <span class="c1"># point in the mesh [x_min, x_max]x[y_min, y_max].</span>
+    <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.1</span>
+    <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.1</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">),</span>
+                         <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span>
+
+<span class="k">def</span> <span class="nf">make_2d_preds</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Z</span>
+
+<span class="k">def</span> <span class="nf">make_2d_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># Create color maps</span>
+    <span class="n">cmap_light</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">([</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="s1">&#39;cornflowerblue&#39;</span><span class="p">])</span>
+    <span class="n">cmap_bold</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">([</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;darkblue&#39;</span><span class="p">])</span>
+
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="c1"># Put the result into a color plot</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+    <span class="c1"># Plot also the training points</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal Length&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal Width&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xx</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">yy</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>    
+</pre></div>
+</div>
+</div>
+</div>
+<p>We may now train and visualize a decision tree on this dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train a Decision Tree Model</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">()</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">iris_y</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">make_2d_preds</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">make_2d_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">iris_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_61_0.png" src="../_images/lecture15-decision-trees_61_0.png" />
+</div>
+</div>
+<p>We see two problems with the output of the decision tree on the Iris dataset:</p>
+<ul class="simple">
+<li><p>The decision boundary between the two classes is very non-smooth and blocky.</p></li>
+<li><p>The decision tree overfits the data and the decision regions are highly fragmented.</p></li>
+</ul>
+</section>
+<section id="high-variance-decision-trees">
+<h3>15.4.1.1. High-Variance Decision Trees<a class="headerlink" href="#high-variance-decision-trees" title="Permalink to this headline">¶</a></h3>
+<p>When the trees have sufficiently large depth, they can quickly overfit the data.</p>
+<p>Recall that this is called the <em>high-variance</em> problem, because small perturbations of the data lead to large changes in model predictions.</p>
+<p>Consider the performance of a decision tree classifier on 3 random subsets of the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_plots</span><span class="p">,</span> <span class="n">n_flowers</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">40</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_plots</span><span class="p">):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_plots</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">random_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_flowers</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,))</span>
+    <span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">random_idx</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">iris_y</span><span class="p">[</span><span class="n">random_idx</span><span class="p">]</span>
+
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">()</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">make_2d_preds</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_random</span><span class="p">)</span>
+    <span class="n">make_2d_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Random sample </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_65_0.png" src="../_images/lecture15-decision-trees_65_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="id2">
+<h2>15.4.2 Random Forests<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>In order to reduce the variance of the basic decision tree, we apply bagging – the variance reduction technique that we have seen earlier.</p>
+<p>We refer to bagged decision trees as <em>Random Forests</em>.</p>
+<p>Instantiating our definition of bagging with decision trees, we obtain the following pseudocode definition of random forests:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_models</span><span class="p">):</span>
+    <span class="c1"># collect data samples and fit models</span>
+    <span class="n">X_i</span><span class="p">,</span> <span class="n">y_i</span> <span class="o">=</span> <span class="n">sample_with_replacement</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTree</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_i</span><span class="p">,</span> <span class="n">y_i</span><span class="p">)</span>
+    <span class="n">random_forest</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># output average prediction at test time:</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">random_forest</span><span class="o">.</span><span class="n">average_prediction</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We may implement random forests in python as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_models</span><span class="p">,</span> <span class="n">n_flowers</span><span class="p">,</span> <span class="n">n_subset</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">10</span>
+<span class="n">random_forest</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_models</span><span class="p">):</span>
+    <span class="c1"># sample the data with replacement</span>
+    <span class="n">random_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_flowers</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_subset</span><span class="p">,))</span>
+    <span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">random_idx</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">iris_y</span><span class="p">[</span><span class="n">random_idx</span><span class="p">]</span>
+
+    <span class="c1"># train a decision tree model</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">()</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_random</span><span class="p">,</span> <span class="n">y_random</span><span class="p">)</span>
+
+    <span class="c1"># append it to our ensemble</span>
+    <span class="n">random_forest</span> <span class="o">+=</span> <span class="p">[</span><span class="n">clf</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="random-forests-on-the-flower-dataset">
+<h3>15.4.2.1 Random Forests on the Flower Dataset<a class="headerlink" href="#random-forests-on-the-flower-dataset" title="Permalink to this headline">¶</a></h3>
+<p>Consider now what happens when we deploy random forests on the same dataset as before.</p>
+<p>Now, each prediction is the average on the set of bagged decision trees.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize predictions from a random forest</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+<span class="c1"># compute average predictions from all the models in the ensemble</span>
+<span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span> <span class="o">=</span> <span class="n">iris_X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">],</span> <span class="n">iris_y</span>
+<span class="n">Z_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">random_forest</span><span class="p">:</span>
+    <span class="n">Z_clf</span> <span class="o">=</span> <span class="n">make_2d_preds</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_all</span><span class="p">)</span>
+    <span class="n">Z_list</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Z_clf</span><span class="p">]</span>
+<span class="n">Z_avg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">Z_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># visualize predictions</span>
+<span class="n">make_2d_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">Z_avg</span><span class="p">),</span> <span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture15-decision-trees_71_0.png" src="../_images/lecture15-decision-trees_71_0.png" />
+</div>
+</div>
+<p>The boundaries are much more smooth and well-behaved compared to those we saw for decision trees.
+We also clearly see less overfitting.</p>
+</section>
+</section>
+<section id="algorithm-random-forests">
+<h2>15.4.3 Algorithm: Random Forests<a class="headerlink" href="#algorithm-random-forests" title="Permalink to this headline">¶</a></h2>
+<p>Summarizing random forests, we have:</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (regression and classification).</p></li>
+<li><p><strong>Model family</strong>: Bagged decision trees.</p></li>
+<li><p><strong>Objective function</strong>: Squared error, misclassification error, Gini index, etc.</p></li>
+<li><p><strong>Optimizer</strong>: Greedy addition of rules, followed by pruning.</p></li>
+</ul>
+</section>
+<section id="pros-and-cons-of-random-forests">
+<h2>15.4.4 Pros and Cons of Random Forests<a class="headerlink" href="#pros-and-cons-of-random-forests" title="Permalink to this headline">¶</a></h2>
+<p>Random forests remain a popular machine learning algorithm:</p>
+<ul class="simple">
+<li><p>As with decision trees, they require little data preparation (no rescaling, handle continuous and discrete features, work well for classification and regression).</p></li>
+<li><p>They are often quite accurate.</p></li>
+</ul>
+<p>Their main disadvantages are that:</p>
+<ul class="simple">
+<li><p>They are not interpretable due to bagging (unlike decision trees).</p></li>
+<li><p>They do not work with unstructured data (e.g., images, audio).</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="lecture14-kernels.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Lecture 14: Kernels</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="lecture16-boosting.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 16: Boosting</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Cornell University<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,1717 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 16: Boosting &#8212; Applied Machine Learning</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Lecture 15: Tree-Based Algorithms" href="lecture15-decision-trees.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Applied Machine Learning</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture2-supervised-learning.html">
+   Lecture 2: Supervised Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture3-linear-regression.html">
+   Lecture 3: Linear Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture4-classification.html">
+   Lecture 4: Classification and Logistic Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture5-regularization.html">
+   Lecture 5: Regularization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture6-naive-bayes.html">
+   Lecture 6: Generative Models and Naive Bayes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture8-unsupervised-learning.html">
+   Lecture 8: Unsupervised Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture9-density-estimation.html">
+   Lecture 9: Density Estimation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture10-clustering.html">
+   Lecture 10: Clustering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture12-suppor-vector-machines.html">
+   Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Lecture 16: Boosting
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/lecture16-boosting.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontents/lecture16-boosting.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/contents/lecture16-boosting.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 16: Boosting
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-boosting">
+   16.1. Defining Boosting
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-overfitting">
+     Review: Overfitting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-bagging">
+     Review: Bagging
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#underfitting-and-boosting">
+     16.1.1. Underfitting and Boosting
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#boosting">
+       Boosting
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#weak-learners">
+       Weak Learners
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#structure-of-a-boosting-algorithm">
+   16.2. Structure of a Boosting Algorithm
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adaboost">
+   16.3. Adaboost
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#defining-adaboost">
+     16.3.1. Defining Adaboost
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#adaboost-an-example">
+     16.3.2. Adaboost: An Example
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ensembling">
+   16.4. Ensembling
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bagging-vs-boosting">
+     16.4.1. Bagging vs. Boosting
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#additive-models">
+   16.5. Additive Models
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#forward-stagewise-additive-modeling">
+     16.5.1. Forward Stagewise Additive Modeling
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#losses-in-additive-models">
+     16.5.2. Losses in Additive Models
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#exponential-loss">
+       16.5.2.1. Exponential Loss
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#special-case-adaboost">
+         Special Case: Adaboost
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#squared-loss">
+       16.5.2.2. Squared Loss
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#logistic-loss">
+       16.5.2.3. Logistic Loss
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-boosting">
+   16.6. Gradient Boosting
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#limitations-of-forward-stagewise-additive-modeling">
+     16.6.1. Limitations of Forward Stagewise Additive Modeling
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#motivating-gradient-boosting">
+     16.6.2. Motivating Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#revisiting-supervised-learning">
+     16.6.3. Revisiting Supervised Learning
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#supervised-learning-the-model">
+       16.6.3.1. Supervised Learning: The Model
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#supervised-learning-the-learning-objective">
+       16.6.3.2. Supervised Learning: The Learning Objective
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#supervised-learning-the-optimizer-gradient-descent">
+       16.6.3.3. Supervised Learning: The Optimizer (Gradient Descent)
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#supervised-learning-over-functions">
+     16.6.4. Supervised Learning Over Functions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-learning-objective">
+       The Learning Objective
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#functional-gradients">
+       Functional Gradients
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#functional-gradient-descent">
+       Functional Gradient Descent
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-challenge-of-supervised-learning-over-functions">
+       The Challenge of Supervised Learning Over Functions
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#modeling-functional-gradients">
+     16.6.5. Modeling Functional Gradients
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fitting-functional-gradients">
+     16.6.6. Fitting Functional Gradients
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     16.6.7. Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interpreting-gradient-boosting">
+     16.6.8. Interpreting Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#returning-to-l2-boosting">
+     16.6.9. Returning to L2 Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#losses-for-additive-models-vs-gradient-boosting">
+     16.6.10. Losses for Additive Models vs. Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-gradient-boosting">
+     16.6.11. Algorithm: Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gradient-boosting-an-example">
+     16.6.12. Gradient Boosting: An Example
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-gradient-boosting">
+     16.6.14. Pros and Cons of Gradient Boosting
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Lecture 16: Boosting</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Lecture 16: Boosting
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-boosting">
+   16.1. Defining Boosting
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-overfitting">
+     Review: Overfitting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#review-bagging">
+     Review: Bagging
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#underfitting-and-boosting">
+     16.1.1. Underfitting and Boosting
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#boosting">
+       Boosting
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#weak-learners">
+       Weak Learners
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#structure-of-a-boosting-algorithm">
+   16.2. Structure of a Boosting Algorithm
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adaboost">
+   16.3. Adaboost
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#defining-adaboost">
+     16.3.1. Defining Adaboost
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#adaboost-an-example">
+     16.3.2. Adaboost: An Example
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ensembling">
+   16.4. Ensembling
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bagging-vs-boosting">
+     16.4.1. Bagging vs. Boosting
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#additive-models">
+   16.5. Additive Models
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#forward-stagewise-additive-modeling">
+     16.5.1. Forward Stagewise Additive Modeling
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#losses-in-additive-models">
+     16.5.2. Losses in Additive Models
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#exponential-loss">
+       16.5.2.1. Exponential Loss
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#special-case-adaboost">
+         Special Case: Adaboost
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#squared-loss">
+       16.5.2.2. Squared Loss
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#logistic-loss">
+       16.5.2.3. Logistic Loss
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gradient-boosting">
+   16.6. Gradient Boosting
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#limitations-of-forward-stagewise-additive-modeling">
+     16.6.1. Limitations of Forward Stagewise Additive Modeling
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#motivating-gradient-boosting">
+     16.6.2. Motivating Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#revisiting-supervised-learning">
+     16.6.3. Revisiting Supervised Learning
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#supervised-learning-the-model">
+       16.6.3.1. Supervised Learning: The Model
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#supervised-learning-the-learning-objective">
+       16.6.3.2. Supervised Learning: The Learning Objective
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#supervised-learning-the-optimizer-gradient-descent">
+       16.6.3.3. Supervised Learning: The Optimizer (Gradient Descent)
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#supervised-learning-over-functions">
+     16.6.4. Supervised Learning Over Functions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-learning-objective">
+       The Learning Objective
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#functional-gradients">
+       Functional Gradients
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#functional-gradient-descent">
+       Functional Gradient Descent
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-challenge-of-supervised-learning-over-functions">
+       The Challenge of Supervised Learning Over Functions
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#modeling-functional-gradients">
+     16.6.5. Modeling Functional Gradients
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fitting-functional-gradients">
+     16.6.6. Fitting Functional Gradients
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     16.6.7. Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interpreting-gradient-boosting">
+     16.6.8. Interpreting Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#returning-to-l2-boosting">
+     16.6.9. Returning to L2 Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#losses-for-additive-models-vs-gradient-boosting">
+     16.6.10. Losses for Additive Models vs. Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm-gradient-boosting">
+     16.6.11. Algorithm: Gradient Boosting
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gradient-boosting-an-example">
+     16.6.12. Gradient Boosting: An Example
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pros-and-cons-of-gradient-boosting">
+     16.6.14. Pros and Cons of Gradient Boosting
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <p><left><img width=25% src="../slides/img/cornell_tech2.svg"></left></p>
+<section class="tex2jax_ignore mathjax_ignore" id="lecture-16-boosting">
+<h1>Lecture 16: Boosting<a class="headerlink" href="#lecture-16-boosting" title="Permalink to this headline">¶</a></h1>
+<p>In this lecture, we will cover a new class of machine learning algorithms based on an idea called <strong>Boosting</strong>.
+Boosting is an effective way to combine the predictions from simple models into more complex and powerful ones that often attain state-of-the-art performance on many machine learning competitions and benchmarks.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="defining-boosting">
+<h1>16.1. Defining Boosting<a class="headerlink" href="#defining-boosting" title="Permalink to this headline">¶</a></h1>
+<p>We will begin by defining boosting and seeing how this concept relates to our previous lectures about bagging, which we saw in the context of random forests and decision trees.</p>
+<section id="review-overfitting">
+<h2>Review: Overfitting<a class="headerlink" href="#review-overfitting" title="Permalink to this headline">¶</a></h2>
+<p>Recall that we saw in our lecture on decision trees and random forests that a common machine learning failure mode is that of overfitting:</p>
+<ul class="simple">
+<li><p>A very expressive model (e.g., a high degree polynomial) fits the training dataset perfectly.</p></li>
+<li><p>The model also makes wildly incorrect prediction outside this dataset and doesn’t generalize.</p></li>
+</ul>
+</section>
+<section id="review-bagging">
+<h2>Review: Bagging<a class="headerlink" href="#review-bagging" title="Permalink to this headline">¶</a></h2>
+<p>The idea of <em>bagging</em> was to reduce <em>overfitting</em> by averaging many models trained on random subsets of the data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_models</span><span class="p">):</span>
+    <span class="c1"># collect data samples and fit models</span>
+    <span class="n">X_i</span><span class="p">,</span> <span class="n">y_i</span> <span class="o">=</span> <span class="n">sample_with_replacement</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_i</span><span class="p">,</span> <span class="n">y_i</span><span class="p">)</span>
+    <span class="n">ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># output average prediction at test time:</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">average_prediction</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="underfitting-and-boosting">
+<h2>16.1.1. Underfitting and Boosting<a class="headerlink" href="#underfitting-and-boosting" title="Permalink to this headline">¶</a></h2>
+<p>Underfitting is another common problem in machine learning that can be thought of as the converse to <em>overfitting</em>.</p>
+<ul class="simple">
+<li><p>The model is too simple to fit the data well (e.g., approximating a high degree polynomial with linear regression).</p></li>
+<li><p>As a result, the model is not accurate on training data and is not accurate on new data.</p></li>
+</ul>
+<section id="boosting">
+<h3>Boosting<a class="headerlink" href="#boosting" title="Permalink to this headline">¶</a></h3>
+<p>The idea of <em>boosting</em> is to reduce <em>underfitting</em> by combining models that correct each others’ errors.</p>
+<ul class="simple">
+<li><p>As in bagging, we combine many models <span class="math notranslate nohighlight">\(g_t\)</span> into one <em>ensemble</em> <span class="math notranslate nohighlight">\(f\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Unlike bagging, the <span class="math notranslate nohighlight">\(g_t\)</span> are small and tend to underfit.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Each <span class="math notranslate nohighlight">\(g_t\)</span> fits the points where the previous models made errors.</p></li>
+</ul>
+</section>
+<section id="weak-learners">
+<h3>Weak Learners<a class="headerlink" href="#weak-learners" title="Permalink to this headline">¶</a></h3>
+<p>A key ingredient of a boosting algorithm is a <em>weak learner</em>.</p>
+<ul class="simple">
+<li><p>Intuitively, this is a model that is slightly better than random.</p></li>
+<li><p>Examples of weak learners include: small linear models, small decision trees (e.g., depth 1 or 2).</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="structure-of-a-boosting-algorithm">
+<h1>16.2. Structure of a Boosting Algorithm<a class="headerlink" href="#structure-of-a-boosting-algorithm" title="Permalink to this headline">¶</a></h1>
+<p>Let’s now move towards more fully describing the structure of a boosting algorithm.</p>
+<p><strong>Step 1:</strong> Fit a weak learner <span class="math notranslate nohighlight">\(g_0\)</span> on dataset <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)})\}\)</span>. Let <span class="math notranslate nohighlight">\(f=g_0\)</span>.</p>
+<p><strong>Step 2:</strong> Compute weights <span class="math notranslate nohighlight">\(w^{(i)}\)</span> for each <span class="math notranslate nohighlight">\(i\)</span> based on model predictions <span class="math notranslate nohighlight">\(f(x^{(i)})\)</span> and targets <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.
+Give more weight to points with errors.</p>
+<p><strong>Step 3:</strong> Fit another weak learner <span class="math notranslate nohighlight">\(g_1\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x^{(i)}, y^{(i)})\}\)</span> with weights <span class="math notranslate nohighlight">\(w^{(i)}\)</span>, which place more emphasis on the points on which the existing model is less accurate.</p>
+<p><strong>Step 4:</strong> Set <span class="math notranslate nohighlight">\(f_1 = g_0 + \alpha_1 g\)</span> for some weight <span class="math notranslate nohighlight">\(\alpha_1\)</span>. Go to Step 2 and repeat.</p>
+<p>At each step, <span class="math notranslate nohighlight">\(f_t\)</span> becomes more expressive since it is the sum of a larger number of weak learners that are each accurate on a different subset of the data.</p>
+<p>In Python-like pseudocode, this looks as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span><span class="p">,</span> <span class="n">ensemble</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_data</span><span class="p">,),</span> <span class="n">Ensemble</span><span class="p">([])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_models</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SimpleBaseModel</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">model_weight</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">update_weights</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+    <span class="n">ensemble</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_weight</span><span class="p">)</span>
+
+<span class="c1"># output consensus prediction at test time:</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="adaboost">
+<h1>16.3. Adaboost<a class="headerlink" href="#adaboost" title="Permalink to this headline">¶</a></h1>
+<p>Given its historical importance, we begin with an introduction of Adaboost and use it to further illustrate the structure of boosting algorithms in general.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (classification).</p></li>
+<li><p><strong>Model family</strong>: Ensembles of weak learners (often decision trees).</p></li>
+<li><p><strong>Objective function</strong>: Exponential loss.</p></li>
+<li><p><strong>Optimizer</strong>: Forward stagewise additive model building (to be defined in more detail below).</p></li>
+</ul>
+<p>An interesting historical note, boosting algorithms were initially developed in the 90s within theoretical machine learning.</p>
+<ul class="simple">
+<li><p>Originally, boosting addressed a theoretical question of whether weak learners with &gt;50% accuracy can be combined to form a strong learner.</p></li>
+<li><p>Eventually, this research led to a practical algorithm called <em>Adaboost</em>.</p></li>
+</ul>
+<p>Today, there exist many algorithms that are considered types of boosting, even though they’re not derived from the perspective of theoretical ML.</p>
+<section id="defining-adaboost">
+<h2>16.3.1. Defining Adaboost<a class="headerlink" href="#defining-adaboost" title="Permalink to this headline">¶</a></h2>
+<p>We start with uniform weights <span class="math notranslate nohighlight">\(w^{(i)} = 1/n\)</span> and <span class="math notranslate nohighlight">\(f = 0\)</span>. Then for <span class="math notranslate nohighlight">\(t=1,2,...,T\)</span>:</p>
+<p><strong>Step 1:</strong> Fit weak learner <span class="math notranslate nohighlight">\(g_t\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> with weights <span class="math notranslate nohighlight">\(w^{(i)}\)</span>.</p>
+<p><strong>Step 2:</strong> Compute misclassification error</p>
+<div class="math notranslate nohighlight">
+\[
+e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq g_t(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}}
+\]</div>
+<ul class="simple">
+<li><p>Recall that <span class="math notranslate nohighlight">\(\mathbb{I}\{\cdot\}\)</span> is an indicator function that takes on value 1 when the condition in the brackets is true and 0 otherwise.</p></li>
+<li><p>Notice that if all the weights <span class="math notranslate nohighlight">\(w^{(i)}\)</span> are the same, then this is just the misclassification rate.
+When each weight can be different, we get a “weighted” misclassification error.</p></li>
+</ul>
+<p><strong>Step 3:</strong> Compute model weight and update function.</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha_t = \log[(1-e_t)/e_t]
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+f \gets f + \alpha_t g_t
+\]</div>
+<ul class="simple">
+<li><p>Notice that <span class="math notranslate nohighlight">\(e_t\)</span> intuitively measures how much <em>influence</em> <span class="math notranslate nohighlight">\(g_t\)</span> should have on our overall predictor <span class="math notranslate nohighlight">\(f\)</span>.
+As <span class="math notranslate nohighlight">\(e_t\)</span> approaches zero, meaning few of the highly weighted points were misclassified by <span class="math notranslate nohighlight">\(g_t\)</span>, <span class="math notranslate nohighlight">\(\alpha_t\)</span> will be large, allowing <span class="math notranslate nohighlight">\(g_t\)</span> to have a bigger contribution to our predictor.
+As <span class="math notranslate nohighlight">\(e_t\)</span> approaches 1/2 (recall that <span class="math notranslate nohighlight">\(g_t\)</span>’s are ‘weak learners’), this means that <span class="math notranslate nohighlight">\(g_t\)</span> is not doing much better than random guessing.
+This will cause <span class="math notranslate nohighlight">\(\alpha_t\)</span> to be close to zero, meaning that <span class="math notranslate nohighlight">\(g_t\)</span> is contributing little to our overall prediction function.</p></li>
+</ul>
+<p><strong>Step 4:</strong> Compute new data weights <span class="math notranslate nohighlight">\(w^{(i)} \gets w^{(i)}\exp[\alpha_t \mathbb{I}\{y^{(i)} \neq f(x^{(i)})\} ]\)</span>.</p>
+<ul class="simple">
+<li><p>Exponentiation ensures that all the weights are positive.</p></li>
+<li><p>If our predictor correctly classifies a point, its weight <span class="math notranslate nohighlight">\(w^{(i)}\)</span> does not change.</p></li>
+<li><p>Any point that is misclassified by <span class="math notranslate nohighlight">\(f\)</span> has its weight increased.</p></li>
+<li><p>We again use <span class="math notranslate nohighlight">\(\alpha_t\)</span> here, as above, to mediate how strongly we adjust weights.</p></li>
+</ul>
+</section>
+<section id="adaboost-an-example">
+<h2>16.3.2. Adaboost: An Example<a class="headerlink" href="#adaboost-an-example" title="Permalink to this headline">¶</a></h2>
+<p>Let’s implement Adaboost on a simple dataset to see what it can do.</p>
+<p>Let’s start by creating a classification dataset.
+We will intentionally create a 2D dataset where the classes are not easily separable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/ensemble/plot_adaboost_twoclass.html</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_gaussian_quantiles</span>
+
+<span class="c1"># Construct dataset</span>
+<span class="n">X1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">make_gaussian_quantiles</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">make_gaussian_quantiles</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">cov</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y1</span><span class="p">,</span> <span class="o">-</span> <span class="n">y2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize this dataset using <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># Plot the training points</span>
+<span class="n">plot_colors</span><span class="p">,</span> <span class="n">plot_step</span><span class="p">,</span> <span class="n">class_names</span> <span class="o">=</span> <span class="s2">&quot;br&quot;</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="s2">&quot;AB&quot;</span>
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">class_names</span><span class="p">,</span> <span class="n">plot_colors</span><span class="p">):</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Class </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture16-boosting_29_0.png" src="../_images/lecture16-boosting_29_0.png" />
+</div>
+</div>
+<p>Let’s now train Adaboost on this dataset.
+We use the <code class="docutils literal notranslate"><span class="pre">AdaBoostClassifier</span></code> class from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+
+<span class="c1"># Create and fit an AdaBoosted decision tree</span>
+<span class="n">bdt</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                         <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;SAMME&quot;</span><span class="p">,</span>
+                         <span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">bdt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AdaBoostClassifier(algorithm=&#39;SAMME&#39;,
+                   base_estimator=DecisionTreeClassifier(max_depth=1),
+                   n_estimators=200)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Visualizing the output of the algorithm, we see that it can learn a highly non-linear decision boundary to separate the two classes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">plot_step</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">plot_step</span><span class="p">))</span>
+
+<span class="c1"># plot decision boundary</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">bdt</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">cs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">)</span>
+
+<span class="c1"># plot training points</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">class_names</span><span class="p">,</span> <span class="n">plot_colors</span><span class="p">):</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Paired</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Class </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture16-boosting_33_0.png" src="../_images/lecture16-boosting_33_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="ensembling">
+<h1>16.4. Ensembling<a class="headerlink" href="#ensembling" title="Permalink to this headline">¶</a></h1>
+<p>Boosting and bagging are special cases of <em>ensembling</em>.</p>
+<p>The idea of ensembling is to combine many models into one. Bagging and boosting are ensembling techniques to reduce over- and under-fitting, respectively.</p>
+<p>There are other approaches to ensembling that are useful to know about.</p>
+<ul class="simple">
+<li><p>In stacking, we train <span class="math notranslate nohighlight">\(m\)</span> independent models <span class="math notranslate nohighlight">\(g_j(x)\)</span> (possibly from different model classes) and then train another model <span class="math notranslate nohighlight">\(f(x)\)</span> to predict <span class="math notranslate nohighlight">\(y\)</span> from the outputs of <span class="math notranslate nohighlight">\(g_j\)</span>.</p></li>
+<li><p>The Bayesian approach can also be seen as form of ensembling</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+P(y\mid x) = \int_\theta P(y\mid x,\theta) P(\theta \mid \mathcal{D}) d\theta
+\]</div>
+<p>where we average models <span class="math notranslate nohighlight">\(P(y\mid x,\theta)\)</span> using weights <span class="math notranslate nohighlight">\(P(\theta \mid \mathcal{D})\)</span>.</p>
+<p>Ensembling is a useful technique in machine learning, as it often helps squeeze out additional performance out of ML algorithms, however this comes at the cost of additional (potentially quite expensive) computation to train and use ensembles.</p>
+<p>As we have seen with Adaboost, boosting algorithms are a form of ensembling that yield high accuracy via a highly expressive non-linear model family. If trees are used as weak learners, then we also have the added benefit of requiring little to no preprocessing. However, as we saw with the random forest algorithm, with boosting, the interpretability of the weak learners is lost.</p>
+<section id="bagging-vs-boosting">
+<h2>16.4.1. Bagging vs. Boosting<a class="headerlink" href="#bagging-vs-boosting" title="Permalink to this headline">¶</a></h2>
+<p>We conclude this initial introduction to boosting by contrasting it to the bagging approach we saw previously.
+While both concepts refer to methods for combining the outputs of various models trained on the same dataset, there are important distinctions between these concepts.</p>
+<ul class="simple">
+<li><p>Bagging targets <strong>overfitting</strong> vs. boosting targets <strong>underfitting</strong>.</p></li>
+<li><p>Bagging is a <strong>parallelizable</strong> method for combining models (e.g., each tree in the random forest can be learned in parallel) vs. boosting is an inherently <strong>sequential</strong> way to combine models.</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="additive-models">
+<h1>16.5. Additive Models<a class="headerlink" href="#additive-models" title="Permalink to this headline">¶</a></h1>
+<p>Next, we are going to see another perspective on boosting and derive new boosting algorithms.</p>
+<p>Boosting can be seen as a way of fitting more general <em>additive models</em>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+f(x) = \sum_{t=1}^T \alpha_t g(x; \phi_t). 
+\]</div>
+<ul class="simple">
+<li><p>The main model <span class="math notranslate nohighlight">\(f(x)\)</span> consists of <span class="math notranslate nohighlight">\(T\)</span> smaller models <span class="math notranslate nohighlight">\(g\)</span> with weights <span class="math notranslate nohighlight">\(\alpha_t\)</span> and paramaters <span class="math notranslate nohighlight">\(\phi_t\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The parameters are the <span class="math notranslate nohighlight">\(\alpha_t\)</span> plus the parameters <span class="math notranslate nohighlight">\(\phi_t\)</span> of each <span class="math notranslate nohighlight">\(g\)</span>.</p></li>
+</ul>
+<p>Additive models are more general than a linear model, because <span class="math notranslate nohighlight">\(g\)</span> can be non-linear in <span class="math notranslate nohighlight">\(\phi_t\)</span> (therefore so is <span class="math notranslate nohighlight">\(f\)</span>).</p>
+<p>Boosting is a specific approach to training additive models.
+We will see a more general approach below.</p>
+<section id="forward-stagewise-additive-modeling">
+<h2>16.5.1. Forward Stagewise Additive Modeling<a class="headerlink" href="#forward-stagewise-additive-modeling" title="Permalink to this headline">¶</a></h2>
+<p>A general way to fit additive models is the forward stagewise approach.</p>
+<ul class="simple">
+<li><p>Suppose we have a loss <span class="math notranslate nohighlight">\(L : \mathcal{Y} \times \mathcal{Y} \to [0, \infty)\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Start with</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+f_0 = \arg \min_\phi \sum_{i=1}^n L(y^{(i)}, g(x^{(i)}; \phi))
+\]</div>
+<ul class="simple">
+<li><p>At each iteration <span class="math notranslate nohighlight">\(t\)</span> we fit the best addition to the current model.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ 
+\alpha_t, \phi_t = \arg\min_{\alpha, \phi} \sum_{i=1}^n L(y^{(i)}, f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))
+\]</div>
+<ul class="simple">
+<li><p>Note that each step <span class="math notranslate nohighlight">\(f_{t-1}\)</span> is fixed, and we are only optimizing over the weight <span class="math notranslate nohighlight">\(\alpha_t\)</span> and the new model parameters <span class="math notranslate nohighlight">\(\phi_t\)</span>.
+This helps keep the optimization process tractable.</p></li>
+</ul>
+<p>We note some practical considerations in forward stagewise additive modeling:</p>
+<ul class="simple">
+<li><p>Popular choices of <span class="math notranslate nohighlight">\(g\)</span> include cubic splines, decision trees, and kernelized models.</p></li>
+<li><p>We may use a fixed number of iterations <span class="math notranslate nohighlight">\(T\)</span> or early stopping when the error on a hold-out set no longer improves.</p></li>
+<li><p>An important design choice is the loss <span class="math notranslate nohighlight">\(L\)</span>.</p></li>
+</ul>
+</section>
+<section id="losses-in-additive-models">
+<h2>16.5.2. Losses in Additive Models<a class="headerlink" href="#losses-in-additive-models" title="Permalink to this headline">¶</a></h2>
+<p>We will now cover the various types of losses used in additive models and the implications of these different choices.</p>
+<section id="exponential-loss">
+<h3>16.5.2.1. Exponential Loss<a class="headerlink" href="#exponential-loss" title="Permalink to this headline">¶</a></h3>
+<p>We start with the exponential loss.
+Give a binary classification problem with labels <span class="math notranslate nohighlight">\(\mathcal{Y} = \{-1, +1\}\)</span>, the exponential loss is defined as</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = \exp(-y \cdot f). 
+\]</div>
+<ul class="simple">
+<li><p>When <span class="math notranslate nohighlight">\(y=1\)</span>, <span class="math notranslate nohighlight">\(L\)</span> is small when <span class="math notranslate nohighlight">\(f \to \infty\)</span>.</p></li>
+<li><p>When <span class="math notranslate nohighlight">\(y=-1\)</span>, <span class="math notranslate nohighlight">\(L\)</span> is small when <span class="math notranslate nohighlight">\(f \to - \infty\)</span>.</p></li>
+</ul>
+<p>Let’s visualize the exponential loss and compare it to other losses.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># define the losses for a target of y=1</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Hinge&#39;</span> <span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;L2&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">f</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;L1&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">f</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;Exponential&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># plot them</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">losses</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">loss</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> Loss&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Prediction f&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;L(y=1,f)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture16-boosting_52_0.png" src="../_images/lecture16-boosting_52_0.png" />
+</div>
+</div>
+<p>Notice that the exponential loss very heavily penalizes (i.e., exponentially) misclassified points.
+This could potentially be an issue in the presence of outliers or if we have some ‘noise’ in the labeling process, e.g., points were originally classified by a human annotator with imperfect labeling.</p>
+<section id="special-case-adaboost">
+<h4>Special Case: Adaboost<a class="headerlink" href="#special-case-adaboost" title="Permalink to this headline">¶</a></h4>
+<p>Adaboost is an instance of forward stagewise additive modeling with the exponential loss.</p>
+<p>At each step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+L_t = \sum_{i=1}^n e^{-y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi))} = \sum_{i=1}^n w^{(i)} \exp\left(-y^{(i)}\alpha g(x^{(i)}; \phi)\right) 
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(w^{(i)} = \exp(-y^{(i)}f_{t-1}(x^{(i)}))\)</span>.</p>
+<p>We can derive the Adaboost update rules from this equation.</p>
+<p>Suppose that <span class="math notranslate nohighlight">\(g(y; \phi) \in \{-1,1\}\)</span>. With a bit of algebraic manipulations, we get that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+L_t &amp; = e^{\alpha} \sum_{y^{(i)} \neq g(x^{(i)})} w^{(i)} + e^{-\alpha} \sum_{y^{(i)} = g(x^{(i)})} w^{(i)} \\
+&amp; = (e^{\alpha} - e^{-\alpha}) \sum_{i=1}^n w^{(i)} \mathbb{I}\{{y^{(i)} \neq g(x^{(i)})}\} + e^{-\alpha} \sum_{i=1}^n w^{(i)}.\\
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbb{I}\{\cdot\}\)</span> is the indicator function.</p>
+<p>From there, we get that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\phi_t &amp; = \arg\min_{\phi} \sum_{i=1}^n w^{(i)} \mathbb{I}\{{y^{(i)} \neq g(x^{(i)}; \phi)}\} \\
+\alpha_t &amp; = \log[(1-e_t)/e_t]
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(e_t = \frac{\sum_{i=1}^n w^{(i)} \mathbb{I}\{y^{(i)} \neq f(x^{(i)})\}}{\sum_{i=1}^n w^{(i)}\}}\)</span>.</p>
+<p>These are update rules for Adaboost, and it’s not hard to show that the update rule for <span class="math notranslate nohighlight">\(w^{(i)}\)</span> is the same as well.</p>
+</section>
+</section>
+<section id="squared-loss">
+<h3>16.5.2.2. Squared Loss<a class="headerlink" href="#squared-loss" title="Permalink to this headline">¶</a></h3>
+<p>Another popular choice of loss is the squared loss, which allows us to derive a principled boosting algorithm for regression (as opposed to the exponential loss which can be used for classification).
+We define the squared loss as:</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = (y-f)^2. 
+\]</div>
+<p>The resulting algorithm is often called L2Boost.
+At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}\)</span> is the residual from the model at time <span class="math notranslate nohighlight">\(t-1\)</span>.</p>
+</section>
+<section id="logistic-loss">
+<h3>16.5.2.3. Logistic Loss<a class="headerlink" href="#logistic-loss" title="Permalink to this headline">¶</a></h3>
+<p>Another common loss is the logistic loss.
+When <span class="math notranslate nohighlight">\(\mathcal{Y}=\{-1,1\}\)</span> it is defined as:</p>
+<div class="math notranslate nohighlight">
+\[L(y, f) = \log(1+\exp(-2\cdot y\cdot f)).\]</div>
+<p>This looks like the log of the exponential loss; it is less sensitive to outliers since it doesn’t penalize large errors as much.</p>
+<p>In the context of boosting, we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+J(\alpha, \phi) = \sum_{i=1}^n \log\left(1+\exp\left(-2y^{(i)}(f_{t-1}(x^{(i)}) + \alpha g(x^{(i)}; \phi)\right)\right).
+\]</div>
+<p>This gives a different weight update compared to Adabost. This algorithm is called LogitBoost.</p>
+<p>Let’s plot some of these new losses as we did before.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># define the losses for a target of y=1</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Hinge&#39;</span> <span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;L2&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">f</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;Logistic&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">f</span><span class="p">)),</span>
+    <span class="s1">&#39;Exponential&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># plot them</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">losses</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">loss</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> Loss&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Prediction f&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;L(y=1,f)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture16-boosting_64_0.png" src="../_images/lecture16-boosting_64_0.png" />
+</div>
+</div>
+<p>To summarize what we have seen for additive models:</p>
+<ul class="simple">
+<li><p>Additive models have the form
+$<span class="math notranslate nohighlight">\( f(x) = \sum_{t=1}^T \alpha_t g(x; \phi_t). \)</span>$</p></li>
+<li><p>These models can be fit using the forward stagewise additive approach.</p></li>
+<li><p>This reproduces Adaboost (when using exponential loss) and can be used to derive new boosting-type algorithms that optimize a wide range of objectives that are more robust to outliers and extend beyond classification.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="gradient-boosting">
+<h1>16.6. Gradient Boosting<a class="headerlink" href="#gradient-boosting" title="Permalink to this headline">¶</a></h1>
+<p>We are now going to see another way of deriving boosting algorithms that is inspired by gradient descent.</p>
+<section id="limitations-of-forward-stagewise-additive-modeling">
+<h2>16.6.1. Limitations of Forward Stagewise Additive Modeling<a class="headerlink" href="#limitations-of-forward-stagewise-additive-modeling" title="Permalink to this headline">¶</a></h2>
+<p>Forward stagewise additive modeling is not without limitations.</p>
+<ul class="simple">
+<li><p>There may exist other losses for which it is complex to derive boosting-type weight update rules.</p></li>
+<li><p>At each step, we may need to solve a costly optimization problem over <span class="math notranslate nohighlight">\(\phi_t\)</span>.</p></li>
+<li><p>Optimizing each <span class="math notranslate nohighlight">\(\phi_t\)</span> greedily may cause us to overfit.</p></li>
+</ul>
+</section>
+<section id="motivating-gradient-boosting">
+<h2>16.6.2. Motivating Gradient Boosting<a class="headerlink" href="#motivating-gradient-boosting" title="Permalink to this headline">¶</a></h2>
+<p>Let’s start to motivate gradient boosting by taking a new lens to the boosting algorithms we saw above.</p>
+<p>Consider, for example, L2Boost, which optimizes the L2 loss</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = \frac{1}{2}(y-f)^2. 
+\]</div>
+<p>At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(r^{(i)}_t = y^{(i)} - f_{t-1}(x^{(i)})\)</span> is the residual from the model at time <span class="math notranslate nohighlight">\(t-1\)</span>.</p>
+<p>Observe that the residual is also the derivative of the <span class="math notranslate nohighlight">\(L2\)</span> loss</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{2}(y^{(i)} - f_{t-1}(x^{(i)}))^2
+\]</div>
+<p>with respect to <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(f_{t-1}(x^{(i)})\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}
+\]</div>
+<p>Thus, at step <span class="math notranslate nohighlight">\(t,\)</span> we are minimizing</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n \left( \underbrace{\left(y^{(i)} - f_{t-1}(x^{(i)})\right)}_\text{derivative of $L$ at $f_{t-1}(x^{(i)})$} - g(x^{(i)}; \phi_t)\right)^2. 
+\]</div>
+<p>That is, we are trying to select the parameters <span class="math notranslate nohighlight">\(\phi_t\)</span> that are closest to the residuals, which we are now viewing as the gradient with respect to <span class="math notranslate nohighlight">\(f_{t-1}(x^{(i)})\)</span>.</p>
+<p>In the coming sections, we will try to explain why in L2Boost we are fitting the derivatives of the L2 loss?</p>
+</section>
+<section id="revisiting-supervised-learning">
+<h2>16.6.3. Revisiting Supervised Learning<a class="headerlink" href="#revisiting-supervised-learning" title="Permalink to this headline">¶</a></h2>
+<p>Let’s first recap classical supervised learning, and then contrast it against the gradient boosting approach to which we are building up.</p>
+<section id="supervised-learning-the-model">
+<h3>16.6.3.1. Supervised Learning: The Model<a class="headerlink" href="#supervised-learning-the-model" title="Permalink to this headline">¶</a></h3>
+<p>Recall that a machine learning model is a function</p>
+<div class="math notranslate nohighlight">
+\[ 
+f_\theta : \mathcal{X} \to \mathcal{Y} 
+\]</div>
+<p>that maps inputs <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span> to targets <span class="math notranslate nohighlight">\(y \in \mathcal{Y}\)</span>.
+The model has a <span class="math notranslate nohighlight">\(d\)</span>-dimensional set of parameters <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta = (\theta_1, \theta_2, ..., \theta_d). 
+\]</div>
+</section>
+<section id="supervised-learning-the-learning-objective">
+<h3>16.6.3.2. Supervised Learning: The Learning Objective<a class="headerlink" href="#supervised-learning-the-learning-objective" title="Permalink to this headline">¶</a></h3>
+<p>Intuitively, <span class="math notranslate nohighlight">\(f_\theta\)</span> should perform well in expectation on new data <span class="math notranslate nohighlight">\(x, y\)</span> sampled from the data distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+J (\theta) = \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left( y, f_\theta( x \right)) \right] \text{ is &quot;good&quot;}.
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(L : \mathcal{X}\times\mathcal{Y} \to \mathbb{R}\)</span> is a performance metric and we take its expectation or average over all the possible samples <span class="math notranslate nohighlight">\( x, y\)</span> from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
+<p>Recall that formally, an expectation <span class="math notranslate nohighlight">\(\mathbb{E}_{x\sim {P}} f(x)\)</span> is <span class="math notranslate nohighlight">\(\sum_{x \in \mathcal{X}} f(x) P(x)\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is discrete and <span class="math notranslate nohighlight">\(\int_{x \in \mathcal{X}} f(x) P(x) dx\)</span> if <span class="math notranslate nohighlight">\(x\)</span> is continuous.</p>
+<p>Intuitively,</p>
+<div class="math notranslate nohighlight">
+\[
+J(\theta) = \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left( y, f_\theta( x) \right) \right]
+= \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} L\left(y, f_\theta(x) \right) \mathbb{P}(x, y)
+\]</div>
+<p>is the performance on an <em>infinite-sized</em> holdout set, where we have sampled every possible point.</p>
+</section>
+<section id="supervised-learning-the-optimizer-gradient-descent">
+<h3>16.6.3.3. Supervised Learning: The Optimizer (Gradient Descent)<a class="headerlink" href="#supervised-learning-the-optimizer-gradient-descent" title="Permalink to this headline">¶</a></h3>
+<p>The gradient <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> is the <span class="math notranslate nohighlight">\(d\)</span>-dimensional vector of partial derivatives:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\nabla J (\theta) = \begin{bmatrix}
+\frac{\partial J(\theta)}{\partial \theta_1} \\
+\frac{\partial J(\theta)}{\partial \theta_2} \\
+\vdots \\
+\frac{\partial J(\theta)}{\partial \theta_d}
+\end{bmatrix}.
+\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(j\)</span>-th entry of the vector <span class="math notranslate nohighlight">\(\nabla J (\theta)\)</span> is the partial derivative <span class="math notranslate nohighlight">\(\frac{\partial J(\theta)}{\partial \theta_j}\)</span> of <span class="math notranslate nohighlight">\(J\)</span> with respect to the <span class="math notranslate nohighlight">\(j\)</span>-th component of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>We can optimize <span class="math notranslate nohighlight">\(J(\theta)\)</span> using gradient descent via the usual update rule:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1}).
+\]</div>
+<p>However, in practice, we cannot measure</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]
+\]</div>
+<p>on infinite data.</p>
+<p>We substitute <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> with an approximation <span class="math notranslate nohighlight">\(\hat \nabla J(\theta)\)</span> measured on a dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> sampled from <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat \nabla J (\theta) = \frac{1}{m} \sum_{i=1}^m \nabla L\left( y^{(i)}, f_\theta( x^{(i)}) \right).
+\]</div>
+<p>If the number of IID samples <span class="math notranslate nohighlight">\(m\)</span> is large, this approximation holds (we call this a Monte Carlo approximation).</p>
+</section>
+</section>
+<section id="supervised-learning-over-functions">
+<h2>16.6.4. Supervised Learning Over Functions<a class="headerlink" href="#supervised-learning-over-functions" title="Permalink to this headline">¶</a></h2>
+<p>Intuitively, the gradient boosting algorithm asks, “what if instead of optimizing over the finite-dimensional parameters <span class="math notranslate nohighlight">\(\theta \in \mathbb{R}^d,\)</span> we try optimizing directly over infinite-dimensional functions?”</p>
+<p>But what do we mean by “infinite-dimensional functions?”
+Letting our model space be the (unrestricted) set of functions <span class="math notranslate nohighlight">\(f: \mathcal{X} \to \mathcal{Y},\)</span> each function is an infinite-dimensional <em>vector</em> indexed by <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+f = \begin{bmatrix}
+\vdots \\
+f(x) \\
+\vdots
+\end{bmatrix}.
+\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(x\)</span>-th component of the vector <span class="math notranslate nohighlight">\(f\)</span> is <span class="math notranslate nohighlight">\(f(x)\)</span>.
+So rather than uniquely characterizing a function by some finite dimensional vector of parameters, a point in function space can be uniquely characterized by the values that it takes on every possible input, of which there can be infinitely many.
+It’s as if we choose infinite parameters <span class="math notranslate nohighlight">\(\theta=(..., f(x), ...)\)</span> that specify function values, and we optimize over that.</p>
+<section id="the-learning-objective">
+<h3>The Learning Objective<a class="headerlink" href="#the-learning-objective" title="Permalink to this headline">¶</a></h3>
+<p>Our learning objective <span class="math notranslate nohighlight">\(J(f)\)</span> is now defined over <span class="math notranslate nohighlight">\(f\)</span>.
+Although the form of the objective will be equivalent to the standard supervised learning setup we recalled above, we can think of optimizing <span class="math notranslate nohighlight">\(J\)</span> over a “very high-dimensional” (potentially infinite) vector of “parameters” <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<p>Keep in mind that <span class="math notranslate nohighlight">\(f\)</span> should perform well in expectation on new data <span class="math notranslate nohighlight">\(x, y\)</span> sampled from the data distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+J (f) = \mathbb{E}_{( x,  y)\sim \mathbb{P}} \left[ L\left( y, f( x \right)) \right] \text{ is &quot;good&quot;}.
+\]</div>
+</section>
+<section id="functional-gradients">
+<h3>Functional Gradients<a class="headerlink" href="#functional-gradients" title="Permalink to this headline">¶</a></h3>
+<p>We would like to again optimize <span class="math notranslate nohighlight">\(J(f)\)</span> using gradient descent:</p>
+<div class="math notranslate nohighlight">
+\[
+\min_f J(f) = \min_f \mathbb{E}_{(x, y)\sim \mathbb{P}} \left[ L\left(y, f(x \right)) \right].
+\]</div>
+<p>We may define the functional gradient of this loss at <span class="math notranslate nohighlight">\(f\)</span> as an infinite-dimensional vector <span class="math notranslate nohighlight">\(\nabla J(f) : \mathcal{X} \to \mathbb{R}\)</span> “indexed” by <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\nabla J (f) = \begin{bmatrix}
+\vdots \\
+\frac{\partial J(f)}{\partial f(x)} \\
+\vdots \\
+\end{bmatrix}.
+\end{split}\]</div>
+<p>Let’s compare the parametric and the functional gradients.</p>
+<ul class="simple">
+<li><p>The parametric gradient <span class="math notranslate nohighlight">\(\nabla J(\theta) \in \mathbb{R}^d\)</span> is a vector of the same shape as <span class="math notranslate nohighlight">\(\theta  \in \mathbb{R}^d\)</span>. Both <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span> are indexed by <span class="math notranslate nohighlight">\(j=1,2,...,d\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The functional gradient <span class="math notranslate nohighlight">\(\nabla J(f) : \mathcal{X} \to \mathbb{R}\)</span> is a vector of the same shape as <span class="math notranslate nohighlight">\(f : \mathcal{X} \to \mathbb{R}\)</span>. Both <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> and <span class="math notranslate nohighlight">\(f\)</span> are “indexed” by <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The parametric gradient <span class="math notranslate nohighlight">\(\nabla J(\theta)\)</span> at <span class="math notranslate nohighlight">\(\theta = \theta_0\)</span> tells us how to modify <span class="math notranslate nohighlight">\(\theta_0\)</span> in order to further decrease the objective <span class="math notranslate nohighlight">\(J\)</span> starting from <span class="math notranslate nohighlight">\(J(\theta_0)\)</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The functional gradient <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> at <span class="math notranslate nohighlight">\(f = f_0\)</span> tells us how to modify <span class="math notranslate nohighlight">\(f_0\)</span> in order to further decrease the objective <span class="math notranslate nohighlight">\(J\)</span> starting from <span class="math notranslate nohighlight">\(J(f_0)\)</span>.
+We can think of this as the functional gradient telling us how to change the output of <span class="math notranslate nohighlight">\(f_0\)</span> for each possible input in order to better optimize our objective.</p></li>
+</ul>
+<p>This is best understood via a picture.</p>
+<center><img width=100% src="../slides/img/functional_gradient.png"></center><p>The functional gradient is a function that tells us how much we “move” <span class="math notranslate nohighlight">\(f(x)\)</span> at each point <span class="math notranslate nohighlight">\(x\)</span>.
+Given a good step size, the resulting new function will be closer to minimizing <span class="math notranslate nohighlight">\(J\)</span>.</p>
+<p>Recall that we are taking the perspective that <span class="math notranslate nohighlight">\(f\)</span> is a vector indexed by <span class="math notranslate nohighlight">\(x.\)</span>
+Thus the <span class="math notranslate nohighlight">\(x\)</span>-th entry of the vector <span class="math notranslate nohighlight">\(\nabla J (f)\)</span> is the partial derivative <span class="math notranslate nohighlight">\(\frac{\partial J(f)}{\partial f(x)}\)</span> of <span class="math notranslate nohighlight">\(J\)</span> with respect to <span class="math notranslate nohighlight">\(f(x)\)</span>, the <span class="math notranslate nohighlight">\(x\)</span>-th component of <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial J(f)}{\partial f(x)} = \frac{\partial}{\partial f(x)} \left( \mathbb{E}_{( x,  y)\sim \mathbb{P}} \left[ L\left( y, f( x \right)) \right] \right) = \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)}
+\]</div>
+<p>So the functional gradient is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\nabla J (f) = \begin{bmatrix}
+\vdots \\
+\frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)} \\
+\vdots \\
+\end{bmatrix}.
+\end{split}\]</div>
+<p>This is an infinite-dimensional vector indexed by <span class="math notranslate nohighlight">\(x\)</span>.</p>
+</section>
+<section id="functional-gradient-descent">
+<h3>Functional Gradient Descent<a class="headerlink" href="#functional-gradient-descent" title="Permalink to this headline">¶</a></h3>
+<p>Previously, we optimized <span class="math notranslate nohighlight">\(J(\theta)\)</span> using gradient descent via the update rule:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_t \gets \theta_{t-1} - \alpha_t \nabla J(\theta_{t-1})
+\]</div>
+<p>We can now optimize our objective using gradient descent in functional space via the same update:</p>
+<div class="math notranslate nohighlight">
+\[
+f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1}).
+\]</div>
+<p>After <span class="math notranslate nohighlight">\(T\)</span> steps of <span class="math notranslate nohighlight">\(f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1})\)</span>, we get a model of the form</p>
+<div class="math notranslate nohighlight">
+\[
+f_T = f_0-\sum_{t=0}^{T-1} \alpha_t \nabla J(f_{t})
+\]</div>
+</section>
+<section id="the-challenge-of-supervised-learning-over-functions">
+<h3>The Challenge of Supervised Learning Over Functions<a class="headerlink" href="#the-challenge-of-supervised-learning-over-functions" title="Permalink to this headline">¶</a></h3>
+<p>After <span class="math notranslate nohighlight">\(T\)</span> steps of <span class="math notranslate nohighlight">\(f_t \gets f_{t-1} - \alpha_t \nabla J(f_{t-1})\)</span>, we get a model of the form
+$<span class="math notranslate nohighlight">\(f_T = f_0-\sum_{t=0}^{T-1} \alpha_t \nabla J(f_{t})\)</span>$</p>
+<p>Recall that each <span class="math notranslate nohighlight">\(\nabla J(f_{t})\)</span> is a function of <span class="math notranslate nohighlight">\(x.\)</span>
+Therefore <span class="math notranslate nohighlight">\(f_T\)</span> is a function of <span class="math notranslate nohighlight">\(x\)</span> as well, and as a function that is found through gradient descent, <span class="math notranslate nohighlight">\(f_T\)</span> will minimize <span class="math notranslate nohighlight">\(J.\)</span></p>
+<p>But recall as well that in the standard supervised learning approach that we reviewed above, we were not able to compute <span class="math notranslate nohighlight">\(\nabla J(\theta) = \mathbb{E}_{( x, y)\sim \mathbb{P}} \left[ \nabla L\left( y, f_\theta( x) \right) \right]\)</span>
+on infinite data and instead we used:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat \nabla J (\theta) = \frac{1}{m} \sum_{i=1}^m \nabla L\left( y^{(i)}, f_\theta( x^{(i)}) \right).
+\]</div>
+<p>In the case of functional gradients, we also need to find an approximation <span class="math notranslate nohighlight">\(\hat \nabla J(f)\)</span>:
+$<span class="math notranslate nohighlight">\(
+\nabla J(f) (x) = \frac{\partial J(f)}{\partial f(x)} = \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)}
+\)</span>$</p>
+<p>This is more challenging than before:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\nabla J(f) (x) = \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f=f(x)}\)</span> is not an expectation so we can’t approximate it with an average in the data.</p></li>
+</ul>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\nabla J (f)\)</span> is a function that we need to “learn” from <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>. (We will use supervised learning for this!)</p></li>
+</ul>
+<ul class="simple">
+<li><p>We cannot represent <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> because it’s a general function.</p></li>
+<li><p>We cannot measure <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> at each <span class="math notranslate nohighlight">\(x\)</span> (only at <span class="math notranslate nohighlight">\(n\)</span> training points).</p></li>
+<li><p>Even if we could, the problem would be too unconstrained and generally intractable to optimize.</p></li>
+</ul>
+</section>
+</section>
+<section id="modeling-functional-gradients">
+<h2>16.6.5. Modeling Functional Gradients<a class="headerlink" href="#modeling-functional-gradients" title="Permalink to this headline">¶</a></h2>
+<p>We will address the above problem by learning a <em>model</em> of gradients.</p>
+<ul class="simple">
+<li><p>In supervised learning, we only have access to <span class="math notranslate nohighlight">\(n\)</span> data points that describe the true <span class="math notranslate nohighlight">\(\mathcal{X} \to \mathcal{Y}\)</span> mapping (call it <span class="math notranslate nohighlight">\(f^*\)</span>).</p></li>
+<li><p>We learn a <em>model</em> <span class="math notranslate nohighlight">\(f_\theta:\mathcal{X} \to \mathcal{Y}\)</span> from a function class <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> to approximate <span class="math notranslate nohighlight">\(f^*\)</span>.</p></li>
+<li><p>The model extrapolates beyond the training set. Given enough datapoints, <span class="math notranslate nohighlight">\(f_\theta\)</span> learns a true mapping.</p></li>
+</ul>
+<p>We can apply the same idea to gradients, learning <span class="math notranslate nohighlight">\(\nabla J(f).\)</span></p>
+<ul class="simple">
+<li><p>We search for a model <span class="math notranslate nohighlight">\(g_{\theta_t} : \mathcal{X} \to R\)</span> within a more restricted function class <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> that can approximate the functional gradient <span class="math notranslate nohighlight">\(\nabla J(f_t)\)</span>.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+g_{\theta_t} \in \mathcal{M} &amp; &amp; g_{\theta_t} \approx \nabla J(f_t)
+\end{align*}
+\]</div>
+<ul class="simple">
+<li><p>The model extrapolates beyond the training set. Given enough datapoints, <span class="math notranslate nohighlight">\(g_{\theta_t}\)</span> learns <span class="math notranslate nohighlight">\(\nabla J(f_t)\)</span>.</p></li>
+<li><p>Think of <span class="math notranslate nohighlight">\(g_{\theta_t}\)</span> as the <em>projection</em> of <span class="math notranslate nohighlight">\(\nabla J(f_t)\)</span> onto the function class <span class="math notranslate nohighlight">\(\mathcal{M}.\)</span></p></li>
+</ul>
+<p>Functional descent will then have the form:
+$<span class="math notranslate nohighlight">\(\underbrace{f_t(x)}_\text{new function} \gets \underbrace{f_{t-1}(x) - \alpha g_{\theta_{t-1}}(x)}_\text{old function - gradient step}.\)</span><span class="math notranslate nohighlight">\(
+If \)</span>g<span class="math notranslate nohighlight">\( generalizes, this approximates \)</span>f_t \gets f_{t-1} - \alpha \nabla J(f_{t-1}).$</p>
+</section>
+<section id="fitting-functional-gradients">
+<h2>16.6.6. Fitting Functional Gradients<a class="headerlink" href="#fitting-functional-gradients" title="Permalink to this headline">¶</a></h2>
+<p>In practice, what does it mean to approximate a functional gradient <span class="math notranslate nohighlight">\(g \approx \nabla J(f)m\)</span>?
+We can use standard supervised learning. Suppose we have a fixed function <span class="math notranslate nohighlight">\(f\)</span> and we want to estimate the functional gradient of <span class="math notranslate nohighlight">\(L\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f(x)}.
+\]</div>
+<p>at any <span class="math notranslate nohighlight">\(x \in \mathcal{X}\)</span></p>
+<p><strong>Step 1:</strong> We define a loss <span class="math notranslate nohighlight">\(L_g\)</span> (e.g., L2 loss) to measure how well <span class="math notranslate nohighlight">\(g \approx \nabla J(f)\)</span>.</p>
+<p><strong>Step 2:</strong> We compute <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> on the training dataset:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{D}_g = \left\{ \left(x^{(i)}, \underbrace{\frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f(x^{(i)})}}_\text{functional derivative $\nabla_f J(f)_i$ at $f(x^{(i)})$} \right), i=1,2,\ldots,n \right\} 
+\]</div>
+<p><strong>Step 3:</strong> We train a model <span class="math notranslate nohighlight">\(g : \mathcal{X} \to \mathbb{R}\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span> to predict functional gradients at any <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+g(x) \approx \frac{\partial L(\text{y}, f)}{\partial f} \bigg\rvert_{f = f_0(x)}.
+\]</div>
+</section>
+<section id="id1">
+<h2>16.6.7. Gradient Boosting<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>We now have the motivation and background needed to define gradient boosting.
+Gradient boosting is a procedure that performs functional gradient descent with approximate gradients.</p>
+<p>Start with <span class="math notranslate nohighlight">\(f(x) = 0\)</span>. Then, at each step <span class="math notranslate nohighlight">\(t&gt;1\)</span>:</p>
+<p><strong>Step 1:</strong> Create a training dataset <span class="math notranslate nohighlight">\(\mathcal{D}_g\)</span> and fit <span class="math notranslate nohighlight">\(g_t(x^{(i)})\)</span> using loss <span class="math notranslate nohighlight">\(L_g\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ 
+g_t(x) \approx \frac{\partial L(y, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}.
+\]</div>
+<p><strong>Step 2:</strong> Take a step of gradient descent using approximate gradients with step <span class="math notranslate nohighlight">\(\alpha_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+f_t(x) = f_{t-1}(x) - \alpha_t \cdot g_t(x).
+\]</div>
+</section>
+<section id="interpreting-gradient-boosting">
+<h2>16.6.8. Interpreting Gradient Boosting<a class="headerlink" href="#interpreting-gradient-boosting" title="Permalink to this headline">¶</a></h2>
+<p>Notice how after <span class="math notranslate nohighlight">\(T\)</span> steps we get an additive model of the form
+$<span class="math notranslate nohighlight">\( f(x) = \sum_{t=1}^T \alpha_t g_t(x). \)</span>$
+This looks like the output of a boosting algorithm!</p>
+<p>However, unlike before for forward stagewise additive models:</p>
+<ul class="simple">
+<li><p>This works for any differentiable loss <span class="math notranslate nohighlight">\(L\)</span>.</p></li>
+<li><p>It does not require any mathematical derivations for new <span class="math notranslate nohighlight">\(L\)</span>.</p></li>
+</ul>
+</section>
+<section id="returning-to-l2-boosting">
+<h2>16.6.9. Returning to L2 Boosting<a class="headerlink" href="#returning-to-l2-boosting" title="Permalink to this headline">¶</a></h2>
+<p>To better highlight the connections between boosting and gradient boosting, let’s return to the example of L2Boost, which optimizes the L2 loss</p>
+<div class="math notranslate nohighlight">
+\[ 
+L(y, f) = \frac{1}{2}(y-f)^2
+\]</div>
+<p>At step <span class="math notranslate nohighlight">\(t,\)</span> we minimize</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^n (r^{(i)}_t - g(x^{(i)}; \phi))^2, 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(r^{(i)}_t = y^{(i)} - f_{t-1}(x^{(i)})\)</span> is the residual from the model at time <span class="math notranslate nohighlight">\(t-1\)</span>.</p>
+<p>Observe that the residual</p>
+<div class="math notranslate nohighlight">
+\[
+r^{(i)}_t = y^{(i)} - f(x^{(i)})_{t-1}
+\]</div>
+<p>is also the gradient of the <span class="math notranslate nohighlight">\(L2\)</span> loss with respect to <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(f(x^{(i)})\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+r^{(i)}_t = \frac{\partial L(y^{(i)}, f)}{\partial f} \bigg\rvert_{f = f_{t-1}(x)}
+\]</div>
+<p>This answers our question from above as to “why in L2Boost we are fitting the derivatives of the L2 loss?”
+The reason is that we are finding an approximation <span class="math notranslate nohighlight">\(g(\cdot; \phi)\)</span> to <span class="math notranslate nohighlight">\(\nabla J(f)\)</span> and to do so we are minimize the square loss between <span class="math notranslate nohighlight">\(\nabla J(f)(x^{(i)}) = r_t^{(i)}\)</span> and <span class="math notranslate nohighlight">\(g(x^{(i)}; \phi)\)</span> at our <span class="math notranslate nohighlight">\(n\)</span> training points.</p>
+<p>Many boosting methods are special cases of gradient boosting in this way.</p>
+</section>
+<section id="losses-for-additive-models-vs-gradient-boosting">
+<h2>16.6.10. Losses for Additive Models vs. Gradient Boosting<a class="headerlink" href="#losses-for-additive-models-vs-gradient-boosting" title="Permalink to this headline">¶</a></h2>
+<p>We have seen several losses that can be used with the forward stagewise additive approach.</p>
+<ul class="simple">
+<li><p>The exponential loss <span class="math notranslate nohighlight">\(L(y,f) = \exp(-yf)\)</span> gives us Adaboost.</p></li>
+<li><p>The log-loss <span class="math notranslate nohighlight">\(L(y,f) = \log(1+\exp(-2yf))\)</span> is more robust to outliers.</p></li>
+<li><p>The squared loss <span class="math notranslate nohighlight">\(L(y,f) = (y-f)^2\)</span> can be used for regression.</p></li>
+</ul>
+<p>Gradient boosting can optimize a wider range of losses.</p>
+<ul class="simple">
+<li><p>Regression losses:</p>
+<ul>
+<li><p>L2, L1, and Huber (L1/L2 interpolation) losses.</p></li>
+<li><p>Quantile loss: estimates quantiles of distribution of <span class="math notranslate nohighlight">\(p(y|x)\)</span>.</p></li>
+</ul>
+</li>
+<li><p>Classification losses:</p>
+<ul>
+<li><p>Log-loss, softmax loss, exponential loss, negative binomial likelihood, etc.</p></li>
+</ul>
+</li>
+</ul>
+<p>When using gradient boosting these additional facts are useful:</p>
+<ul class="simple">
+<li><p>We most often use small decision trees as the learner <span class="math notranslate nohighlight">\(g_t\)</span>. Thus, input preprocessing is minimal.</p></li>
+<li><p>We can regularize by controlling tree size, step size <span class="math notranslate nohighlight">\(\alpha\)</span>, and using <em>early stopping</em>.</p></li>
+<li><p>We can scale-up gradient boosting to big data by sub-sampling data at each iteration (a form of <em>stochastic</em> gradient descent).</p></li>
+</ul>
+</section>
+<section id="algorithm-gradient-boosting">
+<h2>16.6.11. Algorithm: Gradient Boosting<a class="headerlink" href="#algorithm-gradient-boosting" title="Permalink to this headline">¶</a></h2>
+<p>As with the other algorithms we’ve seen, we can now present the algorithmic components for gradient boosting.</p>
+<ul class="simple">
+<li><p><strong>Type</strong>: Supervised learning (classification and regression).</p></li>
+<li><p><strong>Model family</strong>: Ensembles of weak learners (often decision trees).</p></li>
+<li><p><strong>Objective function</strong>: Any differentiable loss function.</p></li>
+<li><p><strong>Optimizer</strong>: Gradient descent in functional space. Weak learner uses its own optimizer.</p></li>
+<li><p><strong>Probabilistic interpretation</strong>: None in general; certain losses may have one.</p></li>
+</ul>
+</section>
+<section id="gradient-boosting-an-example">
+<h2>16.6.12. Gradient Boosting: An Example<a class="headerlink" href="#gradient-boosting-an-example" title="Permalink to this headline">¶</a></h2>
+<p>Let’s now try running Gradient Boosted Decision Trees (GBDT) on a small regression dataset.</p>
+<p>First we create the dataset. Our values come from a non-linear function <span class="math notranslate nohighlight">\(f(x)\)</span> plus some noise.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_quantile.html</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c1"># Create dataset</span>
+<span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="n">dy</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">+=</span> <span class="n">noise</span>
+
+<span class="c1"># Visualize it</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="s1">&#39;g:&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$f(x) = x\,\sin(x)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b.&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;Observations&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture16-boosting_129_0.png" src="../_images/lecture16-boosting_129_0.png" />
+</div>
+</div>
+<p>Next, we train a GBDT regressor, using the <code class="docutils literal notranslate"><span class="pre">GradientBoostingRegressor</span></code> class from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">GradientBoostingRegressor</span>
+
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.95</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GradientBoostingRegressor</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;squared_error&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                                <span class="n">n_estimators</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                <span class="n">learning_rate</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span> <span class="n">min_samples_leaf</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+                                <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GradientBoostingRegressor(alpha=0.95, min_samples_leaf=9, min_samples_split=9,
+                          n_estimators=250)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We may now visualize its predictions</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="s1">&#39;g:&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$f(x) = x\,\sin(x)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b.&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;Observations&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;Prediction&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/lecture16-boosting_133_0.png" src="../_images/lecture16-boosting_133_0.png" />
+</div>
+</div>
+</section>
+<section id="pros-and-cons-of-gradient-boosting">
+<h2>16.6.14. Pros and Cons of Gradient Boosting<a class="headerlink" href="#pros-and-cons-of-gradient-boosting" title="Permalink to this headline">¶</a></h2>
+<p>Gradient boosted decision trees (GBTs) are one of the best off-the-shelf ML algorithms that exist, often on par with deep learning.</p>
+<ul class="simple">
+<li><p>Attain state-of-the-art performance. GBTs have won the most Kaggle competitions.</p></li>
+<li><p>Require little data preprocessing and tuning.</p></li>
+<li><p>Work with any objective, including probabilistic ones.</p></li>
+</ul>
+<p>Their main limitations are:</p>
+<ul class="simple">
+<li><p>GBTs don’t work with unstructured data like images, audio.</p></li>
+<li><p>Implementations are not as flexible as modern neural net libraries.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="lecture15-decision-trees.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Lecture 15: Tree-Based Algorithms</p>
+        </div>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Cornell University<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
