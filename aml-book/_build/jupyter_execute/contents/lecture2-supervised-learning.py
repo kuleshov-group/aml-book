@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# <left><img width=10% src="img/cornell_tech2.svg"></left>
 # 
 # # Lecture 2: Supervised Machine Learning
 
@@ -22,7 +21,7 @@
 # #### An Example 
 # 
 # Consider an autonomous vehicle that needs to recognize objects on the road: pedestrians, cars, etc.
-# <center><img width=70% src="img/tesla_data.png"/></center>
+# <center><img width=70% src="https://kuleshov-group.github.io/aml-resources/img/tesla_data.png"/></center>
 # 
 # One way of building an object detection system would be to specify by hand the properties defining each object: e.g., a car has four wheels, has windows, etc. However this approach does not scale: we can't handle all the edge cases well.
 # 

@@ -57,7 +57,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Lecture 3: Linear Regression" href="lecture3-linear-regression.html" />
-    <link rel="prev" title="Welcome to your Jupyter Book" href="../intro.html" />
+    <link rel="prev" title="Lecture 1: Introduction to Machine Learning" href="lecture1-introduction.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -102,6 +102,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture1-introduction.html">
+   Lecture 1: Introduction to Machine Learning
+  </a>
+ </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Lecture 2: Supervised Machine Learning
@@ -128,6 +133,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="lecture7-gaussian-discriminant-analysis.html">
+   Lecture 7: Gaussian Discriminant Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="lecture8-unsupervised-learning.html">
    Lecture 8: Unsupervised Learning
   </a>
@@ -145,6 +155,26 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="lecture12-suppor-vector-machines.html">
    Lecture 12: Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture13-svm-dual.html">
+   Lecture 13: Dual Formulation of Support Vector Machines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture14-kernels.html">
+   Lecture 14: Kernels
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture15-decision-trees.html">
+   Lecture 15: Tree-Based Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lecture16-boosting.html">
+   Lecture 16: Boosting
   </a>
  </li>
 </ul>
@@ -722,8 +752,7 @@ const thebe_selector_output = ".output, .cell_output"
             
               <div>
                 
-  <p><left><img width=10% src="img/cornell_tech2.svg"></left></p>
-<section class="tex2jax_ignore mathjax_ignore" id="lecture-2-supervised-machine-learning">
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-2-supervised-machine-learning">
 <h1>Lecture 2: Supervised Machine Learning<a class="headerlink" href="#lecture-2-supervised-machine-learning" title="Permalink to this headline">¶</a></h1>
 <p>We saw in the previous lecture that there exist three types of machine learning—supervised, unsupervised, and reinforcement learning. This lecture will focus on supervised learning.</p>
 <!-- Supervised learning is by far the most common type of machine learning. This lecture will focus on supervised learning, define precisely what it is, and provide a few examples. -->
@@ -739,7 +768,7 @@ const thebe_selector_output = ".output, .cell_output"
 <section id="an-example">
 <h3>An Example<a class="headerlink" href="#an-example" title="Permalink to this headline">¶</a></h3>
 <p>Consider an autonomous vehicle that needs to recognize objects on the road: pedestrians, cars, etc.</p>
-<center><img width=70% src="img/tesla_data.png"/></center>
+<center><img width=70% src="https://kuleshov-group.github.io/aml-resources/img/tesla_data.png"/></center>
 <p>One way of building an object detection system would be to specify by hand the properties defining each object: e.g., a car has four wheels, has windows, etc. However this approach does not scale: we can’t handle all the edge cases well.</p>
 <p>Instead, we can apply supervised learning: we collect a large dataset of cars and provide them as exmaples to a supervised learning algorithm. The algorithm then automatically learns what features define a car!</p>
 <p>This approach vastly outperforms human programmers trying to write rules by hand, and is currently the only viable way to program object detection systems.</p>
@@ -1907,27 +1936,27 @@ Test set mean squared error on random inputs: 15887.97
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "aml"
+            mode: "python"
         },
         kernelOptions: {
-            name: "aml",
+            name: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'aml'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../intro.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="lecture1-introduction.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Welcome to your Jupyter Book</p>
+            <p class="prev-next-title">Lecture 1: Introduction to Machine Learning</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="lecture3-linear-regression.html" title="next page">

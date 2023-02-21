@@ -229,7 +229,7 @@ for i in range(len(degrees)):
 
 # To set context, recall our intuitive definition of supervised learning.
 # 
-# <center><img width=70% src="img/tesla_data.png"/></center>
+# <center><img width=70% src="https://kuleshov-group.github.io/aml-resources/img/tesla_data.png"/></center>
 # 
 # 1. First, we collect a dataset of labeled training examples.
 # 2. We train a model to output accurate predictions on this dataset.

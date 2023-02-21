@@ -554,6 +554,7 @@ plt.plot(theta_vals, coin_likelihood(theta_vals))
 # When exact solutions are not available, we can optimize the log likelihood numerically, e.g. using gradient descent.
 # 
 # We will see examples of this later.
+# 
 
 # ## 4.3.3. Why Does Maximum Likelihood Work?
 # 

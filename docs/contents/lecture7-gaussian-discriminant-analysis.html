@@ -103,6 +103,11 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
+  <a class="reference internal" href="lecture1-introduction.html">
+   Lecture 1: Introduction to Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="lecture2-supervised-learning.html">
    Lecture 2: Supervised Machine Learning
   </a>
@@ -962,8 +967,8 @@ P_\theta(x|y=\text{0}) &amp;&amp; P_\theta(x|y=\text{1}) &amp;&amp; P_\theta(x|y
 The inputs <span class="math notranslate nohighlight">\(x\)</span> are vectors of features for the flowers.
 How do we choose <span class="math notranslate nohighlight">\(P_\theta(x|y=k)\)</span>?</p>
 <p>This what the density of a Normal distribution looks like in 2D:</p>
-<center><img width=70% src="img/multivariate_gaussian1.png"></center><p>This is how we can visualize it in a 2D plane:</p>
-<center><img width=70% src="img/multivariate_gaussian2.png"></center></section>
+<center><img width=70% src="https://kuleshov-group.github.io/aml-resources/img/multivariate_gaussian1.png"></center><p>This is how we can visualize it in a 2D plane:</p>
+<center><img width=70% src="https://kuleshov-group.github.io/aml-resources/img/multivariate_gaussian2.png"></center></section>
 </section>
 <section id="gaussian-mixture-model">
 <h2>7.2.2. Gaussian Mixture Model<a class="headerlink" href="#gaussian-mixture-model" title="Permalink to this headline">¶</a></h2>
@@ -988,7 +993,7 @@ P_\theta(x|y=k) = \mathcal{N}(x ; \mu_k, \Sigma_k).
 \phi_1 \mathcal{N}(x; \mu_1, \Sigma_1) + \phi_2 \mathcal{N}(x; \mu_2, \Sigma_2) + \ldots + \phi_K \mathcal{N}(x; \mu_K, \Sigma_K).
 \]</div>
 <p>Mixtures can express distributions that a single mixture component can’t:</p>
-<center><img width=65% src="img/mogdensity1d_v2.png"></center>
+<center><img width=65% src="https://kuleshov-group.github.io/aml-resources/img/mogdensity1d_v2.png"></center>
 <p>Here, we have a mixture of 3 Gaussians.</p>
 <p>We can also represent a mixture of distributions by introducing <span class="math notranslate nohighlight">\(y \in \{1,2,...,K\}\)</span> and a distribution over <span class="math notranslate nohighlight">\((x,y)\)</span> of the form</p>
 <div class="math notranslate nohighlight">
@@ -1032,9 +1037,9 @@ P_\theta(x) = \sum_{k=1}^K P_\theta(y=k) P_\theta(x|y=k) = \sum_{k=1}^K \phi_k \
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><img width=90% src="img/oldfaithful_v2.png"></p></td>
-<td><p><img width=90% src="img/oldfSingle_v2.png"></p></td>
-<td><p><img width=90% src="img/oldfMOG_v2.png"></p></td>
+<tr class="row-even"><td><p><img width=90% src="https://kuleshov-group.github.io/aml-resources/img/oldfaithful_v2.png"></p></td>
+<td><p><img width=90% src="https://kuleshov-group.github.io/aml-resources/img/oldfSingle_v2.png"></p></td>
+<td><p><img width=90% src="https://kuleshov-group.github.io/aml-resources/img/oldfMOG_v2.png"></p></td>
 </tr>
 </tbody>
 </table>

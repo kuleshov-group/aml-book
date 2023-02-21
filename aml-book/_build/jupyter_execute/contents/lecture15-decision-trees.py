@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# <left><img width=25% src="../slides/img/cornell_tech2.svg"></left>
 # 
 # # Lecture 15: Tree-Based Algorithms
 
@@ -152,7 +151,7 @@ plot_tree(clf, feature_names=diabetes_X.columns[:4], impurity=False);
 
 # We can illustrate decision regions via this figure from Hastie et al.
 # 
-# <center><img width=50% src="../slides/img/decision_tree.png"></center>
+# <center><img width=50% src="https://kuleshov-group.github.io/aml-resources/img/decision_tree.png"></center>
 
 # The illustrations are as follows:
 # * Top left: regions that cannot be represented by a tree

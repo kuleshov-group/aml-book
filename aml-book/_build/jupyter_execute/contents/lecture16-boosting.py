@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# <left><img width=25% src="../slides/img/cornell_tech2.svg"></left>
 # 
 # # Lecture 16: Boosting
 

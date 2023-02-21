@@ -12,7 +12,7 @@
 # ## 13.1.1. Review: Classification Margins
 # 
 # In the previous lecture, we defined the concept of classification margins. Recall that the margin $\gamma^{(i)}$ is the distance between the separating hyperplane and the datapoint $x^{(i)}$.
-# <center><img width=30% src="img/margin.png"></center>
+# <center><img width=30% src="https://kuleshov-group.github.io/aml-resources/img/margin.png"></center>
 
 # Large margins are good, since data should be far from the decision boundary. Maximizing the margin of a linear model amounts to solving the following optimization problem:
 # 
@@ -321,7 +321,7 @@
 # 2. Optimize $f(x_1, x_2, \ldots, x_j, \ldots, x_d)$ over $x_j$ while keeping the other variables fixed.
 
 # Here, we visualize coordinate descent applied to a 2D quadratic function.
-# <center><img width=50% src="img/coordinate_descent.png"></center>
+# <center><img width=50% src="https://kuleshov-group.github.io/aml-resources/img/coordinate_descent.png"></center>
 # The red line shows the trajectory of coordinate descent. Each "step" in the trajectory is an iteration of the algorithm. Image from Wikipedia.
 
 # We can apply a form of coordinate descent to solve the dual:

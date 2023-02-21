@@ -7,6 +7,7 @@ chapters:
 # - file: markdown
 # - file: notebooks
 # - file: markdown-notebooks
+- file: contents/lecture1-introduction
 - file: contents/lecture2-supervised-learning
 - file: contents/lecture3-linear-regression
 - file: contents/lecture4-classification

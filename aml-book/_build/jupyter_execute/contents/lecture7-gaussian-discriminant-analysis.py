@@ -237,11 +237,11 @@ plt.show()
 
 # This what the density of a Normal distribution looks like in 2D:
 # 
-# <center><img width=70% src="img/multivariate_gaussian1.png"></center>
+# <center><img width=70% src="https://kuleshov-group.github.io/aml-resources/img/multivariate_gaussian1.png"></center>
 
 # This is how we can visualize it in a 2D plane:
 # 
-# <center><img width=70% src="img/multivariate_gaussian2.png"></center>
+# <center><img width=70% src="https://kuleshov-group.github.io/aml-resources/img/multivariate_gaussian2.png"></center>
 
 # ## 7.2.2. Gaussian Mixture Model
 # 
@@ -274,7 +274,7 @@ plt.show()
 
 # Mixtures can express distributions that a single mixture component can't:
 # 
-# <center><img width=65% src="img/mogdensity1d_v2.png"></center>
+# <center><img width=65% src="https://kuleshov-group.github.io/aml-resources/img/mogdensity1d_v2.png"></center>
 # 
 # Here, we have a mixture of 3 Gaussians.
 
@@ -322,7 +322,7 @@ plt.show()
 # 
 # Raw data | Single Gaussian | Mixture of Gaussians
 # --|--|---
-# <img width=90% src="img/oldfaithful_v2.png"> | <img width=90% src="img/oldfSingle_v2.png"> | <img width=90% src="img/oldfMOG_v2.png">
+# <img width=90% src="https://kuleshov-group.github.io/aml-resources/img/oldfaithful_v2.png"> | <img width=90% src="https://kuleshov-group.github.io/aml-resources/img/oldfSingle_v2.png"> | <img width=90% src="https://kuleshov-group.github.io/aml-resources/img/oldfMOG_v2.png">
 
 # ### 7.2.2.3. Predictions Out of Gaussian Mixture Models
 # 

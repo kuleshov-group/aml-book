@@ -284,7 +284,7 @@ plt.ylim([2.25, 4])
 
 # 2. The vector $\frac{\theta}{||\theta||}$ is perpedicular to the hyperplane $\theta^\top x + \theta_0$ and has unit norm (fact from calculus).
 
-# <center><img width=40% src="img/margin.png"></center>
+# <center><img width=40% src="https://kuleshov-group.github.io/aml-resources/img/margin.png"></center>
 # 
 # 3. Let $x_0$ be the point on the boundary closest to $x^{(i)}$. Then by definition of the margin
 # $x^{(i)} = x_0 + \gamma^{(i)} \frac{\theta}{||\theta||}$ or
