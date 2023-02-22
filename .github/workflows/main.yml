@@ -37,7 +37,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
-        path: ./_build/html
+        path: ./aml-book/_build/html
       
 #     # Push the book's HTML to github-pages
 #     - name: GitHub Pages action
