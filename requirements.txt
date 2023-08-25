@@ -1,2 +1,2 @@
 # Requires jupyter-book to run
-jupyter-book
+jupyter-book==0.13.2
