@@ -4,10 +4,8 @@
 format: jb-book
 root: intro
 chapters:
-# - file: markdown
-# - file: notebooks
-# - file: markdown-notebooks
 - file: contents/lecture1-introduction
+  title: "Lecture 1 - Introduction to Machine Learning"
 - file: contents/lecture2-supervised-learning
 - file: contents/lecture3-linear-regression
 - file: contents/lecture4-classification
