@@ -3,11 +3,14 @@
 
 format: jb-book
 root: intro
+
 chapters:
 - file: contents/lecture1-introduction
-  title: "Lecture 1 - Introduction to Machine Learning"
+  title: Lecture 1 Introduction to Machine Learning
 - file: contents/lecture2-supervised-learning
+  title: Lecture 2 Supervised Learning
 - file: contents/lecture3-linear-regression
+  title: Lecture 3 Linear Regression
 - file: contents/lecture4-classification
 - file: contents/lecture5-regularization
 - file: contents/lecture6-naive-bayes
