@@ -1,4 +1,4 @@
-# Applied Machine Learning - Index
+# **Applied Machine Learning - Welcome**
 
 ## Introduction
 This open online course is a broad introduction to the field of machine learning (ML), based on CS 5785 at Cornell Tech. 
